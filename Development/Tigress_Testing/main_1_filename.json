@@ -1,0 +1,1477 @@
+[
+  {
+    "Source": [ "i + 1", "((i | 1) + (i | 1)) - (i ^ 1)" ],
+    "AST-Compact": [
+      { "BinOp-PlusA-int": [ { "LVal-Var": "i" }, "1" ] },
+      {
+        "BinOp-MinusA-int": [
+          {
+            "BinOp-PlusA-int": [
+              { "BinOp-BOr-int": [ { "LVal-Var": "i" }, "1" ] },
+              { "BinOp-BOr-int": [ { "LVal-Var": "i" }, "1" ] }
+            ]
+          },
+          { "BinOp-BXor-int": [ { "LVal-Var": "i" }, "1" ] }
+        ]
+      }
+    ],
+    "AST-Full": [
+      {
+        "expKind": "BinOp",
+        "op": "PlusA",
+        "left": {
+          "expKind": "Lval",
+          "lval": {
+            "lvalKind": "Var",
+            "host": {
+              "vname": "i",
+              "vtype": { "typeKind": "TInt", "ikind": "int", "attr": [] },
+              "vattr": [],
+              "vglob": false,
+              "vinline": false,
+              "vstorage": "NoStorage",
+              "vid": 1482,
+              "vdecl": { "file": "source_test.c", "line": 10, "byte": 21389 },
+              "vaddrof": false,
+              "vreferenced": false,
+              "vdescrpure": true,
+              "vhasdeclinstruction": false
+            },
+            "offset": { "offsetKind": "NoOffset" }
+          }
+        },
+        "right": {
+          "expKind": "Const",
+          "value": {
+            "constantKind": "CInt",
+            "value": "1",
+            "ikind": "int",
+            "string": null
+          }
+        },
+        "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+      },
+      {
+        "expKind": "BinOp",
+        "op": "MinusA",
+        "left": {
+          "expKind": "BinOp",
+          "op": "PlusA",
+          "left": {
+            "expKind": "BinOp",
+            "op": "BOr",
+            "left": {
+              "expKind": "Lval",
+              "lval": {
+                "lvalKind": "Var",
+                "host": {
+                  "vname": "i",
+                  "vtype": { "typeKind": "TInt", "ikind": "int", "attr": [] },
+                  "vattr": [],
+                  "vglob": false,
+                  "vinline": false,
+                  "vstorage": "NoStorage",
+                  "vid": 1482,
+                  "vdecl": {
+                    "file": "source_test.c",
+                    "line": 10,
+                    "byte": 21389
+                  },
+                  "vaddrof": false,
+                  "vreferenced": false,
+                  "vdescrpure": true,
+                  "vhasdeclinstruction": false
+                },
+                "offset": { "offsetKind": "NoOffset" }
+              }
+            },
+            "right": {
+              "expKind": "Const",
+              "value": {
+                "constantKind": "CInt",
+                "value": "1",
+                "ikind": "int",
+                "string": null
+              }
+            },
+            "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+          },
+          "right": {
+            "expKind": "BinOp",
+            "op": "BOr",
+            "left": {
+              "expKind": "Lval",
+              "lval": {
+                "lvalKind": "Var",
+                "host": {
+                  "vname": "i",
+                  "vtype": { "typeKind": "TInt", "ikind": "int", "attr": [] },
+                  "vattr": [],
+                  "vglob": false,
+                  "vinline": false,
+                  "vstorage": "NoStorage",
+                  "vid": 1482,
+                  "vdecl": {
+                    "file": "source_test.c",
+                    "line": 10,
+                    "byte": 21389
+                  },
+                  "vaddrof": false,
+                  "vreferenced": false,
+                  "vdescrpure": true,
+                  "vhasdeclinstruction": false
+                },
+                "offset": { "offsetKind": "NoOffset" }
+              }
+            },
+            "right": {
+              "expKind": "Const",
+              "value": {
+                "constantKind": "CInt",
+                "value": "1",
+                "ikind": "int",
+                "string": null
+              }
+            },
+            "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+          },
+          "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+        },
+        "right": {
+          "expKind": "BinOp",
+          "op": "BXor",
+          "left": {
+            "expKind": "Lval",
+            "lval": {
+              "lvalKind": "Var",
+              "host": {
+                "vname": "i",
+                "vtype": { "typeKind": "TInt", "ikind": "int", "attr": [] },
+                "vattr": [],
+                "vglob": false,
+                "vinline": false,
+                "vstorage": "NoStorage",
+                "vid": 1482,
+                "vdecl": {
+                  "file": "source_test.c",
+                  "line": 10,
+                  "byte": 21389
+                },
+                "vaddrof": false,
+                "vreferenced": false,
+                "vdescrpure": true,
+                "vhasdeclinstruction": false
+              },
+              "offset": { "offsetKind": "NoOffset" }
+            }
+          },
+          "right": {
+            "expKind": "Const",
+            "value": {
+              "constantKind": "CInt",
+              "value": "1",
+              "ikind": "int",
+              "string": null
+            }
+          },
+          "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+        },
+        "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+      }
+    ]
+  },
+  {
+    "Source": [ "j + 1", "((j | 1) << 1) - (j ^ 1)" ],
+    "AST-Compact": [
+      { "BinOp-PlusA-int": [ { "LVal-Var": "j" }, "1" ] },
+      {
+        "BinOp-MinusA-int": [
+          {
+            "BinOp-Shiftlt-int": [
+              { "BinOp-BOr-int": [ { "LVal-Var": "j" }, "1" ] }, "1"
+            ]
+          },
+          { "BinOp-BXor-int": [ { "LVal-Var": "j" }, "1" ] }
+        ]
+      }
+    ],
+    "AST-Full": [
+      {
+        "expKind": "BinOp",
+        "op": "PlusA",
+        "left": {
+          "expKind": "Lval",
+          "lval": {
+            "lvalKind": "Var",
+            "host": {
+              "vname": "j",
+              "vtype": { "typeKind": "TInt", "ikind": "int", "attr": [] },
+              "vattr": [],
+              "vglob": false,
+              "vinline": false,
+              "vstorage": "NoStorage",
+              "vid": 1483,
+              "vdecl": { "file": "source_test.c", "line": 11, "byte": 21422 },
+              "vaddrof": false,
+              "vreferenced": false,
+              "vdescrpure": true,
+              "vhasdeclinstruction": false
+            },
+            "offset": { "offsetKind": "NoOffset" }
+          }
+        },
+        "right": {
+          "expKind": "Const",
+          "value": {
+            "constantKind": "CInt",
+            "value": "1",
+            "ikind": "int",
+            "string": null
+          }
+        },
+        "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+      },
+      {
+        "expKind": "BinOp",
+        "op": "MinusA",
+        "left": {
+          "expKind": "BinOp",
+          "op": "Shiftlt",
+          "left": {
+            "expKind": "BinOp",
+            "op": "BOr",
+            "left": {
+              "expKind": "Lval",
+              "lval": {
+                "lvalKind": "Var",
+                "host": {
+                  "vname": "j",
+                  "vtype": { "typeKind": "TInt", "ikind": "int", "attr": [] },
+                  "vattr": [],
+                  "vglob": false,
+                  "vinline": false,
+                  "vstorage": "NoStorage",
+                  "vid": 1483,
+                  "vdecl": {
+                    "file": "source_test.c",
+                    "line": 11,
+                    "byte": 21422
+                  },
+                  "vaddrof": false,
+                  "vreferenced": false,
+                  "vdescrpure": true,
+                  "vhasdeclinstruction": false
+                },
+                "offset": { "offsetKind": "NoOffset" }
+              }
+            },
+            "right": {
+              "expKind": "Const",
+              "value": {
+                "constantKind": "CInt",
+                "value": "1",
+                "ikind": "int",
+                "string": null
+              }
+            },
+            "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+          },
+          "right": {
+            "expKind": "Const",
+            "value": {
+              "constantKind": "CInt",
+              "value": "1",
+              "ikind": "int",
+              "string": null
+            }
+          },
+          "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+        },
+        "right": {
+          "expKind": "BinOp",
+          "op": "BXor",
+          "left": {
+            "expKind": "Lval",
+            "lval": {
+              "lvalKind": "Var",
+              "host": {
+                "vname": "j",
+                "vtype": { "typeKind": "TInt", "ikind": "int", "attr": [] },
+                "vattr": [],
+                "vglob": false,
+                "vinline": false,
+                "vstorage": "NoStorage",
+                "vid": 1483,
+                "vdecl": {
+                  "file": "source_test.c",
+                  "line": 11,
+                  "byte": 21422
+                },
+                "vaddrof": false,
+                "vreferenced": false,
+                "vdescrpure": true,
+                "vhasdeclinstruction": false
+              },
+              "offset": { "offsetKind": "NoOffset" }
+            }
+          },
+          "right": {
+            "expKind": "Const",
+            "value": {
+              "constantKind": "CInt",
+              "value": "1",
+              "ikind": "int",
+              "string": null
+            }
+          },
+          "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+        },
+        "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+      }
+    ]
+  },
+  {
+    "Source": [
+      "(char const   */* __restrict  */)\"%d + %d = %d\\n\"",
+      "(char const   */* __restrict  */)\"%d + %d = %d\\n\""
+    ],
+    "AST-Compact": [
+      {
+        "expKind": "CastE",
+        "typ": {
+          "typeKind": "TPtr",
+          "type": {
+            "typeKind": "TInt",
+            "ikind": "char",
+            "attr": [
+              {
+                "attributeKind": "Attr",
+                "string": "const",
+                "attrparamList": []
+              },
+              {
+                "attributeKind": "Attr",
+                "string": "pconst",
+                "attrparamList": []
+              }
+            ]
+          },
+          "attr": [
+            {
+              "attributeKind": "Attr",
+              "string": "__restrict",
+              "attrparamList": []
+            }
+          ]
+        },
+        "exp": {
+          "expKind": "Const",
+          "value": {
+            "constantKind": "CStr",
+            "value": "%d + %d = %d\n",
+            "encoding": "No_encoding"
+          }
+        }
+      },
+      {
+        "expKind": "CastE",
+        "typ": {
+          "typeKind": "TPtr",
+          "type": {
+            "typeKind": "TInt",
+            "ikind": "char",
+            "attr": [
+              {
+                "attributeKind": "Attr",
+                "string": "const",
+                "attrparamList": []
+              },
+              {
+                "attributeKind": "Attr",
+                "string": "pconst",
+                "attrparamList": []
+              }
+            ]
+          },
+          "attr": [
+            {
+              "attributeKind": "Attr",
+              "string": "__restrict",
+              "attrparamList": []
+            }
+          ]
+        },
+        "exp": {
+          "expKind": "Const",
+          "value": {
+            "constantKind": "CStr",
+            "value": "%d + %d = %d\n",
+            "encoding": "No_encoding"
+          }
+        }
+      }
+    ],
+    "AST-Full": [
+      {
+        "expKind": "CastE",
+        "typ": {
+          "typeKind": "TPtr",
+          "type": {
+            "typeKind": "TInt",
+            "ikind": "char",
+            "attr": [
+              {
+                "attributeKind": "Attr",
+                "string": "const",
+                "attrparamList": []
+              },
+              {
+                "attributeKind": "Attr",
+                "string": "pconst",
+                "attrparamList": []
+              }
+            ]
+          },
+          "attr": [
+            {
+              "attributeKind": "Attr",
+              "string": "__restrict",
+              "attrparamList": []
+            }
+          ]
+        },
+        "exp": {
+          "expKind": "Const",
+          "value": {
+            "constantKind": "CStr",
+            "value": "%d + %d = %d\n",
+            "encoding": "No_encoding"
+          }
+        }
+      },
+      {
+        "expKind": "CastE",
+        "typ": {
+          "typeKind": "TPtr",
+          "type": {
+            "typeKind": "TInt",
+            "ikind": "char",
+            "attr": [
+              {
+                "attributeKind": "Attr",
+                "string": "const",
+                "attrparamList": []
+              },
+              {
+                "attributeKind": "Attr",
+                "string": "pconst",
+                "attrparamList": []
+              }
+            ]
+          },
+          "attr": [
+            {
+              "attributeKind": "Attr",
+              "string": "__restrict",
+              "attrparamList": []
+            }
+          ]
+        },
+        "exp": {
+          "expKind": "Const",
+          "value": {
+            "constantKind": "CStr",
+            "value": "%d + %d = %d\n",
+            "encoding": "No_encoding"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "Source": [
+      "j < 10",
+      "((unsigned int )((j & ~ 10) | (~ (j ^ 10) & (j - 10))) >> 31U) & 1"
+    ],
+    "AST-Compact": [
+      { "BinOp-Lt-int": [ { "LVal-Var": "j" }, "10" ] },
+      {
+        "BinOp-BAnd-int": [
+          {
+            "BinOp-Shiftrt-int": [
+              {
+                "expKind": "CastE",
+                "typ": {
+                  "typeKind": "TInt",
+                  "ikind": "unsigned int",
+                  "attr": []
+                },
+                "exp": {
+                  "expKind": "BinOp",
+                  "op": "BOr",
+                  "left": {
+                    "expKind": "BinOp",
+                    "op": "BAnd",
+                    "left": {
+                      "expKind": "Lval",
+                      "lval": {
+                        "lvalKind": "Var",
+                        "host": {
+                          "vname": "j",
+                          "vtype": {
+                            "typeKind": "TInt",
+                            "ikind": "int",
+                            "attr": []
+                          },
+                          "vattr": [],
+                          "vglob": false,
+                          "vinline": false,
+                          "vstorage": "NoStorage",
+                          "vid": 1483,
+                          "vdecl": {
+                            "file": "source_test.c",
+                            "line": 11,
+                            "byte": 21422
+                          },
+                          "vaddrof": false,
+                          "vreferenced": false,
+                          "vdescrpure": true,
+                          "vhasdeclinstruction": false
+                        },
+                        "offset": { "offsetKind": "NoOffset" }
+                      }
+                    },
+                    "right": {
+                      "expKind": "UnOp",
+                      "op": "BNot",
+                      "left": {
+                        "expKind": "Const",
+                        "value": {
+                          "constantKind": "CInt",
+                          "value": "10",
+                          "ikind": "int",
+                          "string": "10"
+                        }
+                      },
+                      "typ": {
+                        "typeKind": "TInt",
+                        "ikind": "int",
+                        "attr": []
+                      }
+                    },
+                    "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+                  },
+                  "right": {
+                    "expKind": "BinOp",
+                    "op": "BAnd",
+                    "left": {
+                      "expKind": "UnOp",
+                      "op": "BNot",
+                      "left": {
+                        "expKind": "BinOp",
+                        "op": "BXor",
+                        "left": {
+                          "expKind": "Lval",
+                          "lval": {
+                            "lvalKind": "Var",
+                            "host": {
+                              "vname": "j",
+                              "vtype": {
+                                "typeKind": "TInt",
+                                "ikind": "int",
+                                "attr": []
+                              },
+                              "vattr": [],
+                              "vglob": false,
+                              "vinline": false,
+                              "vstorage": "NoStorage",
+                              "vid": 1483,
+                              "vdecl": {
+                                "file": "source_test.c",
+                                "line": 11,
+                                "byte": 21422
+                              },
+                              "vaddrof": false,
+                              "vreferenced": false,
+                              "vdescrpure": true,
+                              "vhasdeclinstruction": false
+                            },
+                            "offset": { "offsetKind": "NoOffset" }
+                          }
+                        },
+                        "right": {
+                          "expKind": "Const",
+                          "value": {
+                            "constantKind": "CInt",
+                            "value": "10",
+                            "ikind": "int",
+                            "string": "10"
+                          }
+                        },
+                        "typ": {
+                          "typeKind": "TInt",
+                          "ikind": "int",
+                          "attr": []
+                        }
+                      },
+                      "typ": {
+                        "typeKind": "TInt",
+                        "ikind": "int",
+                        "attr": []
+                      }
+                    },
+                    "right": {
+                      "expKind": "BinOp",
+                      "op": "MinusA",
+                      "left": {
+                        "expKind": "Lval",
+                        "lval": {
+                          "lvalKind": "Var",
+                          "host": {
+                            "vname": "j",
+                            "vtype": {
+                              "typeKind": "TInt",
+                              "ikind": "int",
+                              "attr": []
+                            },
+                            "vattr": [],
+                            "vglob": false,
+                            "vinline": false,
+                            "vstorage": "NoStorage",
+                            "vid": 1483,
+                            "vdecl": {
+                              "file": "source_test.c",
+                              "line": 11,
+                              "byte": 21422
+                            },
+                            "vaddrof": false,
+                            "vreferenced": false,
+                            "vdescrpure": true,
+                            "vhasdeclinstruction": false
+                          },
+                          "offset": { "offsetKind": "NoOffset" }
+                        }
+                      },
+                      "right": {
+                        "expKind": "Const",
+                        "value": {
+                          "constantKind": "CInt",
+                          "value": "10",
+                          "ikind": "int",
+                          "string": "10"
+                        }
+                      },
+                      "typ": {
+                        "typeKind": "TInt",
+                        "ikind": "int",
+                        "attr": []
+                      }
+                    },
+                    "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+                  },
+                  "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+                }
+              },
+              "31"
+            ]
+          },
+          "1"
+        ]
+      }
+    ],
+    "AST-Full": [
+      {
+        "expKind": "BinOp",
+        "op": "Lt",
+        "left": {
+          "expKind": "Lval",
+          "lval": {
+            "lvalKind": "Var",
+            "host": {
+              "vname": "j",
+              "vtype": { "typeKind": "TInt", "ikind": "int", "attr": [] },
+              "vattr": [],
+              "vglob": false,
+              "vinline": false,
+              "vstorage": "NoStorage",
+              "vid": 1483,
+              "vdecl": { "file": "source_test.c", "line": 11, "byte": 21422 },
+              "vaddrof": false,
+              "vreferenced": false,
+              "vdescrpure": true,
+              "vhasdeclinstruction": false
+            },
+            "offset": { "offsetKind": "NoOffset" }
+          }
+        },
+        "right": {
+          "expKind": "Const",
+          "value": {
+            "constantKind": "CInt",
+            "value": "10",
+            "ikind": "int",
+            "string": "10"
+          }
+        },
+        "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+      },
+      {
+        "expKind": "BinOp",
+        "op": "BAnd",
+        "left": {
+          "expKind": "BinOp",
+          "op": "Shiftrt",
+          "left": {
+            "expKind": "CastE",
+            "typ": {
+              "typeKind": "TInt",
+              "ikind": "unsigned int",
+              "attr": []
+            },
+            "exp": {
+              "expKind": "BinOp",
+              "op": "BOr",
+              "left": {
+                "expKind": "BinOp",
+                "op": "BAnd",
+                "left": {
+                  "expKind": "Lval",
+                  "lval": {
+                    "lvalKind": "Var",
+                    "host": {
+                      "vname": "j",
+                      "vtype": {
+                        "typeKind": "TInt",
+                        "ikind": "int",
+                        "attr": []
+                      },
+                      "vattr": [],
+                      "vglob": false,
+                      "vinline": false,
+                      "vstorage": "NoStorage",
+                      "vid": 1483,
+                      "vdecl": {
+                        "file": "source_test.c",
+                        "line": 11,
+                        "byte": 21422
+                      },
+                      "vaddrof": false,
+                      "vreferenced": false,
+                      "vdescrpure": true,
+                      "vhasdeclinstruction": false
+                    },
+                    "offset": { "offsetKind": "NoOffset" }
+                  }
+                },
+                "right": {
+                  "expKind": "UnOp",
+                  "op": "BNot",
+                  "left": {
+                    "expKind": "Const",
+                    "value": {
+                      "constantKind": "CInt",
+                      "value": "10",
+                      "ikind": "int",
+                      "string": "10"
+                    }
+                  },
+                  "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+                },
+                "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+              },
+              "right": {
+                "expKind": "BinOp",
+                "op": "BAnd",
+                "left": {
+                  "expKind": "UnOp",
+                  "op": "BNot",
+                  "left": {
+                    "expKind": "BinOp",
+                    "op": "BXor",
+                    "left": {
+                      "expKind": "Lval",
+                      "lval": {
+                        "lvalKind": "Var",
+                        "host": {
+                          "vname": "j",
+                          "vtype": {
+                            "typeKind": "TInt",
+                            "ikind": "int",
+                            "attr": []
+                          },
+                          "vattr": [],
+                          "vglob": false,
+                          "vinline": false,
+                          "vstorage": "NoStorage",
+                          "vid": 1483,
+                          "vdecl": {
+                            "file": "source_test.c",
+                            "line": 11,
+                            "byte": 21422
+                          },
+                          "vaddrof": false,
+                          "vreferenced": false,
+                          "vdescrpure": true,
+                          "vhasdeclinstruction": false
+                        },
+                        "offset": { "offsetKind": "NoOffset" }
+                      }
+                    },
+                    "right": {
+                      "expKind": "Const",
+                      "value": {
+                        "constantKind": "CInt",
+                        "value": "10",
+                        "ikind": "int",
+                        "string": "10"
+                      }
+                    },
+                    "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+                  },
+                  "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+                },
+                "right": {
+                  "expKind": "BinOp",
+                  "op": "MinusA",
+                  "left": {
+                    "expKind": "Lval",
+                    "lval": {
+                      "lvalKind": "Var",
+                      "host": {
+                        "vname": "j",
+                        "vtype": {
+                          "typeKind": "TInt",
+                          "ikind": "int",
+                          "attr": []
+                        },
+                        "vattr": [],
+                        "vglob": false,
+                        "vinline": false,
+                        "vstorage": "NoStorage",
+                        "vid": 1483,
+                        "vdecl": {
+                          "file": "source_test.c",
+                          "line": 11,
+                          "byte": 21422
+                        },
+                        "vaddrof": false,
+                        "vreferenced": false,
+                        "vdescrpure": true,
+                        "vhasdeclinstruction": false
+                      },
+                      "offset": { "offsetKind": "NoOffset" }
+                    }
+                  },
+                  "right": {
+                    "expKind": "Const",
+                    "value": {
+                      "constantKind": "CInt",
+                      "value": "10",
+                      "ikind": "int",
+                      "string": "10"
+                    }
+                  },
+                  "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+                },
+                "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+              },
+              "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+            }
+          },
+          "right": {
+            "expKind": "Const",
+            "value": {
+              "constantKind": "CInt",
+              "value": "31",
+              "ikind": "unsigned int",
+              "string": null
+            }
+          },
+          "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+        },
+        "right": {
+          "expKind": "Const",
+          "value": {
+            "constantKind": "CInt",
+            "value": "1",
+            "ikind": "int",
+            "string": null
+          }
+        },
+        "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+      }
+    ]
+  },
+  {
+    "Source": [
+      "i < 10",
+      "((unsigned int )((i & ~ 10) | (~ (i ^ 10) & (i - 10))) >> 31U) & 1"
+    ],
+    "AST-Compact": [
+      { "BinOp-Lt-int": [ { "LVal-Var": "i" }, "10" ] },
+      {
+        "BinOp-BAnd-int": [
+          {
+            "BinOp-Shiftrt-int": [
+              {
+                "expKind": "CastE",
+                "typ": {
+                  "typeKind": "TInt",
+                  "ikind": "unsigned int",
+                  "attr": []
+                },
+                "exp": {
+                  "expKind": "BinOp",
+                  "op": "BOr",
+                  "left": {
+                    "expKind": "BinOp",
+                    "op": "BAnd",
+                    "left": {
+                      "expKind": "Lval",
+                      "lval": {
+                        "lvalKind": "Var",
+                        "host": {
+                          "vname": "i",
+                          "vtype": {
+                            "typeKind": "TInt",
+                            "ikind": "int",
+                            "attr": []
+                          },
+                          "vattr": [],
+                          "vglob": false,
+                          "vinline": false,
+                          "vstorage": "NoStorage",
+                          "vid": 1482,
+                          "vdecl": {
+                            "file": "source_test.c",
+                            "line": 10,
+                            "byte": 21389
+                          },
+                          "vaddrof": false,
+                          "vreferenced": false,
+                          "vdescrpure": true,
+                          "vhasdeclinstruction": false
+                        },
+                        "offset": { "offsetKind": "NoOffset" }
+                      }
+                    },
+                    "right": {
+                      "expKind": "UnOp",
+                      "op": "BNot",
+                      "left": {
+                        "expKind": "Const",
+                        "value": {
+                          "constantKind": "CInt",
+                          "value": "10",
+                          "ikind": "int",
+                          "string": "10"
+                        }
+                      },
+                      "typ": {
+                        "typeKind": "TInt",
+                        "ikind": "int",
+                        "attr": []
+                      }
+                    },
+                    "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+                  },
+                  "right": {
+                    "expKind": "BinOp",
+                    "op": "BAnd",
+                    "left": {
+                      "expKind": "UnOp",
+                      "op": "BNot",
+                      "left": {
+                        "expKind": "BinOp",
+                        "op": "BXor",
+                        "left": {
+                          "expKind": "Lval",
+                          "lval": {
+                            "lvalKind": "Var",
+                            "host": {
+                              "vname": "i",
+                              "vtype": {
+                                "typeKind": "TInt",
+                                "ikind": "int",
+                                "attr": []
+                              },
+                              "vattr": [],
+                              "vglob": false,
+                              "vinline": false,
+                              "vstorage": "NoStorage",
+                              "vid": 1482,
+                              "vdecl": {
+                                "file": "source_test.c",
+                                "line": 10,
+                                "byte": 21389
+                              },
+                              "vaddrof": false,
+                              "vreferenced": false,
+                              "vdescrpure": true,
+                              "vhasdeclinstruction": false
+                            },
+                            "offset": { "offsetKind": "NoOffset" }
+                          }
+                        },
+                        "right": {
+                          "expKind": "Const",
+                          "value": {
+                            "constantKind": "CInt",
+                            "value": "10",
+                            "ikind": "int",
+                            "string": "10"
+                          }
+                        },
+                        "typ": {
+                          "typeKind": "TInt",
+                          "ikind": "int",
+                          "attr": []
+                        }
+                      },
+                      "typ": {
+                        "typeKind": "TInt",
+                        "ikind": "int",
+                        "attr": []
+                      }
+                    },
+                    "right": {
+                      "expKind": "BinOp",
+                      "op": "MinusA",
+                      "left": {
+                        "expKind": "Lval",
+                        "lval": {
+                          "lvalKind": "Var",
+                          "host": {
+                            "vname": "i",
+                            "vtype": {
+                              "typeKind": "TInt",
+                              "ikind": "int",
+                              "attr": []
+                            },
+                            "vattr": [],
+                            "vglob": false,
+                            "vinline": false,
+                            "vstorage": "NoStorage",
+                            "vid": 1482,
+                            "vdecl": {
+                              "file": "source_test.c",
+                              "line": 10,
+                              "byte": 21389
+                            },
+                            "vaddrof": false,
+                            "vreferenced": false,
+                            "vdescrpure": true,
+                            "vhasdeclinstruction": false
+                          },
+                          "offset": { "offsetKind": "NoOffset" }
+                        }
+                      },
+                      "right": {
+                        "expKind": "Const",
+                        "value": {
+                          "constantKind": "CInt",
+                          "value": "10",
+                          "ikind": "int",
+                          "string": "10"
+                        }
+                      },
+                      "typ": {
+                        "typeKind": "TInt",
+                        "ikind": "int",
+                        "attr": []
+                      }
+                    },
+                    "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+                  },
+                  "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+                }
+              },
+              "31"
+            ]
+          },
+          "1"
+        ]
+      }
+    ],
+    "AST-Full": [
+      {
+        "expKind": "BinOp",
+        "op": "Lt",
+        "left": {
+          "expKind": "Lval",
+          "lval": {
+            "lvalKind": "Var",
+            "host": {
+              "vname": "i",
+              "vtype": { "typeKind": "TInt", "ikind": "int", "attr": [] },
+              "vattr": [],
+              "vglob": false,
+              "vinline": false,
+              "vstorage": "NoStorage",
+              "vid": 1482,
+              "vdecl": { "file": "source_test.c", "line": 10, "byte": 21389 },
+              "vaddrof": false,
+              "vreferenced": false,
+              "vdescrpure": true,
+              "vhasdeclinstruction": false
+            },
+            "offset": { "offsetKind": "NoOffset" }
+          }
+        },
+        "right": {
+          "expKind": "Const",
+          "value": {
+            "constantKind": "CInt",
+            "value": "10",
+            "ikind": "int",
+            "string": "10"
+          }
+        },
+        "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+      },
+      {
+        "expKind": "BinOp",
+        "op": "BAnd",
+        "left": {
+          "expKind": "BinOp",
+          "op": "Shiftrt",
+          "left": {
+            "expKind": "CastE",
+            "typ": {
+              "typeKind": "TInt",
+              "ikind": "unsigned int",
+              "attr": []
+            },
+            "exp": {
+              "expKind": "BinOp",
+              "op": "BOr",
+              "left": {
+                "expKind": "BinOp",
+                "op": "BAnd",
+                "left": {
+                  "expKind": "Lval",
+                  "lval": {
+                    "lvalKind": "Var",
+                    "host": {
+                      "vname": "i",
+                      "vtype": {
+                        "typeKind": "TInt",
+                        "ikind": "int",
+                        "attr": []
+                      },
+                      "vattr": [],
+                      "vglob": false,
+                      "vinline": false,
+                      "vstorage": "NoStorage",
+                      "vid": 1482,
+                      "vdecl": {
+                        "file": "source_test.c",
+                        "line": 10,
+                        "byte": 21389
+                      },
+                      "vaddrof": false,
+                      "vreferenced": false,
+                      "vdescrpure": true,
+                      "vhasdeclinstruction": false
+                    },
+                    "offset": { "offsetKind": "NoOffset" }
+                  }
+                },
+                "right": {
+                  "expKind": "UnOp",
+                  "op": "BNot",
+                  "left": {
+                    "expKind": "Const",
+                    "value": {
+                      "constantKind": "CInt",
+                      "value": "10",
+                      "ikind": "int",
+                      "string": "10"
+                    }
+                  },
+                  "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+                },
+                "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+              },
+              "right": {
+                "expKind": "BinOp",
+                "op": "BAnd",
+                "left": {
+                  "expKind": "UnOp",
+                  "op": "BNot",
+                  "left": {
+                    "expKind": "BinOp",
+                    "op": "BXor",
+                    "left": {
+                      "expKind": "Lval",
+                      "lval": {
+                        "lvalKind": "Var",
+                        "host": {
+                          "vname": "i",
+                          "vtype": {
+                            "typeKind": "TInt",
+                            "ikind": "int",
+                            "attr": []
+                          },
+                          "vattr": [],
+                          "vglob": false,
+                          "vinline": false,
+                          "vstorage": "NoStorage",
+                          "vid": 1482,
+                          "vdecl": {
+                            "file": "source_test.c",
+                            "line": 10,
+                            "byte": 21389
+                          },
+                          "vaddrof": false,
+                          "vreferenced": false,
+                          "vdescrpure": true,
+                          "vhasdeclinstruction": false
+                        },
+                        "offset": { "offsetKind": "NoOffset" }
+                      }
+                    },
+                    "right": {
+                      "expKind": "Const",
+                      "value": {
+                        "constantKind": "CInt",
+                        "value": "10",
+                        "ikind": "int",
+                        "string": "10"
+                      }
+                    },
+                    "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+                  },
+                  "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+                },
+                "right": {
+                  "expKind": "BinOp",
+                  "op": "MinusA",
+                  "left": {
+                    "expKind": "Lval",
+                    "lval": {
+                      "lvalKind": "Var",
+                      "host": {
+                        "vname": "i",
+                        "vtype": {
+                          "typeKind": "TInt",
+                          "ikind": "int",
+                          "attr": []
+                        },
+                        "vattr": [],
+                        "vglob": false,
+                        "vinline": false,
+                        "vstorage": "NoStorage",
+                        "vid": 1482,
+                        "vdecl": {
+                          "file": "source_test.c",
+                          "line": 10,
+                          "byte": 21389
+                        },
+                        "vaddrof": false,
+                        "vreferenced": false,
+                        "vdescrpure": true,
+                        "vhasdeclinstruction": false
+                      },
+                      "offset": { "offsetKind": "NoOffset" }
+                    }
+                  },
+                  "right": {
+                    "expKind": "Const",
+                    "value": {
+                      "constantKind": "CInt",
+                      "value": "10",
+                      "ikind": "int",
+                      "string": "10"
+                    }
+                  },
+                  "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+                },
+                "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+              },
+              "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+            }
+          },
+          "right": {
+            "expKind": "Const",
+            "value": {
+              "constantKind": "CInt",
+              "value": "31",
+              "ikind": "unsigned int",
+              "string": null
+            }
+          },
+          "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+        },
+        "right": {
+          "expKind": "Const",
+          "value": {
+            "constantKind": "CInt",
+            "value": "1",
+            "ikind": "int",
+            "string": null
+          }
+        },
+        "typ": { "typeKind": "TInt", "ikind": "int", "attr": [] }
+      }
+    ]
+  },
+  {
+    "Source": [
+      "(char const   */* __restrict  */)\"Hello world!\\n\"",
+      "(char const   */* __restrict  */)\"Hello world!\\n\""
+    ],
+    "AST-Compact": [
+      {
+        "expKind": "CastE",
+        "typ": {
+          "typeKind": "TPtr",
+          "type": {
+            "typeKind": "TInt",
+            "ikind": "char",
+            "attr": [
+              {
+                "attributeKind": "Attr",
+                "string": "const",
+                "attrparamList": []
+              },
+              {
+                "attributeKind": "Attr",
+                "string": "pconst",
+                "attrparamList": []
+              }
+            ]
+          },
+          "attr": [
+            {
+              "attributeKind": "Attr",
+              "string": "__restrict",
+              "attrparamList": []
+            }
+          ]
+        },
+        "exp": {
+          "expKind": "Const",
+          "value": {
+            "constantKind": "CStr",
+            "value": "Hello world!\n",
+            "encoding": "No_encoding"
+          }
+        }
+      },
+      {
+        "expKind": "CastE",
+        "typ": {
+          "typeKind": "TPtr",
+          "type": {
+            "typeKind": "TInt",
+            "ikind": "char",
+            "attr": [
+              {
+                "attributeKind": "Attr",
+                "string": "const",
+                "attrparamList": []
+              },
+              {
+                "attributeKind": "Attr",
+                "string": "pconst",
+                "attrparamList": []
+              }
+            ]
+          },
+          "attr": [
+            {
+              "attributeKind": "Attr",
+              "string": "__restrict",
+              "attrparamList": []
+            }
+          ]
+        },
+        "exp": {
+          "expKind": "Const",
+          "value": {
+            "constantKind": "CStr",
+            "value": "Hello world!\n",
+            "encoding": "No_encoding"
+          }
+        }
+      }
+    ],
+    "AST-Full": [
+      {
+        "expKind": "CastE",
+        "typ": {
+          "typeKind": "TPtr",
+          "type": {
+            "typeKind": "TInt",
+            "ikind": "char",
+            "attr": [
+              {
+                "attributeKind": "Attr",
+                "string": "const",
+                "attrparamList": []
+              },
+              {
+                "attributeKind": "Attr",
+                "string": "pconst",
+                "attrparamList": []
+              }
+            ]
+          },
+          "attr": [
+            {
+              "attributeKind": "Attr",
+              "string": "__restrict",
+              "attrparamList": []
+            }
+          ]
+        },
+        "exp": {
+          "expKind": "Const",
+          "value": {
+            "constantKind": "CStr",
+            "value": "Hello world!\n",
+            "encoding": "No_encoding"
+          }
+        }
+      },
+      {
+        "expKind": "CastE",
+        "typ": {
+          "typeKind": "TPtr",
+          "type": {
+            "typeKind": "TInt",
+            "ikind": "char",
+            "attr": [
+              {
+                "attributeKind": "Attr",
+                "string": "const",
+                "attrparamList": []
+              },
+              {
+                "attributeKind": "Attr",
+                "string": "pconst",
+                "attrparamList": []
+              }
+            ]
+          },
+          "attr": [
+            {
+              "attributeKind": "Attr",
+              "string": "__restrict",
+              "attrparamList": []
+            }
+          ]
+        },
+        "exp": {
+          "expKind": "Const",
+          "value": {
+            "constantKind": "CStr",
+            "value": "Hello world!\n",
+            "encoding": "No_encoding"
+          }
+        }
+      }
+    ]
+  }
+]

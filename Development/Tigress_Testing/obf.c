@@ -142,7 +142,7 @@ BEGIN-OPTIONS
     "kind": "Flatten",
     "prefix": "",
     "seed": "",
-    "funSpec": [ [ "id(add)", "" ], [ "id(main)", "" ] ],
+    "funSpec": [ [ "*", "" ] ],
     "globalVarSpec": [],
     "localVarSpec": [],
     "exclude": [],
@@ -206,6 +206,38 @@ BEGIN-OPTIONS
           "(jit_thread_timer,(0,0))", "(branchPrediction_time,(2,10))"
         ]
       }
+    }
+  },
+  {
+    "task": 2,
+    "kind": "SelfModify",
+    "prefix": "",
+    "seed": "",
+    "funSpec": [ [ "id(add)", "" ] ],
+    "globalVarSpec": [],
+    "localVarSpec": [],
+    "exclude": [],
+    "funs": [ "add" ],
+    "options": {
+      "common": {
+        "prefix": "",
+        "verbosity": "None",
+        "statistics": "None",
+        "transformationKind": "Ident",
+        "vlaTransformation": "alloca",
+        "transformationNumber": "0"
+      },
+      "count": "1",
+      "kinds": [ "indirectBranch", "arithmetic", "comparisons" ],
+      "binOps": [
+        "PlusA", "PlusPI", "IndexPI", "MinusA", "MinusPI", "MinusPP", "Mult",
+        "Div", "Mod", "Shiftlt", "Shiftrt", "Lt", "Gt", "Le", "Ge", "Eq",
+        "Ne", "BAnd", "BXor", "BOr", "LAnd", "LOr"
+      ],
+      "doSubExpressions": "false",
+      "fraction": "*",
+      "bogusInstructions": "0",
+      "style": "None"
     }
   }
 ]
@@ -315,6 +347,14 @@ BEGIN-UNIVERSE
       "TransformationUpdates": {}
     },
     {
+      "TransformationNumber": 2,
+      "TransformationKind": "SelfModify",
+      "TransformationUpdates": {
+        "Modified Function Implementations": [ "add" ],
+        "New Texts/Asms/Pragmas": [ "Text" ]
+      }
+    },
+    {
       "TransformationNumber": 1,
       "TransformationKind": "Flatten",
       "TransformationUpdates": {
@@ -334,9 +374,9 @@ BEGIN-UNIVERSE
       "TransformationUpdates": {
         "Modified Function Implementations": [ "main" ],
         "New Global Variables": {
-          "_TIG_IZ_onDW_envp": "INIT_FUN: '_TIG_IZ_onDW_envp__INIT'",
-          "_TIG_IZ_onDW_argv": "INIT_FUN: '_TIG_IZ_onDW_argv__INIT'",
-          "_TIG_IZ_onDW_argc": "INIT_FUN: '_TIG_IZ_onDW_argc__INIT'"
+          "_TIG_IZ_capJ_envp": "INIT_FUN: '_TIG_IZ_capJ_envp__INIT'",
+          "_TIG_IZ_capJ_argv": "INIT_FUN: '_TIG_IZ_capJ_argv__INIT'",
+          "_TIG_IZ_capJ_argc": "INIT_FUN: '_TIG_IZ_capJ_argc__INIT'"
         }
       }
     },
@@ -648,6 +688,180 @@ BEGIN-UNIVERSE
 END-UNIVERSE
 */
 
+#if __aarch64__
+#define SELFMODIFY_ARM_SET_ASM_MACROS \
+".macro selfmodify_arm_register_aliases_for_int_arithmetic \n\t"\
+"r0 .req x0\n\t"\
+"r1 .req w1\n\t"\
+"r2 .req w2\n\t"\
+".endm\n\t"\
+".macro selfmodify_arm_register_aliases_for_long_arithmetic \n\t"\
+"r0 .req x0\n\t"\
+"r1 .req x1\n\t"\
+"r2 .req x2\n\t"\
+".endm\n\t"\
+".macro selfmodify_arm_register_aliases_for_branch \n\t"\
+"linkreg .req x30\n\t"\
+".endm\n\t"\
+".macro selfmodify_arm_unregister_aliases_for_int_arithmetic \n\t"\
+".unreq r0\n\t"\
+".unreq r1\n\t"\
+".unreq r2\n\t"\
+".endm\n\t"\
+".macro selfmodify_arm_unregister_aliases_for_long_arithmetic \n\t"\
+".unreq r0\n\t"\
+".unreq r1\n\t"\
+".unreq r2\n\t"\
+".endm\n\t"\
+".macro selfmodify_arm_unregister_aliases_for_branch \n\t"\
+".unreq linkreg\n\t"\
+".endm\n\t"\
+".macro selfmodify_arm_macro_initial_arithmetic_op regd,regn,regm\n\t"\
+"add \\regd, \\regn, \\regm\n\t"\
+".endm\n\t"\
+".macro selfmodify_arm_macro_add_immediate regd,regn,imm\n\t"\
+"add \\regd, \\regn, #\\imm\n\t"\
+".endm\n\t"\
+".macro selfmodify_arm_macro_initial_comparison_op \n\t"\
+".inst 0x5400004a\n\t"\
+".endm\n\t"\
+".macro selfmodify_arm_macro_branch_register_op reg\n\t"\
+"br \\reg\n\t"\
+".endm\n\t"
+#elif __arm__ && !__thumb__
+#define SELFMODIFY_ARM_SET_ASM_MACROS \
+".macro selfmodify_arm_register_aliases_for_int_arithmetic \n\t"\
+".code 32\n\t"\
+".endm\n\t"\
+".macro selfmodify_arm_register_aliases_for_long_arithmetic \n\t"\
+".code 32\n\t"\
+".endm\n\t"\
+".macro selfmodify_arm_register_aliases_for_branch \n\t"\
+"linkreg .req lr\n\t"\
+".endm\n\t"\
+".macro selfmodify_arm_unregister_aliases_for_int_arithmetic \n\t"\
+".code 32\n\t"\
+".endm\n\t"\
+".macro selfmodify_arm_unregister_aliases_for_long_arithmetic \n\t"\
+".code 32\n\t"\
+".endm\n\t"\
+".macro selfmodify_arm_unregister_aliases_for_branch \n\t"\
+".unreq linkreg\n\t"\
+".endm\n\t"\
+".macro selfmodify_arm_macro_initial_arithmetic_op regd,regn,regm\n\t"\
+"add \\regd, \\regn, \\regm\n\t"\
+".endm\n\t"\
+".macro selfmodify_arm_macro_add_immediate regd,regn,imm\n\t"\
+"add \\regd, \\regn, #\\imm\n\t"\
+".endm\n\t"\
+".macro selfmodify_arm_macro_initial_comparison_op \n\t"\
+".inst 0xaa000000\n\t"\
+".endm\n\t"\
+".macro selfmodify_arm_macro_branch_register_op reg\n\t"\
+"bx \\reg\n\t"\
+".endm\n\t"
+#elif __arm__ && __thumb__
+#define SELFMODIFY_ARM_SET_ASM_MACROS \
+".macro selfmodify_arm_register_aliases_for_int_arithmetic \n\t"\
+".code 16\n\t"\
+".endm\n\t"\
+".macro selfmodify_arm_register_aliases_for_long_arithmetic \n\t"\
+".code 16\n\t"\
+".endm\n\t"\
+".macro selfmodify_arm_register_aliases_for_branch \n\t"\
+"linkreg .req lr\n\t"\
+".endm\n\t"\
+".macro selfmodify_arm_unregister_aliases_for_int_arithmetic \n\t"\
+".code 16\n\t"\
+".endm\n\t"\
+".macro selfmodify_arm_unregister_aliases_for_long_arithmetic \n\t"\
+".code 16\n\t"\
+".endm\n\t"\
+".macro selfmodify_arm_unregister_aliases_for_branch \n\t"\
+".unreq linkreg\n\t"\
+".endm\n\t"\
+".macro selfmodify_arm_macro_initial_arithmetic_op regd,regn,regm\n\t"\
+"add.w \\regd, \\regn, \\regm\n\t"\
+".endm\n\t"\
+".macro selfmodify_arm_macro_add_immediate regd,regn,imm\n\t"\
+"add.w \\regd, \\regn, #\\imm\n\t"\
+".endm\n\t"\
+".macro selfmodify_arm_macro_initial_comparison_op \n\t"\
+".inst.n 0x4000\n\t"\
+".inst.n 0xda01\n\t"\
+".endm\n\t"\
+".macro selfmodify_arm_macro_branch_register_op reg\n\t"\
+"orr \\reg, #0x1\n\t"\
+"bx \\reg\n\t"\
+".endm\n\t"
+#endif
+
+#if __aarch64__ || __arm__
+asm(SELFMODIFY_ARM_SET_ASM_MACROS);
+#endif
+#if __aarch64__
+#define SELFMODIFY_ARM_ADD_OP 0x0B010042U
+#define SELFMODIFY_ARM_SUB_OP 0x4B010042U
+#define SELFMODIFY_ARM_EOR_OP 0x4A010042U
+#define SELFMODIFY_ARM_ORR_OP 0x2A010042U
+#define SELFMODIFY_ARM_AND_OP 0x0A010042U
+#define SELFMODIFY_ARM_MUL_OP 0x1B017C42U
+#define SELFMODIFY_ARM_LSL_OP 0x1AC12042U
+#define SELFMODIFY_ARM_LSR_OP 0x1AC12442U
+#define SELFMODIFY_ARM_BLT_OP 0x5400004BU
+#define SELFMODIFY_ARM_BGT_OP 0x5400004CU
+#define SELFMODIFY_ARM_BGE_OP 0x5400004AU
+#define SELFMODIFY_ARM_BLE_OP 0x5400004DU
+#define SELFMODIFY_ARM_BEQ_OP 0x54000040U
+#define SELFMODIFY_ARM_BNE_OP 0x54000041U
+#define SELFMODIFY_ARM_LONG_OP_MODIFIER 0x80000000U
+#define ENCODE_ADD_LR_LR_IMM(imm) \
+(((imm & 0xFFF) << 10) | 0b10010001000000000000001111011110U)
+#elif __arm__ && !__thumb__
+#define SELFMODIFY_ARM_ADD_OP 0xE0822001U
+#define SELFMODIFY_ARM_SUB_OP 0xE0422001U
+#define SELFMODIFY_ARM_EOR_OP 0xE0222001U
+#define SELFMODIFY_ARM_ORR_OP 0xE1822001U
+#define SELFMODIFY_ARM_AND_OP 0xE0022001U
+#define SELFMODIFY_ARM_MUL_OP 0xE0020192U
+#define SELFMODIFY_ARM_LSL_OP 0xE1A02112U
+#define SELFMODIFY_ARM_LSR_OP 0xE1A02132U
+#define SELFMODIFY_ARM_BLT_OP 0xBA000000U
+#define SELFMODIFY_ARM_BGT_OP 0xCA000000U
+#define SELFMODIFY_ARM_BGE_OP 0xAA000000U
+#define SELFMODIFY_ARM_BLE_OP 0xDA000000U
+#define SELFMODIFY_ARM_BEQ_OP 0x0A000000U
+#define SELFMODIFY_ARM_BNE_OP 0x1A000000U
+#define SELFMODIFY_ARM_LONG_OP_MODIFIER 0x0U
+#define ENCODE_ADD_LR_LR_IMM(imm) \
+((imm & 0xFFF) | 0b11100010100011101110000000000000U)
+#elif __arm__ && __thumb__
+#define SELFMODIFY_ARM_ADD_OP 0x18524000U
+#define SELFMODIFY_ARM_SUB_OP 0x1A524000U
+#define SELFMODIFY_ARM_EOR_OP 0x404A4000U
+#define SELFMODIFY_ARM_ORR_OP 0x430A4000U
+#define SELFMODIFY_ARM_AND_OP 0x400A4000U
+#define SELFMODIFY_ARM_MUL_OP 0x434A4000U
+#define SELFMODIFY_ARM_LSL_OP 0x408A4000U
+#define SELFMODIFY_ARM_LSR_OP 0x40CA4000U
+#define SELFMODIFY_ARM_BLT_OP 0x4000DB01U
+#define SELFMODIFY_ARM_BGT_OP 0x4000DC01U
+#define SELFMODIFY_ARM_BGE_OP 0x4000DA01U
+#define SELFMODIFY_ARM_BLE_OP 0x4000DD01U
+#define SELFMODIFY_ARM_BEQ_OP 0x4000D001U
+#define SELFMODIFY_ARM_BNE_OP 0x4000D101U
+#define SELFMODIFY_ARM_LONG_OP_MODIFIER 0x0U
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+#define ENCODE_ADD_LR_LR_IMM(imm) \
+((((imm & 0xFF) | 0b0000111000000000U) << 16) | 0b1111000100001110U) 
+#elif __BTYE_ORDER__ == __ORDER_BIG_ENDIAN__
+#define ENCODE_ADD_LR_LR_IMM(imm) \
+((imm & 0xFF) | 0b11110001000011100000111000000000U)
+#else
+#error "Only little endian and big endian are supported for ARM."
+#endif
+#endif
+
 
 /* BEGIN TYPEDEF __fpos_t LOC=/usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h:10 */
 #line 10 "/usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h"
@@ -838,13 +1052,6 @@ extern int ( __attribute__((__nonnull__(1))) vfprintf)(FILE * __restrict  __s , 
                                                        __gnuc_va_list __arg ) ;
 /* END FUNCTION-DECL-EXTERN vfprintf LOC=/usr/include/stdio.h:372 VKEY=1106 */
 
-/* BEGIN FUNCTION-DECL-EXTERN vasprintf LOC=/usr/include/stdio.h:397 VKEY=1141 */
-#line 397
-extern  __attribute__((__nothrow__)) int ( /* format attribute */  vasprintf)(char ** __restrict  __ptr ,
-                                                                              char const   * __restrict  __f ,
-                                                                              __gnuc_va_list __arg ) ;
-/* END FUNCTION-DECL-EXTERN vasprintf LOC=/usr/include/stdio.h:397 VKEY=1141 */
-
 /* BEGIN FUNCTION-DECL-EXTERN vsnprintf LOC=/usr/include/stdio.h:389 VKEY=1134 */
 #line 389
 extern  __attribute__((__nothrow__)) int ( /* format attribute */  vsnprintf)(char * __restrict  __s ,
@@ -852,6 +1059,13 @@ extern  __attribute__((__nothrow__)) int ( /* format attribute */  vsnprintf)(ch
                                                                               char const   * __restrict  __format ,
                                                                               __gnuc_va_list __arg ) ;
 /* END FUNCTION-DECL-EXTERN vsnprintf LOC=/usr/include/stdio.h:389 VKEY=1134 */
+
+/* BEGIN FUNCTION-DECL-EXTERN vasprintf LOC=/usr/include/stdio.h:397 VKEY=1141 */
+#line 397
+extern  __attribute__((__nothrow__)) int ( /* format attribute */  vasprintf)(char ** __restrict  __ptr ,
+                                                                              char const   * __restrict  __f ,
+                                                                              __gnuc_va_list __arg ) ;
+/* END FUNCTION-DECL-EXTERN vasprintf LOC=/usr/include/stdio.h:397 VKEY=1141 */
 
 /* BEGIN TYPEDEF __blksize_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:175 */
 #line 175 "/usr/include/x86_64-linux-gnu/bits/types.h"
@@ -863,6 +1077,10 @@ typedef long __blksize_t;
 extern int getchar_unlocked(void) ;
 /* END FUNCTION-DECL-EXTERN getchar_unlocked LOC=/usr/include/stdio.h:590 VKEY=1242 */
 
+/* BEGIN VARIABLE-DEF _TIG_IZ_capJ_argv LOC=UNKNOWN VKEY=1469 */
+char **_TIG_IZ_capJ_argv  ;
+/* END VARIABLE-DEF _TIG_IZ_capJ_argv LOC=UNKNOWN VKEY=1469 */
+
 /* BEGIN FUNCTION-DECL-EXTERN tempnam LOC=/usr/include/stdio.h:228 VKEY=1020 */
 #line 228
 extern  __attribute__((__nothrow__)) char *( __attribute__((__leaf__)) tempnam)(char const   *__dir ,
@@ -870,9 +1088,9 @@ extern  __attribute__((__nothrow__)) char *( __attribute__((__leaf__)) tempnam)(
 __malloc__)) ;
 /* END FUNCTION-DECL-EXTERN tempnam LOC=/usr/include/stdio.h:228 VKEY=1020 */
 
-/* BEGIN VARIABLE-DEF _TIG_IZ_onDW_envp LOC=UNKNOWN VKEY=1471 */
-char **_TIG_IZ_onDW_envp  ;
-/* END VARIABLE-DEF _TIG_IZ_onDW_envp LOC=UNKNOWN VKEY=1471 */
+/* BEGIN VARIABLE-DECL _TIG_IZ_capJ_argc LOC=UNKNOWN VKEY=1468 */
+int _TIG_IZ_capJ_argc ;
+/* END VARIABLE-DECL _TIG_IZ_capJ_argc LOC=UNKNOWN VKEY=1468 */
 
 /* BEGIN TYPEDEF __mode_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:150 */
 #line 150 "/usr/include/x86_64-linux-gnu/bits/types.h"
@@ -921,10 +1139,6 @@ struct _IO_wide_data ;
 extern  __attribute__((__nothrow__)) int ( __attribute__((__nonnull__(1), __leaf__)) feof)(FILE *__stream ) ;
 /* END FUNCTION-DECL-EXTERN feof LOC=/usr/include/stdio.h:862 VKEY=1399 */
 
-/* BEGIN VARIABLE-DECL _TIG_IZ_onDW_argc LOC=UNKNOWN VKEY=1468 */
-int _TIG_IZ_onDW_argc ;
-/* END VARIABLE-DECL _TIG_IZ_onDW_argc LOC=UNKNOWN VKEY=1468 */
-
 /* BEGIN FUNCTION-DECL-EXTERN putc_unlocked LOC=/usr/include/stdio.h:635 VKEY=1268 */
 #line 635
 extern int ( __attribute__((__nonnull__(2))) putc_unlocked)(int __c , FILE *__stream ) ;
@@ -970,20 +1184,24 @@ extern  __attribute__((__nothrow__)) int ( __attribute__((__nonnull__(1), __leaf
 struct _G_fpos64_t ;
 /* END STRUCT-DECL _G_fpos64_t LOC=/usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h:10 13 */
 
+/* BEGIN VARIABLE-DECL _TIG_IZ_capJ_argv LOC=UNKNOWN VKEY=1469 */
+char **_TIG_IZ_capJ_argv ;
+/* END VARIABLE-DECL _TIG_IZ_capJ_argv LOC=UNKNOWN VKEY=1469 */
+
 /* BEGIN TYPEDEF __uint_least8_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:53 */
 #line 53 "/usr/include/x86_64-linux-gnu/bits/types.h"
 typedef __uint8_t __uint_least8_t;
 /* END TYPEDEF __uint_least8_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:53 */
 
-/* BEGIN TYPEDEF __uintmax_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:73 */
-#line 73 "/usr/include/x86_64-linux-gnu/bits/types.h"
-typedef unsigned long __uintmax_t;
-/* END TYPEDEF __uintmax_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:73 */
-
 /* BEGIN TYPEDEF __clock_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:156 */
 #line 156 "/usr/include/x86_64-linux-gnu/bits/types.h"
 typedef long __clock_t;
 /* END TYPEDEF __clock_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:156 */
+
+/* BEGIN TYPEDEF __uintmax_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:73 */
+#line 73 "/usr/include/x86_64-linux-gnu/bits/types.h"
+typedef unsigned long __uintmax_t;
+/* END TYPEDEF __uintmax_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:73 */
 
 /* BEGIN FUNCTION-DECL-EXTERN open_memstream LOC=/usr/include/stdio.h:320 VKEY=1062 */
 #line 320 "/usr/include/stdio.h"
@@ -1000,11 +1218,6 @@ extern  __attribute__((__nothrow__)) FILE *( __attribute__((__leaf__)) fopencook
 __malloc__)) ;
 /* END FUNCTION-DECL-EXTERN fopencookie LOC=/usr/include/stdio.h:306 VKEY=1050 */
 
-/* BEGIN FUNCTION-DECL-EXTERN __uflow LOC=/usr/include/stdio.h:959 VKEY=1443 */
-#line 959
-extern int __uflow(FILE * ) ;
-/* END FUNCTION-DECL-EXTERN __uflow LOC=/usr/include/stdio.h:959 VKEY=1443 */
-
 /* BEGIN FUNCTION-DECL-EXTERN snprintf LOC=/usr/include/stdio.h:385 VKEY=1125 */
 #line 385
 extern  __attribute__((__nothrow__)) int ( /* format attribute */  snprintf)(char * __restrict  __s ,
@@ -1012,6 +1225,11 @@ extern  __attribute__((__nothrow__)) int ( /* format attribute */  snprintf)(cha
                                                                              char const   * __restrict  __format 
                                                                              , ...) ;
 /* END FUNCTION-DECL-EXTERN snprintf LOC=/usr/include/stdio.h:385 VKEY=1125 */
+
+/* BEGIN FUNCTION-DECL-EXTERN __uflow LOC=/usr/include/stdio.h:959 VKEY=1443 */
+#line 959
+extern int __uflow(FILE * ) ;
+/* END FUNCTION-DECL-EXTERN __uflow LOC=/usr/include/stdio.h:959 VKEY=1443 */
 
 /* BEGIN TYPEDEF __u_short LOC=/usr/include/x86_64-linux-gnu/bits/types.h:32 */
 #line 32 "/usr/include/x86_64-linux-gnu/bits/types.h"
@@ -1027,6 +1245,10 @@ extern  __attribute__((__nothrow__)) void ( __attribute__((__nonnull__(1), __lea
 #line 34 "/usr/include/x86_64-linux-gnu/bits/types.h"
 typedef unsigned long __u_long;
 /* END TYPEDEF __u_long LOC=/usr/include/x86_64-linux-gnu/bits/types.h:34 */
+
+/* BEGIN VARIABLE-DECL _TIG_IZ_capJ_envp LOC=UNKNOWN VKEY=1471 */
+char **_TIG_IZ_capJ_envp ;
+/* END VARIABLE-DECL _TIG_IZ_capJ_envp LOC=UNKNOWN VKEY=1471 */
 
 /* BEGIN TYPEDEF __socklen_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:210 */
 #line 210 "/usr/include/x86_64-linux-gnu/bits/types.h"
@@ -1048,24 +1270,20 @@ struct __anonstruct___fsid_t_109580352 ;
 extern FILE *stderr ;
 /* END VARIABLE-DECL-EXTERN stderr LOC=/usr/include/stdio.h:151 VKEY=986 */
 
-/* BEGIN TYPEDEF __uint_least32_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:57 */
-#line 57 "/usr/include/x86_64-linux-gnu/bits/types.h"
-typedef __uint32_t __uint_least32_t;
-/* END TYPEDEF __uint_least32_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:57 */
-
 /* BEGIN TYPEDEF __key_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:166 */
 #line 166 "/usr/include/x86_64-linux-gnu/bits/types.h"
 typedef int __key_t;
 /* END TYPEDEF __key_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:166 */
 
+/* BEGIN TYPEDEF __uint_least32_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:57 */
+#line 57 "/usr/include/x86_64-linux-gnu/bits/types.h"
+typedef __uint32_t __uint_least32_t;
+/* END TYPEDEF __uint_least32_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:57 */
+
 /* BEGIN FUNCTION-DECL-EXTERN putchar LOC=/usr/include/stdio.h:618 VKEY=1258 */
 #line 618 "/usr/include/stdio.h"
 extern int putchar(int __c ) ;
 /* END FUNCTION-DECL-EXTERN putchar LOC=/usr/include/stdio.h:618 VKEY=1258 */
-
-/* BEGIN VARIABLE-DECL _TIG_IZ_onDW_argv LOC=UNKNOWN VKEY=1469 */
-char **_TIG_IZ_onDW_argv ;
-/* END VARIABLE-DECL _TIG_IZ_onDW_argv LOC=UNKNOWN VKEY=1469 */
 
 /* BEGIN TYPEDEF __syscall_slong_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:197 */
 #line 197 "/usr/include/x86_64-linux-gnu/bits/types.h"
@@ -1109,9 +1327,9 @@ extern int ( __attribute__((__nonnull__(1))) fseeko)(FILE *__stream , __off_t __
 extern int ( __attribute__((__nonnull__(1))) fgetc)(FILE *__stream ) ;
 /* END FUNCTION-DECL-EXTERN fgetc LOC=/usr/include/stdio.h:575 VKEY=1230 */
 
-/* BEGIN FUNCTION-DECL add LOC=UNKNOWN VKEY=1477 */
+/* BEGIN FUNCTION-DECL add LOC=UNKNOWN VKEY=1491 */
 int add(int a , int b ) ;
-/* END FUNCTION-DECL add LOC=UNKNOWN VKEY=1477 */
+/* END FUNCTION-DECL add LOC=UNKNOWN VKEY=1491 */
 
 /* BEGIN STRUCT-DECL _IO_cookie_io_functions_t LOC=/usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h:55 18 */
 #line 55 "/usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h"
@@ -1136,20 +1354,18 @@ typedef unsigned long __fsfilcnt64_t;
 typedef __int32_t __int_least32_t;
 /* END TYPEDEF __int_least32_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:56 */
 
-/* BEGIN FUNCTION-DECL-EXTERN fwrite LOC=/usr/include/stdio.h:745 VKEY=1342 */
-#line 745 "/usr/include/stdio.h"
-extern size_t ( __attribute__((__nonnull__(4))) fwrite)(void const   * __restrict  __ptr ,
-                                                        size_t __size , size_t __n ,
-                                                        FILE * __restrict  __s ) ;
-/* END FUNCTION-DECL-EXTERN fwrite LOC=/usr/include/stdio.h:745 VKEY=1342 */
-
 /* BEGIN FUNCTION-DECL-EXTERN setvbuf LOC=/usr/include/stdio.h:339 VKEY=1076 */
-#line 339
+#line 339 "/usr/include/stdio.h"
 extern  __attribute__((__nothrow__)) int ( __attribute__((__nonnull__(1), __leaf__)) setvbuf)(FILE * __restrict  __stream ,
                                                                                               char * __restrict  __buf ,
                                                                                               int __modes ,
                                                                                               size_t __n ) ;
 /* END FUNCTION-DECL-EXTERN setvbuf LOC=/usr/include/stdio.h:339 VKEY=1076 */
+
+/* BEGIN FUNCTION-DECL-EXTERN remove LOC=/usr/include/stdio.h:158 VKEY=989 */
+#line 158
+extern  __attribute__((__nothrow__)) int ( __attribute__((__leaf__)) remove)(char const   *__filename ) ;
+/* END FUNCTION-DECL-EXTERN remove LOC=/usr/include/stdio.h:158 VKEY=989 */
 
 /* BEGIN FUNCTION-DECL-EXTERN renameat LOC=/usr/include/stdio.h:164 VKEY=1003 */
 #line 164
@@ -1159,10 +1375,12 @@ extern  __attribute__((__nothrow__)) int ( __attribute__((__leaf__)) renameat)(i
                                                                                char const   *__new ) ;
 /* END FUNCTION-DECL-EXTERN renameat LOC=/usr/include/stdio.h:164 VKEY=1003 */
 
-/* BEGIN FUNCTION-DECL-EXTERN remove LOC=/usr/include/stdio.h:158 VKEY=989 */
-#line 158
-extern  __attribute__((__nothrow__)) int ( __attribute__((__leaf__)) remove)(char const   *__filename ) ;
-/* END FUNCTION-DECL-EXTERN remove LOC=/usr/include/stdio.h:158 VKEY=989 */
+/* BEGIN FUNCTION-DECL-EXTERN fwrite LOC=/usr/include/stdio.h:745 VKEY=1342 */
+#line 745
+extern size_t ( __attribute__((__nonnull__(4))) fwrite)(void const   * __restrict  __ptr ,
+                                                        size_t __size , size_t __n ,
+                                                        FILE * __restrict  __s ) ;
+/* END FUNCTION-DECL-EXTERN fwrite LOC=/usr/include/stdio.h:745 VKEY=1342 */
 
 /* BEGIN FUNCTION-DECL-EXTERN fseek LOC=/usr/include/stdio.h:779 VKEY=1367 */
 #line 779
@@ -1200,15 +1418,15 @@ typedef unsigned long __fsfilcnt_t;
 extern int putchar_unlocked(int __c ) ;
 /* END FUNCTION-DECL-EXTERN putchar_unlocked LOC=/usr/include/stdio.h:636 VKEY=1271 */
 
-/* BEGIN FUNCTION-DECL-EXTERN rewind LOC=/usr/include/stdio.h:790 VKEY=1373 */
-#line 790
-extern void ( __attribute__((__nonnull__(1))) rewind)(FILE *__stream ) ;
-/* END FUNCTION-DECL-EXTERN rewind LOC=/usr/include/stdio.h:790 VKEY=1373 */
-
 /* BEGIN FUNCTION-DECL-EXTERN ungetc LOC=/usr/include/stdio.h:731 VKEY=1324 */
 #line 731
 extern int ( __attribute__((__nonnull__(2))) ungetc)(int __c , FILE *__stream ) ;
 /* END FUNCTION-DECL-EXTERN ungetc LOC=/usr/include/stdio.h:731 VKEY=1324 */
+
+/* BEGIN FUNCTION-DECL-EXTERN rewind LOC=/usr/include/stdio.h:790 VKEY=1373 */
+#line 790
+extern void ( __attribute__((__nonnull__(1))) rewind)(FILE *__stream ) ;
+/* END FUNCTION-DECL-EXTERN rewind LOC=/usr/include/stdio.h:790 VKEY=1373 */
 
 /* BEGIN FUNCTION-DECL-EXTERN fputs LOC=/usr/include/stdio.h:717 VKEY=1316 */
 #line 717
@@ -1221,14 +1439,8 @@ extern int ( __attribute__((__nonnull__(2))) fputs)(char const   * __restrict  _
 typedef unsigned long __syscall_ulong_t;
 /* END TYPEDEF __syscall_ulong_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:199 */
 
-/* BEGIN FUNCTION-DECL-EXTERN popen LOC=/usr/include/stdio.h:903 VKEY=1428 */
-#line 903 "/usr/include/stdio.h"
-extern FILE *popen(char const   *__command , char const   *__modes )  __attribute__((__malloc__(pclose,1),
-__malloc__)) ;
-/* END FUNCTION-DECL-EXTERN popen LOC=/usr/include/stdio.h:903 VKEY=1428 */
-
 /* BEGIN FUNCTION-DECL-EXTERN vfscanf LOC=/usr/include/stdio.h:490 VKEY=1196 */
-#line 490
+#line 490 "/usr/include/stdio.h"
 extern int ( /* format attribute */ __attribute__((__nonnull__(1))) vfscanf)(FILE * __restrict  __s ,
                                                                              char const   * __restrict  __format ,
                                                                              __gnuc_va_list __arg )  __asm__("__isoc99_vfscanf")  ;
@@ -1240,6 +1452,12 @@ extern size_t ( __attribute__((__nonnull__(4))) fwrite_unlocked)(void const   * 
                                                                  size_t __size , size_t __n ,
                                                                  FILE * __restrict  __stream ) ;
 /* END FUNCTION-DECL-EXTERN fwrite_unlocked LOC=/usr/include/stdio.h:769 VKEY=1360 */
+
+/* BEGIN FUNCTION-DECL-EXTERN popen LOC=/usr/include/stdio.h:903 VKEY=1428 */
+#line 903
+extern FILE *popen(char const   *__command , char const   *__modes )  __attribute__((__malloc__(pclose,1),
+__malloc__)) ;
+/* END FUNCTION-DECL-EXTERN popen LOC=/usr/include/stdio.h:903 VKEY=1428 */
 
 /* BEGIN TYPEDEF __rlim_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:157 */
 #line 157 "/usr/include/x86_64-linux-gnu/bits/types.h"
@@ -1261,41 +1479,41 @@ typedef __gnuc_va_list va_list;
 typedef unsigned int __id_t;
 /* END TYPEDEF __id_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:159 */
 
-/* BEGIN FUNCTION-DECL-EXTERN perror LOC=/usr/include/stdio.h:878 VKEY=1414 */
-#line 878 "/usr/include/stdio.h"
-extern void perror(char const   *__s )  __attribute__((__cold__)) ;
-/* END FUNCTION-DECL-EXTERN perror LOC=/usr/include/stdio.h:878 VKEY=1414 */
-
 /* BEGIN FUNCTION-DECL-EXTERN rename LOC=/usr/include/stdio.h:160 VKEY=994 */
-#line 160
+#line 160 "/usr/include/stdio.h"
 extern  __attribute__((__nothrow__)) int ( __attribute__((__leaf__)) rename)(char const   *__old ,
                                                                              char const   *__new ) ;
 /* END FUNCTION-DECL-EXTERN rename LOC=/usr/include/stdio.h:160 VKEY=994 */
 
-/* BEGIN FUNCTION-DECL-EXTERN fputc LOC=/usr/include/stdio.h:611 VKEY=1250 */
-#line 611
-extern int ( __attribute__((__nonnull__(2))) fputc)(int __c , FILE *__stream ) ;
-/* END FUNCTION-DECL-EXTERN fputc LOC=/usr/include/stdio.h:611 VKEY=1250 */
+/* BEGIN FUNCTION-DECL-EXTERN perror LOC=/usr/include/stdio.h:878 VKEY=1414 */
+#line 878
+extern void perror(char const   *__s )  __attribute__((__cold__)) ;
+/* END FUNCTION-DECL-EXTERN perror LOC=/usr/include/stdio.h:878 VKEY=1414 */
 
 /* BEGIN FUNCTION-DECL-EXTERN ferror LOC=/usr/include/stdio.h:864 VKEY=1402 */
 #line 864
 extern  __attribute__((__nothrow__)) int ( __attribute__((__nonnull__(1), __leaf__)) ferror)(FILE *__stream ) ;
 /* END FUNCTION-DECL-EXTERN ferror LOC=/usr/include/stdio.h:864 VKEY=1402 */
 
+/* BEGIN FUNCTION-DECL-EXTERN fputc LOC=/usr/include/stdio.h:611 VKEY=1250 */
+#line 611
+extern int ( __attribute__((__nonnull__(2))) fputc)(int __c , FILE *__stream ) ;
+/* END FUNCTION-DECL-EXTERN fputc LOC=/usr/include/stdio.h:611 VKEY=1250 */
+
 /* BEGIN TYPEDEF __rlim64_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:158 */
 #line 158 "/usr/include/x86_64-linux-gnu/bits/types.h"
 typedef unsigned long __rlim64_t;
 /* END TYPEDEF __rlim64_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:158 */
 
-/* BEGIN TYPEDEF __uint_least64_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:59 */
-#line 59 "/usr/include/x86_64-linux-gnu/bits/types.h"
-typedef __uint64_t __uint_least64_t;
-/* END TYPEDEF __uint_least64_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:59 */
-
 /* BEGIN TYPEDEF __pid_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:154 */
 #line 154 "/usr/include/x86_64-linux-gnu/bits/types.h"
 typedef int __pid_t;
 /* END TYPEDEF __pid_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:154 */
+
+/* BEGIN TYPEDEF __uint_least64_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:59 */
+#line 59 "/usr/include/x86_64-linux-gnu/bits/types.h"
+typedef __uint64_t __uint_least64_t;
+/* END TYPEDEF __uint_least64_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:59 */
 
 /* BEGIN FUNCTION-DECL-EXTERN __getdelim LOC=/usr/include/stdio.h:694 VKEY=1295 */
 #line 694 "/usr/include/stdio.h"
@@ -1311,15 +1529,15 @@ extern  __attribute__((__nothrow__)) FILE *( __attribute__((__leaf__)) fdopen)(i
 __malloc__)) ;
 /* END FUNCTION-DECL-EXTERN fdopen LOC=/usr/include/stdio.h:299 VKEY=1043 */
 
-/* BEGIN FUNCTION-DECL-EXTERN clearerr LOC=/usr/include/stdio.h:860 VKEY=1396 */
-#line 860
-extern  __attribute__((__nothrow__)) void ( __attribute__((__nonnull__(1), __leaf__)) clearerr)(FILE *__stream ) ;
-/* END FUNCTION-DECL-EXTERN clearerr LOC=/usr/include/stdio.h:860 VKEY=1396 */
-
 /* BEGIN FUNCTION-DECL-EXTERN ctermid LOC=/usr/include/stdio.h:911 VKEY=1431 */
 #line 911
 extern  __attribute__((__nothrow__)) char *( __attribute__((__leaf__)) ctermid)(char *__s )  __attribute__((__access__(__write_only__,1))) ;
 /* END FUNCTION-DECL-EXTERN ctermid LOC=/usr/include/stdio.h:911 VKEY=1431 */
+
+/* BEGIN FUNCTION-DECL-EXTERN clearerr LOC=/usr/include/stdio.h:860 VKEY=1396 */
+#line 860
+extern  __attribute__((__nothrow__)) void ( __attribute__((__nonnull__(1), __leaf__)) clearerr)(FILE *__stream ) ;
+/* END FUNCTION-DECL-EXTERN clearerr LOC=/usr/include/stdio.h:860 VKEY=1396 */
 
 /* BEGIN FUNCTION-DECL-EXTERN vdprintf LOC=/usr/include/stdio.h:410 VKEY=1158 */
 #line 410
@@ -1399,10 +1617,6 @@ extern int ( __attribute__((__nonnull__(1))) fgetpos)(FILE * __restrict  __strea
 typedef unsigned long __fsblkcnt_t;
 /* END TYPEDEF __fsblkcnt_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:184 */
 
-/* BEGIN VARIABLE-DEF _TIG_IZ_onDW_argv LOC=UNKNOWN VKEY=1469 */
-char **_TIG_IZ_onDW_argv  ;
-/* END VARIABLE-DEF _TIG_IZ_onDW_argv LOC=UNKNOWN VKEY=1469 */
-
 /* BEGIN VARIABLE-DECL-EXTERN stdout LOC=/usr/include/stdio.h:150 VKEY=985 */
 #line 150 "/usr/include/stdio.h"
 extern FILE *stdout ;
@@ -1428,15 +1642,20 @@ typedef unsigned long __nlink_t;
 typedef long __blkcnt64_t;
 /* END TYPEDEF __blkcnt64_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:181 */
 
+/* BEGIN FUNCTION-DECL-EXTERN putw LOC=/usr/include/stdio.h:646 VKEY=1279 */
+#line 646 "/usr/include/stdio.h"
+extern int ( __attribute__((__nonnull__(2))) putw)(int __w , FILE *__stream ) ;
+/* END FUNCTION-DECL-EXTERN putw LOC=/usr/include/stdio.h:646 VKEY=1279 */
+
 /* BEGIN FUNCTION-DECL-EXTERN fputc_unlocked LOC=/usr/include/stdio.h:627 VKEY=1263 */
-#line 627 "/usr/include/stdio.h"
+#line 627
 extern int ( __attribute__((__nonnull__(2))) fputc_unlocked)(int __c , FILE *__stream ) ;
 /* END FUNCTION-DECL-EXTERN fputc_unlocked LOC=/usr/include/stdio.h:627 VKEY=1263 */
 
-/* BEGIN FUNCTION-DECL-EXTERN putw LOC=/usr/include/stdio.h:646 VKEY=1279 */
-#line 646
-extern int ( __attribute__((__nonnull__(2))) putw)(int __w , FILE *__stream ) ;
-/* END FUNCTION-DECL-EXTERN putw LOC=/usr/include/stdio.h:646 VKEY=1279 */
+/* BEGIN FUNCTION-DECL-EXTERN fflush LOC=/usr/include/stdio.h:236 VKEY=1023 */
+#line 236
+extern int fflush(FILE *__stream ) ;
+/* END FUNCTION-DECL-EXTERN fflush LOC=/usr/include/stdio.h:236 VKEY=1023 */
 
 /* BEGIN FUNCTION-DECL-EXTERN fprintf LOC=/usr/include/stdio.h:357 VKEY=1091 */
 #line 357
@@ -1445,19 +1664,14 @@ extern int ( __attribute__((__nonnull__(1))) fprintf)(FILE * __restrict  __strea
                                                       , ...) ;
 /* END FUNCTION-DECL-EXTERN fprintf LOC=/usr/include/stdio.h:357 VKEY=1091 */
 
-/* BEGIN FUNCTION-DECL-EXTERN fflush LOC=/usr/include/stdio.h:236 VKEY=1023 */
-#line 236
-extern int fflush(FILE *__stream ) ;
-/* END FUNCTION-DECL-EXTERN fflush LOC=/usr/include/stdio.h:236 VKEY=1023 */
-
-/* BEGIN VARIABLE-DEF _TIG_IZ_onDW_argc LOC=UNKNOWN VKEY=1468 */
-int _TIG_IZ_onDW_argc  ;
-/* END VARIABLE-DEF _TIG_IZ_onDW_argc LOC=UNKNOWN VKEY=1468 */
-
 /* BEGIN STRUCT-DECL __anonstruct___mbstate_t_503534491 LOC=/usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h:13 10 */
 #line 13 "/usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h"
 struct __anonstruct___mbstate_t_503534491 ;
 /* END STRUCT-DECL __anonstruct___mbstate_t_503534491 LOC=/usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h:13 10 */
+
+/* BEGIN VARIABLE-DEF _TIG_IZ_capJ_envp LOC=UNKNOWN VKEY=1471 */
+char **_TIG_IZ_capJ_envp  ;
+/* END VARIABLE-DEF _TIG_IZ_capJ_envp LOC=UNKNOWN VKEY=1471 */
 
 /* BEGIN FUNCTION-DECL-EXTERN ftrylockfile LOC=/usr/include/stdio.h:945 VKEY=1437 */
 #line 945 "/usr/include/stdio.h"
@@ -1580,17 +1794,17 @@ typedef unsigned int __u_int;
 extern int getchar(void) ;
 /* END FUNCTION-DECL-EXTERN getchar LOC=/usr/include/stdio.h:582 VKEY=1236 */
 
-/* BEGIN FUNCTION-DECL-EXTERN setbuf LOC=/usr/include/stdio.h:334 VKEY=1067 */
-#line 334
-extern  __attribute__((__nothrow__)) void ( __attribute__((__nonnull__(1), __leaf__)) setbuf)(FILE * __restrict  __stream ,
-                                                                                              char * __restrict  __buf ) ;
-/* END FUNCTION-DECL-EXTERN setbuf LOC=/usr/include/stdio.h:334 VKEY=1067 */
-
 /* BEGIN FUNCTION-DECL-EXTERN dprintf LOC=/usr/include/stdio.h:413 VKEY=1163 */
 #line 413
 extern int ( /* format attribute */  dprintf)(int __fd , char const   * __restrict  __fmt 
                                               , ...) ;
 /* END FUNCTION-DECL-EXTERN dprintf LOC=/usr/include/stdio.h:413 VKEY=1163 */
+
+/* BEGIN FUNCTION-DECL-EXTERN setbuf LOC=/usr/include/stdio.h:334 VKEY=1067 */
+#line 334
+extern  __attribute__((__nothrow__)) void ( __attribute__((__nonnull__(1), __leaf__)) setbuf)(FILE * __restrict  __stream ,
+                                                                                              char * __restrict  __buf ) ;
+/* END FUNCTION-DECL-EXTERN setbuf LOC=/usr/include/stdio.h:334 VKEY=1067 */
 
 /* BEGIN FUNCTION-DECL-EXTERN fileno LOC=/usr/include/stdio.h:883 VKEY=1417 */
 #line 883
@@ -1622,17 +1836,17 @@ typedef long __intptr_t;
 extern  __attribute__((__nothrow__)) char *( __attribute__((__leaf__)) tmpnam_r)(char *__s ) ;
 /* END FUNCTION-DECL-EXTERN tmpnam_r LOC=/usr/include/stdio.h:216 VKEY=1015 */
 
+/* BEGIN FUNCTION-DECL-EXTERN flockfile LOC=/usr/include/stdio.h:941 VKEY=1434 */
+#line 941
+extern  __attribute__((__nothrow__)) void ( __attribute__((__nonnull__(1), __leaf__)) flockfile)(FILE *__stream ) ;
+/* END FUNCTION-DECL-EXTERN flockfile LOC=/usr/include/stdio.h:941 VKEY=1434 */
+
 /* BEGIN FUNCTION-DECL-EXTERN __asprintf LOC=/usr/include/stdio.h:400 VKEY=1146 */
 #line 400
 extern  __attribute__((__nothrow__)) int ( /* format attribute */  __asprintf)(char ** __restrict  __ptr ,
                                                                                char const   * __restrict  __fmt 
                                                                                , ...) ;
 /* END FUNCTION-DECL-EXTERN __asprintf LOC=/usr/include/stdio.h:400 VKEY=1146 */
-
-/* BEGIN FUNCTION-DECL-EXTERN flockfile LOC=/usr/include/stdio.h:941 VKEY=1434 */
-#line 941
-extern  __attribute__((__nothrow__)) void ( __attribute__((__nonnull__(1), __leaf__)) flockfile)(FILE *__stream ) ;
-/* END FUNCTION-DECL-EXTERN flockfile LOC=/usr/include/stdio.h:941 VKEY=1434 */
 
 /* BEGIN FUNCTION-DECL-EXTERN __overflow LOC=/usr/include/stdio.h:960 VKEY=1448 */
 #line 960
@@ -1686,6 +1900,10 @@ extern __ssize_t ( __attribute__((__nonnull__(4))) getdelim)(char ** __restrict 
                                                              int __delimiter , FILE * __restrict  __stream ) ;
 /* END FUNCTION-DECL-EXTERN getdelim LOC=/usr/include/stdio.h:697 VKEY=1304 */
 
+/* BEGIN VARIABLE-DEF _TIG_IZ_capJ_argc LOC=UNKNOWN VKEY=1468 */
+int _TIG_IZ_capJ_argc  ;
+/* END VARIABLE-DEF _TIG_IZ_capJ_argc LOC=UNKNOWN VKEY=1468 */
+
 /* BEGIN TYPEDEF __clockid_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:169 */
 #line 169 "/usr/include/x86_64-linux-gnu/bits/types.h"
 typedef int __clockid_t;
@@ -1696,19 +1914,15 @@ typedef int __clockid_t;
 extern  __attribute__((__nothrow__)) char *( __attribute__((__leaf__)) tmpnam)(char * ) ;
 /* END FUNCTION-DECL-EXTERN tmpnam LOC=/usr/include/stdio.h:211 VKEY=1012 */
 
-/* BEGIN VARIABLE-DECL _TIG_IZ_onDW_envp LOC=UNKNOWN VKEY=1471 */
-char **_TIG_IZ_onDW_envp ;
-/* END VARIABLE-DECL _TIG_IZ_onDW_envp LOC=UNKNOWN VKEY=1471 */
+/* BEGIN FUNCTION-DECL main LOC=UNKNOWN VKEY=1483 */
+int main(int argc , char **argv , char **_TIG_IZ_capJ_formal_envp ) ;
+/* END FUNCTION-DECL main LOC=UNKNOWN VKEY=1483 */
 
 /* BEGIN FUNCTION-DECL-EXTERN sprintf LOC=/usr/include/stdio.h:365 VKEY=1099 */
 #line 365
 extern  __attribute__((__nothrow__)) int sprintf(char * __restrict  __s , char const   * __restrict  __format 
                                                  , ...) ;
 /* END FUNCTION-DECL-EXTERN sprintf LOC=/usr/include/stdio.h:365 VKEY=1099 */
-
-/* BEGIN FUNCTION-DECL main LOC=UNKNOWN VKEY=1483 */
-int main(int argc , char **argv , char **_TIG_IZ_onDW_formal_envp ) ;
-/* END FUNCTION-DECL main LOC=UNKNOWN VKEY=1483 */
 
 /* BEGIN TYPEDEF __u_char LOC=/usr/include/x86_64-linux-gnu/bits/types.h:31 */
 #line 31 "/usr/include/x86_64-linux-gnu/bits/types.h"
@@ -1748,79 +1962,57 @@ extern char *( __attribute__((__nonnull__(3))) fgets)(char * __restrict  __s , i
 extern int ( __attribute__((__nonnull__(1))) fgetc_unlocked)(FILE *__stream ) ;
 /* END FUNCTION-DECL-EXTERN fgetc_unlocked LOC=/usr/include/stdio.h:600 VKEY=1245 */
 
-/* BEGIN FUNCTION-DEF add LOC=UNKNOWN VKEY=1477 */
-int add(int a , int b ) 
-{ 
-  unsigned long _TIG_FN_onDW_1_add_next ;
-
-  {
-  {
-  _TIG_FN_onDW_1_add_next = 0UL;
-  }
-  while (1) {
-    switch (_TIG_FN_onDW_1_add_next) {
-    case 0UL: ;
-    return (a + b);
-    break;
-    default: 
-    break;
-    }
-  }
-}
-}
-/* END FUNCTION-DEF add LOC=UNKNOWN VKEY=1477 */
-
 /* BEGIN FUNCTION-DEF main LOC=UNKNOWN VKEY=1483 */
-int main(int argc , char **argv , char **_TIG_IZ_onDW_formal_envp ) 
+int main(int argc , char **argv , char **_TIG_IZ_capJ_formal_envp ) 
 { 
   int i ;
   int j ;
   int tmp ;
-  unsigned long _TIG_FN_onDW_1_main_next ;
+  unsigned long _TIG_FN_capJ_1_main_next ;
 
   {
   {
   {
   {
   {
-  _TIG_IZ_onDW_argc = 0;
-  goto _TIG_IZ_onDW_argc__INITINLINE__TIG_IZ_onDW_argc__INIT;
+  _TIG_IZ_capJ_argc = 0;
+  goto _TIG_IZ_capJ_argc__INITINLINE__TIG_IZ_capJ_argc__INIT;
   }
-  _TIG_IZ_onDW_argc__INITINLINE__TIG_IZ_onDW_argc__INIT: /* CIL Label */ ;
-  }
-  {
-  {
-  _TIG_IZ_onDW_argv = (char **)0;
-  goto _TIG_IZ_onDW_argv__INITINLINE__TIG_IZ_onDW_argv__INIT;
-  }
-  _TIG_IZ_onDW_argv__INITINLINE__TIG_IZ_onDW_argv__INIT: /* CIL Label */ ;
+  _TIG_IZ_capJ_argc__INITINLINE__TIG_IZ_capJ_argc__INIT: /* CIL Label */ ;
   }
   {
   {
-  _TIG_IZ_onDW_envp = (char **)0;
-  goto _TIG_IZ_onDW_envp__INITINLINE__TIG_IZ_onDW_envp__INIT;
+  _TIG_IZ_capJ_argv = (char **)0;
+  goto _TIG_IZ_capJ_argv__INITINLINE__TIG_IZ_capJ_argv__INIT;
   }
-  _TIG_IZ_onDW_envp__INITINLINE__TIG_IZ_onDW_envp__INIT: /* CIL Label */ ;
+  _TIG_IZ_capJ_argv__INITINLINE__TIG_IZ_capJ_argv__INIT: /* CIL Label */ ;
+  }
+  {
+  {
+  _TIG_IZ_capJ_envp = (char **)0;
+  goto _TIG_IZ_capJ_envp__INITINLINE__TIG_IZ_capJ_envp__INIT;
+  }
+  _TIG_IZ_capJ_envp__INITINLINE__TIG_IZ_capJ_envp__INIT: /* CIL Label */ ;
   }
   goto megaInitINLINE_megaInit;
   }
   megaInitINLINE_megaInit: /* CIL Label */ ;
   }
   while (1) {
-    __asm__ volatile ("##_ANNOTATION_INITIALREGION_-TIG-IZ-onDW--0":);
-    _TIG_IZ_onDW_argc = argc;
-    _TIG_IZ_onDW_argv = argv;
-    _TIG_IZ_onDW_envp = _TIG_IZ_onDW_formal_envp;
+    __asm__ volatile ("##_ANNOTATION_INITIALREGION_-TIG-IZ-capJ--0":);
+    _TIG_IZ_capJ_argc = argc;
+    _TIG_IZ_capJ_argv = argv;
+    _TIG_IZ_capJ_envp = _TIG_IZ_capJ_formal_envp;
     break;
   }
   {
-  _TIG_FN_onDW_1_main_next = 4UL;
+  _TIG_FN_capJ_1_main_next = 4UL;
   }
   while (1) {
-    switch (_TIG_FN_onDW_1_main_next) {
+    switch (_TIG_FN_capJ_1_main_next) {
     case 4UL: ;
     {
-    _TIG_FN_onDW_1_main_next = 11UL;
+    _TIG_FN_capJ_1_main_next = 11UL;
     }
     break;
     case 11UL: 
@@ -1829,7 +2021,7 @@ int main(int argc , char **argv , char **_TIG_IZ_onDW_formal_envp )
 #line 10
     i = 0;
     {
-    _TIG_FN_onDW_1_main_next = 6UL;
+    _TIG_FN_capJ_1_main_next = 6UL;
     }
     break;
     case 9UL: ;
@@ -1838,11 +2030,11 @@ int main(int argc , char **argv , char **_TIG_IZ_onDW_formal_envp )
     case 6UL: ;
     if (i < 10) {
       {
-      _TIG_FN_onDW_1_main_next = 10UL;
+      _TIG_FN_capJ_1_main_next = 10UL;
       }
     } else {
       {
-      _TIG_FN_onDW_1_main_next = 9UL;
+      _TIG_FN_capJ_1_main_next = 9UL;
       }
     }
     break;
@@ -1854,31 +2046,31 @@ int main(int argc , char **argv , char **_TIG_IZ_onDW_formal_envp )
 #line 11
     j ++;
     {
-    _TIG_FN_onDW_1_main_next = 7UL;
+    _TIG_FN_capJ_1_main_next = 7UL;
     }
     break;
     case 10UL: 
 #line 11
     j = 0;
     {
-    _TIG_FN_onDW_1_main_next = 7UL;
+    _TIG_FN_capJ_1_main_next = 7UL;
     }
     break;
     case 0UL: 
 #line 10
     i ++;
     {
-    _TIG_FN_onDW_1_main_next = 6UL;
+    _TIG_FN_capJ_1_main_next = 6UL;
     }
     break;
     case 7UL: ;
     if (j < 10) {
       {
-      _TIG_FN_onDW_1_main_next = 5UL;
+      _TIG_FN_capJ_1_main_next = 5UL;
       }
     } else {
       {
-      _TIG_FN_onDW_1_main_next = 0UL;
+      _TIG_FN_capJ_1_main_next = 0UL;
       }
     }
     break;
@@ -1889,3 +2081,23 @@ int main(int argc , char **argv , char **_TIG_IZ_onDW_formal_envp )
 }
 }
 /* END FUNCTION-DEF main LOC=UNKNOWN VKEY=1483 */
+
+/* BEGIN FUNCTION-DEF add LOC=UNKNOWN VKEY=1491 */
+int add(int a , int b ) 
+{ 
+  unsigned long _TIG_FN_capJ_1_add_next ;
+
+  {
+  _TIG_FN_capJ_1_add_next = 0UL;
+  while (1) {
+    switch (_TIG_FN_capJ_1_add_next) {
+    case 0UL: ;
+    return (a + b);
+    break;
+    default: 
+    break;
+    }
+  }
+}
+}
+/* END FUNCTION-DEF add LOC=UNKNOWN VKEY=1491 */

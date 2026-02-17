@@ -142,7 +142,7 @@ BEGIN-OPTIONS
     "kind": "EncodeArithmetic",
     "prefix": "",
     "seed": "",
-    "funSpec": [ [ "id(add)", "" ], [ "id(main)", "" ] ],
+    "funSpec": [ [ "*", "" ] ],
     "globalVarSpec": [],
     "localVarSpec": [],
     "exclude": [],
@@ -328,9 +328,9 @@ BEGIN-UNIVERSE
       "TransformationUpdates": {
         "Modified Function Implementations": [ "main" ],
         "New Global Variables": {
-          "_TIG_IZ_qQKl_envp": "INIT_FUN: '_TIG_IZ_qQKl_envp__INIT'",
-          "_TIG_IZ_qQKl_argv": "INIT_FUN: '_TIG_IZ_qQKl_argv__INIT'",
-          "_TIG_IZ_qQKl_argc": "INIT_FUN: '_TIG_IZ_qQKl_argc__INIT'"
+          "_TIG_IZ_WIqk_envp": "INIT_FUN: '_TIG_IZ_WIqk_envp__INIT'",
+          "_TIG_IZ_WIqk_argv": "INIT_FUN: '_TIG_IZ_WIqk_argv__INIT'",
+          "_TIG_IZ_WIqk_argc": "INIT_FUN: '_TIG_IZ_WIqk_argc__INIT'"
         }
       }
     },
@@ -874,14 +874,14 @@ typedef unsigned int __mode_t;
 typedef __off_t off_t;
 /* END TYPEDEF off_t LOC=/usr/include/stdio.h:64 */
 
+/* BEGIN VARIABLE-DECL _TIG_IZ_WIqk_argv LOC=UNKNOWN VKEY=1469 */
+char **_TIG_IZ_WIqk_argv ;
+/* END VARIABLE-DECL _TIG_IZ_WIqk_argv LOC=UNKNOWN VKEY=1469 */
+
 /* BEGIN TYPEDEF __suseconds64_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:163 */
 #line 163 "/usr/include/x86_64-linux-gnu/bits/types.h"
 typedef long __suseconds64_t;
 /* END TYPEDEF __suseconds64_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:163 */
-
-/* BEGIN VARIABLE-DECL _TIG_IZ_qQKl_argc LOC=UNKNOWN VKEY=1468 */
-int _TIG_IZ_qQKl_argc ;
-/* END VARIABLE-DECL _TIG_IZ_qQKl_argc LOC=UNKNOWN VKEY=1468 */
 
 /* BEGIN TYPEDEF __uint_least16_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:55 */
 #line 55 "/usr/include/x86_64-linux-gnu/bits/types.h"
@@ -964,10 +964,6 @@ struct _G_fpos64_t ;
 #line 53 "/usr/include/x86_64-linux-gnu/bits/types.h"
 typedef __uint8_t __uint_least8_t;
 /* END TYPEDEF __uint_least8_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:53 */
-
-/* BEGIN VARIABLE-DEF _TIG_IZ_qQKl_argc LOC=UNKNOWN VKEY=1468 */
-int _TIG_IZ_qQKl_argc  ;
-/* END VARIABLE-DEF _TIG_IZ_qQKl_argc LOC=UNKNOWN VKEY=1468 */
 
 /* BEGIN TYPEDEF __uintmax_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:73 */
 #line 73 "/usr/include/x86_64-linux-gnu/bits/types.h"
@@ -1116,6 +1112,10 @@ extern  __attribute__((__nothrow__)) FILE *( __attribute__((__leaf__)) fmemopen)
 __malloc__)) ;
 /* END FUNCTION-DECL-EXTERN fmemopen LOC=/usr/include/stdio.h:314 VKEY=1057 */
 
+/* BEGIN VARIABLE-DEF _TIG_IZ_WIqk_argc LOC=UNKNOWN VKEY=1468 */
+int _TIG_IZ_WIqk_argc  ;
+/* END VARIABLE-DEF _TIG_IZ_WIqk_argc LOC=UNKNOWN VKEY=1468 */
+
 /* BEGIN TYPEDEF __fsfilcnt64_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:189 */
 #line 189 "/usr/include/x86_64-linux-gnu/bits/types.h"
 typedef unsigned long __fsfilcnt64_t;
@@ -1231,10 +1231,6 @@ extern int ( /* format attribute */ __attribute__((__nonnull__(1))) vfscanf)(FIL
                                                                              __gnuc_va_list __arg )  __asm__("__isoc99_vfscanf")  ;
 /* END FUNCTION-DECL-EXTERN vfscanf LOC=/usr/include/stdio.h:490 VKEY=1196 */
 
-/* BEGIN VARIABLE-DEF _TIG_IZ_qQKl_argv LOC=UNKNOWN VKEY=1469 */
-char **_TIG_IZ_qQKl_argv  ;
-/* END VARIABLE-DEF _TIG_IZ_qQKl_argv LOC=UNKNOWN VKEY=1469 */
-
 /* BEGIN TYPEDEF __rlim_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:157 */
 #line 157 "/usr/include/x86_64-linux-gnu/bits/types.h"
 typedef unsigned long __rlim_t;
@@ -1249,10 +1245,6 @@ extern  __attribute__((__nothrow__)) void ( __attribute__((__nonnull__(1), __lea
 #line 53 "/usr/include/stdio.h"
 typedef __gnuc_va_list va_list;
 /* END TYPEDEF va_list LOC=/usr/include/stdio.h:53 */
-
-/* BEGIN VARIABLE-DECL _TIG_IZ_qQKl_argv LOC=UNKNOWN VKEY=1469 */
-char **_TIG_IZ_qQKl_argv ;
-/* END VARIABLE-DECL _TIG_IZ_qQKl_argv LOC=UNKNOWN VKEY=1469 */
 
 /* BEGIN TYPEDEF __id_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:159 */
 #line 159 "/usr/include/x86_64-linux-gnu/bits/types.h"
@@ -1330,6 +1322,10 @@ extern int ( /* format attribute */  vdprintf)(int __fd , char const   * __restr
 typedef unsigned long __ino64_t;
 /* END TYPEDEF __ino64_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:149 */
 
+/* BEGIN VARIABLE-DEF _TIG_IZ_WIqk_argv LOC=UNKNOWN VKEY=1469 */
+char **_TIG_IZ_WIqk_argv  ;
+/* END VARIABLE-DEF _TIG_IZ_WIqk_argv LOC=UNKNOWN VKEY=1469 */
+
 /* BEGIN TYPEDEF __useconds_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:161 */
 #line 161 "/usr/include/x86_64-linux-gnu/bits/types.h"
 typedef unsigned int __useconds_t;
@@ -1341,6 +1337,14 @@ extern  __attribute__((__nothrow__)) int ( /* format attribute */ __attribute__(
                                                                                                      char const   * __restrict  __format ,
                                                                                                      __gnuc_va_list __arg )  __asm__("__isoc99_vsscanf")  ;
 /* END FUNCTION-DECL-EXTERN vsscanf LOC=/usr/include/stdio.h:502 VKEY=1208 */
+
+/* BEGIN VARIABLE-DECL _TIG_IZ_WIqk_argc LOC=UNKNOWN VKEY=1468 */
+int _TIG_IZ_WIqk_argc ;
+/* END VARIABLE-DECL _TIG_IZ_WIqk_argc LOC=UNKNOWN VKEY=1468 */
+
+/* BEGIN VARIABLE-DEF _TIG_IZ_WIqk_envp LOC=UNKNOWN VKEY=1471 */
+char **_TIG_IZ_WIqk_envp  ;
+/* END VARIABLE-DEF _TIG_IZ_WIqk_envp LOC=UNKNOWN VKEY=1471 */
 
 /* BEGIN TYPEDEF __timer_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:172 */
 #line 172 "/usr/include/x86_64-linux-gnu/bits/types.h"
@@ -1363,10 +1367,6 @@ typedef struct _IO_FILE __FILE;
 #line 785 "/usr/include/stdio.h"
 extern long ( __attribute__((__nonnull__(1))) ftell)(FILE *__stream ) ;
 /* END FUNCTION-DECL-EXTERN ftell LOC=/usr/include/stdio.h:785 VKEY=1370 */
-
-/* BEGIN VARIABLE-DECL _TIG_IZ_qQKl_envp LOC=UNKNOWN VKEY=1471 */
-char **_TIG_IZ_qQKl_envp ;
-/* END VARIABLE-DECL _TIG_IZ_qQKl_envp LOC=UNKNOWN VKEY=1471 */
 
 /* BEGIN TYPEDEF __dev_t LOC=/usr/include/x86_64-linux-gnu/bits/types.h:145 */
 #line 145 "/usr/include/x86_64-linux-gnu/bits/types.h"
@@ -1661,10 +1661,6 @@ __malloc__)) ;
 extern int fflush_unlocked(FILE *__stream ) ;
 /* END FUNCTION-DECL-EXTERN fflush_unlocked LOC=/usr/include/stdio.h:245 VKEY=1026 */
 
-/* BEGIN VARIABLE-DEF _TIG_IZ_qQKl_envp LOC=UNKNOWN VKEY=1471 */
-char **_TIG_IZ_qQKl_envp  ;
-/* END VARIABLE-DEF _TIG_IZ_qQKl_envp LOC=UNKNOWN VKEY=1471 */
-
 /* BEGIN FUNCTION-DECL-EXTERN ferror_unlocked LOC=/usr/include/stdio.h:870 VKEY=1411 */
 #line 870
 extern  __attribute__((__nothrow__)) int ( __attribute__((__nonnull__(1), __leaf__)) ferror_unlocked)(FILE *__stream ) ;
@@ -1694,6 +1690,10 @@ typedef int __clockid_t;
 extern  __attribute__((__nothrow__)) char *( __attribute__((__leaf__)) tmpnam)(char * ) ;
 /* END FUNCTION-DECL-EXTERN tmpnam LOC=/usr/include/stdio.h:211 VKEY=1012 */
 
+/* BEGIN VARIABLE-DECL _TIG_IZ_WIqk_envp LOC=UNKNOWN VKEY=1471 */
+char **_TIG_IZ_WIqk_envp ;
+/* END VARIABLE-DECL _TIG_IZ_WIqk_envp LOC=UNKNOWN VKEY=1471 */
+
 /* BEGIN FUNCTION-DECL-EXTERN sprintf LOC=/usr/include/stdio.h:365 VKEY=1099 */
 #line 365
 extern  __attribute__((__nothrow__)) int sprintf(char * __restrict  __s , char const   * __restrict  __format 
@@ -1701,7 +1701,7 @@ extern  __attribute__((__nothrow__)) int sprintf(char * __restrict  __s , char c
 /* END FUNCTION-DECL-EXTERN sprintf LOC=/usr/include/stdio.h:365 VKEY=1099 */
 
 /* BEGIN FUNCTION-DECL main LOC=UNKNOWN VKEY=1481 */
-int main(int argc , char **argv , char **_TIG_IZ_qQKl_formal_envp ) ;
+int main(int argc , char **argv , char **_TIG_IZ_WIqk_formal_envp ) ;
 /* END FUNCTION-DECL main LOC=UNKNOWN VKEY=1481 */
 
 /* BEGIN TYPEDEF __u_char LOC=/usr/include/x86_64-linux-gnu/bits/types.h:31 */
@@ -1743,7 +1743,7 @@ extern int ( __attribute__((__nonnull__(1))) fgetc_unlocked)(FILE *__stream ) ;
 /* END FUNCTION-DECL-EXTERN fgetc_unlocked LOC=/usr/include/stdio.h:600 VKEY=1245 */
 
 /* BEGIN FUNCTION-DEF main LOC=UNKNOWN VKEY=1481 */
-int main(int argc , char **argv , char **_TIG_IZ_qQKl_formal_envp ) 
+int main(int argc , char **argv , char **_TIG_IZ_WIqk_formal_envp ) 
 { 
   int i ;
   int j ;
@@ -1754,34 +1754,34 @@ int main(int argc , char **argv , char **_TIG_IZ_qQKl_formal_envp )
   {
   {
   {
-  _TIG_IZ_qQKl_argc = 0;
-  goto _TIG_IZ_qQKl_argc__INITINLINE__TIG_IZ_qQKl_argc__INIT;
+  _TIG_IZ_WIqk_argc = 0;
+  goto _TIG_IZ_WIqk_argc__INITINLINE__TIG_IZ_WIqk_argc__INIT;
   }
-  _TIG_IZ_qQKl_argc__INITINLINE__TIG_IZ_qQKl_argc__INIT: /* CIL Label */ ;
-  }
-  {
-  {
-  _TIG_IZ_qQKl_argv = (char **)0;
-  goto _TIG_IZ_qQKl_argv__INITINLINE__TIG_IZ_qQKl_argv__INIT;
-  }
-  _TIG_IZ_qQKl_argv__INITINLINE__TIG_IZ_qQKl_argv__INIT: /* CIL Label */ ;
+  _TIG_IZ_WIqk_argc__INITINLINE__TIG_IZ_WIqk_argc__INIT: /* CIL Label */ ;
   }
   {
   {
-  _TIG_IZ_qQKl_envp = (char **)0;
-  goto _TIG_IZ_qQKl_envp__INITINLINE__TIG_IZ_qQKl_envp__INIT;
+  _TIG_IZ_WIqk_argv = (char **)0;
+  goto _TIG_IZ_WIqk_argv__INITINLINE__TIG_IZ_WIqk_argv__INIT;
   }
-  _TIG_IZ_qQKl_envp__INITINLINE__TIG_IZ_qQKl_envp__INIT: /* CIL Label */ ;
+  _TIG_IZ_WIqk_argv__INITINLINE__TIG_IZ_WIqk_argv__INIT: /* CIL Label */ ;
+  }
+  {
+  {
+  _TIG_IZ_WIqk_envp = (char **)0;
+  goto _TIG_IZ_WIqk_envp__INITINLINE__TIG_IZ_WIqk_envp__INIT;
+  }
+  _TIG_IZ_WIqk_envp__INITINLINE__TIG_IZ_WIqk_envp__INIT: /* CIL Label */ ;
   }
   goto megaInitINLINE_megaInit;
   }
   megaInitINLINE_megaInit: /* CIL Label */ ;
   }
   while (1) {
-    __asm__ volatile ("##_ANNOTATION_INITIALREGION_-TIG-IZ-qQKl--0":);
-    _TIG_IZ_qQKl_argc = argc;
-    _TIG_IZ_qQKl_argv = argv;
-    _TIG_IZ_qQKl_envp = _TIG_IZ_qQKl_formal_envp;
+    __asm__ volatile ("##_ANNOTATION_INITIALREGION_-TIG-IZ-WIqk--0":);
+    _TIG_IZ_WIqk_argc = argc;
+    _TIG_IZ_WIqk_argv = argv;
+    _TIG_IZ_WIqk_envp = _TIG_IZ_WIqk_formal_envp;
     break;
   }
   {
