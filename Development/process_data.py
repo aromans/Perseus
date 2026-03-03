@@ -109,6 +109,74 @@ class DataPipeline:
             logger.error(f"Obfuscation error: {e}")
             return False
 
+    def compile_to_binary(
+        self,
+        source_file,
+        output_binary ,
+        optimization_level = "O0"
+    ) -> bool:
+        try:
+            cmd = [
+                self.gcc_path,
+                f'-{optimization_level}',
+                '-o', str(output_binary),
+                str(source_file),
+                '-lm'
+            ]
+            
+            logger.info(f"Compiling {source_file.name}")
+            result = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                timeout=60
+            )
+            
+            if result.returncode == 0 and output_binary.exists():
+                logger.info(f"Successfully compiled: {output_binary}")
+                return True
+            else:
+                logger.error(f"Compilation failed: {result.stderr}")
+                return False
+                
+        except subprocess.TimeoutExpired:
+            logger.error(f"Compilation timeout for {source_file}")
+            return False
+        except Exception as e:
+            logger.error(f"Compilation error: {e}")
+            return False
+
+    def disassemble_with_capstone(
+            self,
+            binary_path,
+            output_dir
+    ) -> bool:
+        try:
+            from capstone import Cs, CS_ARCH_X86, CS_MODE_64
+
+            with open(binary_path, 'rb') as f:
+                code = f.read()
+
+            md = Cs(CS_ARCH_X86, CS_MODE_64)
+            disasm_output = output_dir / f'{binary_path.stem}_disasm.txt'
+
+            with open(disasm_output, 'w') as f:
+                for i in md.disasm(code, 0x1000):
+                    f.write(f"0x{i.address:x}:\t{i.mnemonic}\t{i.op_str}\n")
+
+            logger.info(f"Disassembled with Capstone: {disasm_output}")
+            return True
+    
+        except ImportError:
+            logger.error("Capstone not installed. Install with: pip install capstone")
+            return False
+        except Exception as e:
+            logger.error(f"Capstone disassembly error: {e}")
+            return False
+
+    def process_dataset(self, samples, obfuscation_types) -> None:
+
+
 def main():
     data_root = Path('./perseus_data')
 
