@@ -1,0 +1,11 @@
+{
+  "sample_id": "simple_arithmetic_control_flow",
+  "original_path": "perseus_data/source/benign/simple_arithmetic.c",
+  "source_hash": "9adade2f637b118248e1b305f75d1f275e8220a6cd0810accdf176bf68e00c82",
+  "is_malicious": false,
+  "obfuscation_type": "control_flow",
+  "obfuscation_params": null,
+  "compilation_success": true,
+  "disassembly_success": true,
+  "feature_extraction_success": false
+}

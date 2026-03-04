@@ -1,0 +1,36 @@
+{
+  "nodes": [
+    {
+      "index": 0,
+      "num_instructions": 1,
+      "has_call": false,
+      "has_jump": false,
+      "has_conditional": false,
+      "arithmetic_ops": 1,
+      "memory_ops": 0,
+      "control_ops": 0
+    },
+    {
+      "index": 1,
+      "num_instructions": 163,
+      "has_call": false,
+      "has_jump": false,
+      "has_conditional": false,
+      "arithmetic_ops": 152,
+      "memory_ops": 0,
+      "control_ops": 0
+    }
+  ],
+  "edges": [
+    [
+      0,
+      1,
+      "fallthrough"
+    ]
+  ],
+  "num_nodes": 2,
+  "num_edges": 1,
+  "cyclo_complexity": 1,
+  "max_depth": 0,
+  "num_loops": 0
+}

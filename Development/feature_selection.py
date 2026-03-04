@@ -308,7 +308,7 @@ class FeatureExtractor:
 
         disasm_file = disasm_files[0]
 
-        instructions = self.parse_disassembly_files(disasm_file)
+        instructions = self.parse_disassembly_file(disasm_file)
 
         if not instructions:
             logger.error(f"Failed to parse instructions from {disasm_file}")
@@ -335,8 +335,8 @@ class FeatureExtractor:
 def main():
     extractor = FeatureExtractor()
 
-    disasm_dir = Path('perseus_data/disassembled/mba/sample1')
-    output_dir = Path('perseus_data/features/mba/sample1')
+    disasm_dir = Path('./perseus_data/disassembled/mba/sample1')
+    output_dir = Path('./perseus_data/features/mba/sample1')
 
     extractor.process_disassembly(disasm_dir, output_dir)
 

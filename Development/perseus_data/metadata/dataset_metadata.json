@@ -1,0 +1,35 @@
+[
+  {
+    "sample_id": "fibonacci_clean",
+    "original_path": "perseus_data/source/benign/fibonacci.c",
+    "source_hash": "40de30f0018aa0d6c77c4d7d14e1908bee1fb4b5ca15be43f764350a2f5c5c20",
+    "is_malicious": false,
+    "obfuscation_type": null,
+    "obfuscation_params": null,
+    "compilation_success": true,
+    "disassembly_success": true,
+    "feature_extraction_success": false
+  },
+  {
+    "sample_id": "fibonacci_virtualization",
+    "original_path": "perseus_data/source/benign/fibonacci.c",
+    "source_hash": "40de30f0018aa0d6c77c4d7d14e1908bee1fb4b5ca15be43f764350a2f5c5c20",
+    "is_malicious": false,
+    "obfuscation_type": "virtualization",
+    "obfuscation_params": null,
+    "compilation_success": true,
+    "disassembly_success": true,
+    "feature_extraction_success": false
+  },
+  {
+    "sample_id": "fibonacci_control_flow",
+    "original_path": "perseus_data/source/benign/fibonacci.c",
+    "source_hash": "40de30f0018aa0d6c77c4d7d14e1908bee1fb4b5ca15be43f764350a2f5c5c20",
+    "is_malicious": false,
+    "obfuscation_type": "control_flow",
+    "obfuscation_params": null,
+    "compilation_success": true,
+    "disassembly_success": true,
+    "feature_extraction_success": false
+  }
+]

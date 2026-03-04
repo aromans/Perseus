@@ -177,7 +177,7 @@ class DataPipeline:
     
     def extract_features(self, disasm_dir, feature_dir) -> bool:
         try:
-            from feature_extraction import FeatureExtractor
+            from feature_selection import FeatureExtractor
             extractor = FeatureExtractor()
             return extractor.process_disassembly(disasm_dir, feature_dir)
         except ImportError:
@@ -281,7 +281,7 @@ class DataPipeline:
             metadata.extend(metadata_list)
 
         metadata_dir = self.dirs['metadata'] / 'dataset_metadata.json'
-        with open(metdata_dir, 'w') as f:
+        with open(metadata_dir, 'w') as f:
             json.dump([asdict(m) for m in metadata], f, indent=2)
 
         logger.info(f"Processed {len(metadata)} samples")
@@ -291,6 +291,20 @@ def main():
     data_root = Path('./perseus_data')
 
     obfuscation_types = ['mba', 'virtualization', 'control_flow']
+
+    pipeline = DataPipeline(
+        data_root=data_root,
+        tigress_path='tigress',
+        gcc_path='gcc'
+    )
+
+    source_files = [
+            (Path('./perseus_data/source/benign/fibonacci.c'), False),
+            #(Path('./perseus_data/source/benign/simple_arithmetic.c'), False),
+            #(Path('./perseus_data/source/benign/string_rev.c'), False)
+    ]
+
+    pipeline.process_dataset(source_files, obfuscation_types)
 
 if __name__ == '__main__':
     main()

@@ -97,7 +97,7 @@ def main():
     parser.add_argument('--obfuscations', nargs='+', default=['mba', 'virtualization', 'control_flow'], choices=['mba', 'virtualization', 'control_flow'], help='Obfuscation types to apply (default: all)')
     parser.add_argument('--max-samples', type=int, default=None, help='Maximum number of samples to process (default: all)')
     parser.add_argument('--skip-collection', action='store_true', help='Skip source collection step (use existing sources)')
-    parser.add_argument('--collect-only', acion='store_true', help='Only run collection step, skip processing')
+    parser.add_argument('--collect-only', action='store_true', help='Only run collection step, skip processing')
 
     args = parser.parse_args()
 

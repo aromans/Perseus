@@ -1,0 +1,174 @@
+0x1000:	jg	0x1047
+0x1002:	add	r8b, byte ptr [rcx]
+0x1006:	add	dword ptr [rax], eax
+0x1008:	add	byte ptr [rax], al
+0x100a:	add	byte ptr [rax], al
+0x100c:	add	byte ptr [rax], al
+0x100e:	add	byte ptr [rax], al
+0x1010:	add	eax, dword ptr [rax]
+0x1012:	add	byte ptr ds:[rcx], al
+0x1015:	add	byte ptr [rax], al
+0x1017:	add	byte ptr [rax + 0x10], ah
+0x101a:	add	byte ptr [rax], al
+0x101c:	add	byte ptr [rax], al
+0x101e:	add	byte ptr [rax], al
+0x1020:	add	byte ptr [rax], al
+0x1023:	add	byte ptr [rax], al
+0x1025:	add	byte ptr [rax], al
+0x1027:	add	al, ch
+0x1029:	add	byte ptr ss:[rax], al
+0x102c:	add	byte ptr [rax], al
+0x102e:	add	byte ptr [rax], al
+0x1030:	add	byte ptr [rax], al
+0x1032:	add	byte ptr [rax], al
+0x1034:	add	byte ptr [rax], dil
+0x1037:	add	byte ptr [rip + 0x1f004000], cl
+0x103d:	add	byte ptr [rsi], bl
+0x103f:	add	byte ptr [rsi], al
+0x1041:	add	byte ptr [rax], al
+0x1043:	add	byte ptr [rax + rax], al
+0x1046:	add	byte ptr [rax], al
+0x1048:	add	byte ptr [rax], al
+0x104b:	add	byte ptr [rax], al
+0x104d:	add	byte ptr [rax], al
+0x104f:	add	byte ptr [rax], al
+0x1052:	add	byte ptr [rax], al
+0x1054:	add	byte ptr [rax], al
+0x1056:	add	byte ptr [rax], al
+0x1058:	add	byte ptr [rax], al
+0x105b:	add	byte ptr [rax], al
+0x105d:	add	byte ptr [rax], al
+0x105f:	add	al, bl
+0x1061:	add	al, byte ptr [rax]
+0x1063:	add	byte ptr [rax], al
+0x1065:	add	byte ptr [rax], al
+0x1067:	add	al, bl
+0x1069:	add	al, byte ptr [rax]
+0x106b:	add	byte ptr [rax], al
+0x106d:	add	byte ptr [rax], al
+0x106f:	add	byte ptr [rax], cl
+0x1071:	add	byte ptr [rax], al
+0x1073:	add	byte ptr [rax], al
+0x1075:	add	byte ptr [rax], al
+0x1077:	add	byte ptr [rbx], al
+0x1079:	add	byte ptr [rax], al
+0x107b:	add	byte ptr [rax + rax], al
+0x107e:	add	byte ptr [rax], al
+0x1080:	sbb	byte ptr [rbx], al
+0x1082:	add	byte ptr [rax], al
+0x1084:	add	byte ptr [rax], al
+0x1086:	add	byte ptr [rax], al
+0x1088:	sbb	byte ptr [rbx], al
+0x108a:	add	byte ptr [rax], al
+0x108c:	add	byte ptr [rax], al
+0x108e:	add	byte ptr [rax], al
+0x1090:	sbb	byte ptr [rbx], al
+0x1092:	add	byte ptr [rax], al
+0x1094:	add	byte ptr [rax], al
+0x1096:	add	byte ptr [rax], al
+0x1098:	sbb	al, 0
+0x109a:	add	byte ptr [rax], al
+0x109c:	add	byte ptr [rax], al
+0x109e:	add	byte ptr [rax], al
+0x10a0:	sbb	al, 0
+0x10a2:	add	byte ptr [rax], al
+0x10a4:	add	byte ptr [rax], al
+0x10a6:	add	byte ptr [rax], al
+0x10a8:	add	dword ptr [rax], eax
+0x10aa:	add	byte ptr [rax], al
+0x10ac:	add	byte ptr [rax], al
+0x10ae:	add	byte ptr [rax], al
+0x10b0:	add	dword ptr [rax], eax
+0x10b2:	add	byte ptr [rax], al
+0x10b4:	add	al, 0
+0x10b6:	add	byte ptr [rax], al
+0x10b8:	add	byte ptr [rax], al
+0x10ba:	add	byte ptr [rax], al
+0x10bc:	add	byte ptr [rax], al
+0x10be:	add	byte ptr [rax], al
+0x10c0:	add	byte ptr [rax], al
+0x10c2:	add	byte ptr [rax], al
+0x10c4:	add	byte ptr [rax], al
+0x10c6:	add	byte ptr [rax], al
+0x10c8:	add	byte ptr [rax], al
+0x10ca:	add	byte ptr [rax], al
+0x10cc:	add	byte ptr [rax], al
+0x10ce:	add	byte ptr [rax], al
+0x10d0:	sub	byte ptr [rsi], al
+0x10d2:	add	byte ptr [rax], al
+0x10d4:	add	byte ptr [rax], al
+0x10d6:	add	byte ptr [rax], al
+0x10d8:	sub	byte ptr [rsi], al
+0x10da:	add	byte ptr [rax], al
+0x10dc:	add	byte ptr [rax], al
+0x10de:	add	byte ptr [rax], al
+0x10e0:	add	byte ptr [rax], dl
+0x10e2:	add	byte ptr [rax], al
+0x10e4:	add	byte ptr [rax], al
+0x10e6:	add	byte ptr [rax], al
+0x10e8:	add	dword ptr [rax], eax
+0x10ea:	add	byte ptr [rax], al
+0x10ec:	add	eax, 0
+0x10f1:	adc	byte ptr [rax], al
+0x10f3:	add	byte ptr [rax], al
+0x10f5:	add	byte ptr [rax], al
+0x10f7:	add	byte ptr [rax], al
+0x10f9:	adc	byte ptr [rax], al
+0x10fb:	add	byte ptr [rax], al
+0x10fd:	add	byte ptr [rax], al
+0x10ff:	add	byte ptr [rax], al
+0x1101:	adc	byte ptr [rax], al
+0x1103:	add	byte ptr [rax], al
+0x1105:	add	byte ptr [rax], al
+0x1107:	add	ch, bh
+0x1109:	add	dword ptr [rax], eax
+0x110b:	add	byte ptr [rax], al
+0x110d:	add	byte ptr [rax], al
+0x110f:	add	ch, bh
+0x1111:	add	dword ptr [rax], eax
+0x1113:	add	byte ptr [rax], al
+0x1115:	add	byte ptr [rax], al
+0x1117:	add	byte ptr [rax], al
+0x1119:	adc	byte ptr [rax], al
+0x111b:	add	byte ptr [rax], al
+0x111d:	add	byte ptr [rax], al
+0x111f:	add	byte ptr [rcx], al
+0x1121:	add	byte ptr [rax], al
+0x1123:	add	byte ptr [rax + rax], al
+0x1126:	add	byte ptr [rax], al
+0x1128:	add	byte ptr [rax], ah
+0x112a:	add	byte ptr [rax], al
+0x112c:	add	byte ptr [rax], al
+0x112e:	add	byte ptr [rax], al
+0x1130:	add	byte ptr [rax], ah
+0x1132:	add	byte ptr [rax], al
+0x1134:	add	byte ptr [rax], al
+0x1136:	add	byte ptr [rax], al
+0x1138:	add	byte ptr [rax], ah
+0x113a:	add	byte ptr [rax], al
+0x113c:	add	byte ptr [rax], al
+0x113e:	add	byte ptr [rax], al
+0x1140:	add	qword ptr [rax], r8
+0x1143:	add	byte ptr [rax], al
+0x1145:	add	byte ptr [rax], al
+0x1147:	add	byte ptr [rcx + rax], cl
+0x114b:	add	byte ptr [rax], al
+0x114d:	add	byte ptr [rax], al
+0x114f:	add	byte ptr [rax], al
+0x1151:	adc	byte ptr [rax], al
+0x1153:	add	byte ptr [rax], al
+0x1155:	add	byte ptr [rax], al
+0x1157:	add	byte ptr [rcx], al
+0x1159:	add	byte ptr [rax], al
+0x115b:	add	byte ptr [rsi], al
+0x115d:	add	byte ptr [rax], al
+0x115f:	add	byte ptr [rax + 0x2d], bh
+0x1165:	add	byte ptr [rax], al
+0x1167:	add	byte ptr [rax + 0x3d], bh
+0x116d:	add	byte ptr [rax], al
+0x116f:	add	byte ptr [rax + 0x3d], bh
+0x1175:	add	byte ptr [rax], al
+0x1177:	add	byte ptr [rax + 2], bl
+0x117a:	add	byte ptr [rax], al
+0x117c:	add	byte ptr [rax], al
+0x117e:	add	byte ptr [rax], al
