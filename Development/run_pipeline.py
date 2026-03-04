@@ -9,8 +9,8 @@ import sys
 sys.path.insert(0, str(Path(__file__).parent))
 
 from collect_sources import SourceCollector
-from data_pipeline import DataPipeline
-from feature_extraction import FeatureExtractor
+from process_data import DataPipeline
+from feature_selection import FeatureExtractor
 
 logging.basicConfig(
     level=logging.INFO,
@@ -33,8 +33,8 @@ def run_full_pipeline(
     logger.info("Perseus Data Pipeline - Starting")
     logger.info("="*80)
 
+    logger.info("\nCollecting source file...")
     if not skip_collection:
-        logger.info("\n[Step 1/5] Collecting source file...")
         source_dir = data_root / 'source'
         collector = SourceCollector(source_dir)
         samples = collector.collect_all(repos_dir)
@@ -42,7 +42,6 @@ def run_full_pipeline(
         logger.info(f"  - Benign: {sum(1 for _, is_mal in samples if not is_mal)}")
         logger.info(f"  - Malicious: {sum(1 for _, is_mal in samples if is_mal)}")
     else:
-        logger.info("\n[Step 1/5] Collecting source file...")
         source_dir = data_root / 'source'
         benign_dir = data_root / 'benign'
         malicious_dir = data_root / 'malicious'
@@ -59,36 +58,36 @@ def run_full_pipeline(
         logger.info(f"Limiting to {max_samples} samples")
         samples = samples[:max_samples]
 
-    logger.info("\n[Step 2-4/5] Processing samples...")
+    logger.info("\nProcessing samples...")
     pipeline = DataPipeline(data_root)
 
     pipeline.process_dataset(samples, obfuscation_types)
 
-    logger.info("\n[Step 5/5] Extracting features...")
-    extractor = FeatureExtractor()
+    #logger.info("\nExtracting features...")
+    #extractor = FeatureExtractor()
 
-    feature_count = 0
-    for obf_type in ['clean'] + obfuscation_types:
-        disasm_base = data_root / 'disassembled' / obf_type
-        feature_base = data_root / 'features' / obf_type
+    #feature_count = 0
+    #for obf_type in ['clean'] + obfuscation_types:
+    #    disasm_base = data_root / 'disassembled' / obf_type
+    #    feature_base = data_root / 'features' / obf_type
 
-        if not disasm_base.exists():
-            continue
+    #    if not disasm_base.exists():
+    #        continue
 
-        for disasm_dir in disasm_base.iterdir():
-            if disasm_dir.is_dir():
-                feature_dir = feature_base / disasm_dir.name
-                if extractor.process_disassembly(disasm_dir, feature_dir):
-                    feature_count += 1
+    #    for disasm_dir in disasm_base.iterdir():
+    #        if disasm_dir.is_dir():
+    #            feature_dir = feature_base / disasm_dir.name
+    #            if extractor.process_disassembly(disasm_dir, feature_dir):
+    #                feature_count += 1
 
-    logger.info(f"Extracted features for {feature_count} samples")
+    #logger.info(f"Extracted features for {feature_count} samples")
 
     logger.info("\n" + "="*80)
     logger.info("Pipeline Complete!")
     logger.info("="*80)
     logger.info(f"Data root: {data_root}")
-    logger.info(f"Check {data_root}/metadata/ for sample metadata")
-    logger.info(f"Check {data_root}/features/ for extracted features")
+    #logger.info(f"Check {data_root}/metadata/ for sample metadata")
+    #logger.info(f"Check {data_root}/features/ for extracted features")
 
 def main():
     parser = argparse.ArgumentParser(description='Perseus Data Pipeline')
