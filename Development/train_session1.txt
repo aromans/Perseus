@@ -1,0 +1,392 @@
+{'loss': '0.7878', 'grad_norm': '0.1316', 'learning_rate': '0', 'entropy': '0.5857', 'num_tokens': '3614', 'mean_token_accuracy': '0.8215', 'epoch': '0.2667'}
+{'loss': '0.9119', 'grad_norm': '0.151', 'learning_rate': '1.667e-05', 'entropy': '0.6555', 'num_tokens': '6524', 'mean_token_accuracy': '0.8003', 'epoch': '0.5333'}
+{'loss': '0.7524', 'grad_norm': '0.1218', 'learning_rate': '3.333e-05', 'entropy': '0.5687', 'num_tokens': '1.062e+04', 'mean_token_accuracy': '0.8184', 'epoch': '0.8'}
+{'loss': '0.7678', 'grad_norm': '0.1458', 'learning_rate': '5e-05', 'entropy': '0.5771', 'num_tokens': '1.313e+04', 'mean_token_accuracy': '0.8281', 'epoch': '1'}
+  3%|██▏                                                             | 4/120 [11:34<5:15:57, 163.43s/it]{'eval_loss': '0.7078', 'eval_runtime': '128', 'eval_samples_per_second': '0.047', 'eval_steps_per_second': '0.008', 'eval_entropy': '0.5696', 'eval_num_tokens': '1.313e+04', 'eval_mean_token_accuracy': '0.8307', 'epoch': '1'}
+  3%|██▏                                                             | 4/120 [13:42<5:15:57, 163.43s/it2026-03-04 23:06:54,586 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-04 23:06:54,624 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+2026-03-04 23:06:54,728 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-04 23:06:54,739 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+/home/perseus/Venvs/PerseusDev/lib/python3.12/site-packages/torch/utils/data/dataloader.py:775: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  super().__init__(loader)
+{'loss': '0.7484', 'grad_norm': '0.1183', 'learning_rate': '6.667e-05', 'entropy': '0.6095', 'num_tokens': '1.723e+04', 'mean_token_accuracy': '0.8121', 'epoch': '1.267'}
+{'loss': '0.6989', 'grad_norm': '0.1088', 'learning_rate': '8.333e-05', 'entropy': '0.5914', 'num_tokens': '2.072e+04', 'mean_token_accuracy': '0.836', 'epoch': '1.533'}
+{'loss': '0.6748', 'grad_norm': '0.1241', 'learning_rate': '0.0001', 'entropy': '0.5973', 'num_tokens': '2.367e+04', 'mean_token_accuracy': '0.8418', 'epoch': '1.8'}
+{'loss': '0.5701', 'grad_norm': '0.1179', 'learning_rate': '0.0001167', 'entropy': '0.5279', 'num_tokens': '2.626e+04', 'mean_token_accuracy': '0.8693', 'epoch': '2'}
+{'eval_loss': '0.5696', 'eval_runtime': '106.9', 'eval_samples_per_second': '0.056', 'eval_steps_per_second': '0.009', 'eval_entropy': '0.5398', 'eval_num_tokens': '2.626e+04', 'eval_mean_token_accuracy': '0.8586', 'epoch': '2'}
+  7%|████▎                                                           | 8/120 [26:41<5:18:33, 170.66s/it2026-03-04 23:19:53,321 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-04 23:19:53,345 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+2026-03-04 23:19:53,439 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-04 23:19:53,451 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+/home/perseus/Venvs/PerseusDev/lib/python3.12/site-packages/torch/utils/data/dataloader.py:775: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  super().__init__(loader)
+{'loss': '0.5199', 'grad_norm': '0.1074', 'learning_rate': '0.0001333', 'entropy': '0.5141', 'num_tokens': '3.036e+04', 'mean_token_accuracy': '0.868', 'epoch': '2.267'}
+{'loss': '0.5413', 'grad_norm': '0.1603', 'learning_rate': '0.00015', 'entropy': '0.5803', 'num_tokens': '3.327e+04', 'mean_token_accuracy': '0.8707', 'epoch': '2.533'}
+{'loss': '0.4571', 'grad_norm': '0.1243', 'learning_rate': '0.0001667', 'entropy': '0.4677', 'num_tokens': '3.688e+04', 'mean_token_accuracy': '0.8913', 'epoch': '2.8'}
+{'loss': '0.4714', 'grad_norm': '0.2229', 'learning_rate': '0.0001833', 'entropy': '0.4892', 'num_tokens': '3.94e+04', 'mean_token_accuracy': '0.8809', 'epoch': '3'}
+{'eval_loss': '0.4207', 'eval_runtime': '94.63', 'eval_samples_per_second': '0.063', 'eval_steps_per_second': '0.011', 'eval_entropy': '0.4451', 'eval_num_tokens': '3.94e+04', 'eval_mean_token_accuracy': '0.8829', 'epoch': '3'}
+ 10%|██████▎                                                        | 12/120 [39:07<5:03:06, 168.40s/it2026-03-04 23:32:19,572 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-04 23:32:19,590 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+2026-03-04 23:32:19,679 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-04 23:32:19,699 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+/home/perseus/Venvs/PerseusDev/lib/python3.12/site-packages/torch/utils/data/dataloader.py:775: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  super().__init__(loader)
+{'loss': '0.3461', 'grad_norm': '0.1724', 'learning_rate': '0.0002', 'entropy': '0.4309', 'num_tokens': '4.175e+04', 'mean_token_accuracy': '0.9196', 'epoch': '3.267'}
+{'loss': '0.2998', 'grad_norm': '0.1493', 'learning_rate': '0.0002', 'entropy': '0.3842', 'num_tokens': '4.536e+04', 'mean_token_accuracy': '0.9199', 'epoch': '3.533'}
+{'loss': '0.2942', 'grad_norm': '0.1116', 'learning_rate': '0.0001998', 'entropy': '0.3612', 'num_tokens': '4.946e+04', 'mean_token_accuracy': '0.9198', 'epoch': '3.8'}
+{'loss': '0.3039', 'grad_norm': '0.1283', 'learning_rate': '0.0001996', 'entropy': '0.3456', 'num_tokens': '5.253e+04', 'mean_token_accuracy': '0.9081', 'epoch': '4'}                                              
+{'eval_loss': '0.3284', 'eval_runtime': '95.4', 'eval_samples_per_second': '0.063', 'eval_steps_per_second': '0.01', 'eval_entropy': '0.3056', 'eval_num_tokens': '5.253e+04', 'eval_mean_token_accuracy': '0.9052', 'epoch': '4'}                                                                                                                                                                                                      
+ 13%|██████████████████████▊                                                                                                                                                    | 16/120 [51:41<5:08:20, 177.89s/it2026-03-04 23:44:53,844 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"                                       
+2026-03-04 23:44:53,872 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+2026-03-04 23:44:53,959 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-04 23:44:53,981 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+/home/perseus/Venvs/PerseusDev/lib/python3.12/site-packages/torch/utils/data/dataloader.py:775: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  super().__init__(loader)
+{'loss': '0.2307', 'grad_norm': '0.09311', 'learning_rate': '0.0001993', 'entropy': '0.2635', 'num_tokens': '5.604e+04', 'mean_token_accuracy': '0.9335', 'epoch': '4.267'}                                         
+{'loss': '0.1715', 'grad_norm': '0.1213', 'learning_rate': '0.0001989', 'entropy': '0.1964', 'num_tokens': '5.849e+04', 'mean_token_accuracy': '0.9565', 'epoch': '4.533'}                                          
+{'loss': '0.2252', 'grad_norm': '0.1015', 'learning_rate': '0.0001985', 'entropy': '0.2401', 'num_tokens': '6.259e+04', 'mean_token_accuracy': '0.9252', 'epoch': '4.8'}                                            
+{'loss': '0.1846', 'grad_norm': '0.0863', 'learning_rate': '0.0001979', 'entropy': '0.2121', 'num_tokens': '6.566e+04', 'mean_token_accuracy': '0.9407', 'epoch': '5'}                                              
+{'eval_loss': '0.3115', 'eval_runtime': '93.96', 'eval_samples_per_second': '0.064', 'eval_steps_per_second': '0.011', 'eval_entropy': '0.2391', 'eval_num_tokens': '6.566e+04', 'eval_mean_token_accuracy': '0.9115', 'epoch': '5'}                                                                                                                                                                                                    
+ 17%|████████████████████████████▏                                                                                                                                            | 20/120 [1:03:51<4:50:06, 174.07s/it2026-03-04 23:57:02,836 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"                                       
+2026-03-04 23:57:02,846 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+2026-03-04 23:57:02,929 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-04 23:57:02,940 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+/home/perseus/Venvs/PerseusDev/lib/python3.12/site-packages/torch/utils/data/dataloader.py:775: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  super().__init__(loader)
+{'loss': '0.1705', 'grad_norm': '0.0925', 'learning_rate': '0.0001973', 'entropy': '0.1998', 'num_tokens': '6.917e+04', 'mean_token_accuracy': '0.9522', 'epoch': '5.267'}                                          
+{'loss': '0.1651', 'grad_norm': '0.09496', 'learning_rate': '0.0001966', 'entropy': '0.1775', 'num_tokens': '7.267e+04', 'mean_token_accuracy': '0.9485', 'epoch': '5.533'}                                         
+{'loss': '0.1299', 'grad_norm': '0.1098', 'learning_rate': '0.0001958', 'entropy': '0.1383', 'num_tokens': '7.572e+04', 'mean_token_accuracy': '0.9637', 'epoch': '5.8'}                                            
+{'loss': '0.1601', 'grad_norm': '0.1365', 'learning_rate': '0.0001949', 'entropy': '0.1605', 'num_tokens': '7.879e+04', 'mean_token_accuracy': '0.9427', 'epoch': '6'}                                              
+{'eval_loss': '0.3258', 'eval_runtime': '91.8', 'eval_samples_per_second': '0.065', 'eval_steps_per_second': '0.011', 'eval_entropy': '0.1822', 'eval_num_tokens': '7.879e+04', 'eval_mean_token_accuracy': '0.9115', 'epoch': '6'}                                                                                                                                                                                                     
+ 20%|█████████████████████████████████▊                                                                                                                                       | 24/120 [1:15:53<4:29:26, 168.40s/it2026-03-05 00:09:05,542 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"                                       
+2026-03-05 00:09:05,556 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+2026-03-05 00:09:05,641 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-05 00:09:05,653 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+/home/perseus/Venvs/PerseusDev/lib/python3.12/site-packages/torch/utils/data/dataloader.py:775: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  super().__init__(loader)
+{'loss': '0.06226', 'grad_norm': '0.07685', 'learning_rate': '0.000194', 'entropy': '0.08991', 'num_tokens': '8.122e+04', 'mean_token_accuracy': '0.9839', 'epoch': '6.267'}                                        
+{'loss': '0.1281', 'grad_norm': '0.1065', 'learning_rate': '0.0001929', 'entropy': '0.131', 'num_tokens': '8.476e+04', 'mean_token_accuracy': '0.9601', 'epoch': '6.533'}                                           
+{'loss': '0.1322', 'grad_norm': '0.111', 'learning_rate': '0.0001918', 'entropy': '0.1448', 'num_tokens': '8.885e+04', 'mean_token_accuracy': '0.9545', 'epoch': '6.8'}                                             
+{'loss': '0.1243', 'grad_norm': '0.1125', 'learning_rate': '0.0001906', 'entropy': '0.1365', 'num_tokens': '9.192e+04', 'mean_token_accuracy': '0.9602', 'epoch': '7'}                                              
+{'eval_loss': '0.3463', 'eval_runtime': '92.44', 'eval_samples_per_second': '0.065', 'eval_steps_per_second': '0.011', 'eval_entropy': '0.1611', 'eval_num_tokens': '9.192e+04', 'eval_mean_token_accuracy': '0.9145', 'epoch': '7'}                                                                                                                                                                                                    
+ 23%|███████████████████████████████████████▍                                                                                                                                 | 28/120 [1:27:45<4:22:26, 171.16s/it2026-03-05 00:20:57,522 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"                                       
+2026-03-05 00:20:57,545 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+2026-03-05 00:20:57,631 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-05 00:20:57,655 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+/home/perseus/Venvs/PerseusDev/lib/python3.12/site-packages/torch/utils/data/dataloader.py:775: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  super().__init__(loader)
+{'loss': '0.08703', 'grad_norm': '0.1187', 'learning_rate': '0.0001894', 'entropy': '0.097', 'num_tokens': '9.498e+04', 'mean_token_accuracy': '0.9739', 'epoch': '7.267'}                                          
+{'loss': '0.06327', 'grad_norm': '0.08993', 'learning_rate': '0.000188', 'entropy': '0.07156', 'num_tokens': '9.789e+04', 'mean_token_accuracy': '0.9798', 'epoch': '7.533'}                                        
+{'loss': '0.09835', 'grad_norm': '0.1002', 'learning_rate': '0.0001866', 'entropy': '0.1111', 'num_tokens': '1.02e+05', 'mean_token_accuracy': '0.9658', 'epoch': '7.8'}                                            
+{'loss': '0.1054', 'grad_norm': '0.134', 'learning_rate': '0.0001851', 'entropy': '0.1095', 'num_tokens': '1.051e+05', 'mean_token_accuracy': '0.9655', 'epoch': '8'}                                               
+{'eval_loss': '0.3481', 'eval_runtime': '92.08', 'eval_samples_per_second': '0.065', 'eval_steps_per_second': '0.011', 'eval_entropy': '0.1431', 'eval_num_tokens': '1.051e+05', 'eval_mean_token_accuracy': '0.9174', 'epoch': '8'}                                                                                                                                                                                                    
+ 27%|█████████████████████████████████████████████                                                                                                                            | 32/120 [1:39:45<4:11:51, 171.72s/it2026-03-05 00:32:57,196 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"                                       
+2026-03-05 00:32:57,209 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+2026-03-05 00:32:57,293 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-05 00:32:57,304 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+/home/perseus/Venvs/PerseusDev/lib/python3.12/site-packages/torch/utils/data/dataloader.py:775: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  super().__init__(loader)
+{'loss': '0.07605', 'grad_norm': '0.07518', 'learning_rate': '0.0001835', 'entropy': '0.09979', 'num_tokens': '1.092e+05', 'mean_token_accuracy': '0.9751', 'epoch': '8.267'}                                       
+{'loss': '0.07612', 'grad_norm': '0.07333', 'learning_rate': '0.0001819', 'entropy': '0.0985', 'num_tokens': '1.132e+05', 'mean_token_accuracy': '0.9748', 'epoch': '8.533'}                                        
+{'loss': '0.0538', 'grad_norm': '0.07245', 'learning_rate': '0.0001802', 'entropy': '0.05991', 'num_tokens': '1.163e+05', 'mean_token_accuracy': '0.9859', 'epoch': '8.8'}                                          
+{'loss': '0.05863', 'grad_norm': '0.08362', 'learning_rate': '0.0001784', 'entropy': '0.05502', 'num_tokens': '1.182e+05', 'mean_token_accuracy': '0.9841', 'epoch': '9'}                                           
+{'eval_loss': '0.4195', 'eval_runtime': '91.04', 'eval_samples_per_second': '0.066', 'eval_steps_per_second': '0.011', 'eval_entropy': '0.1142', 'eval_num_tokens': '1.182e+05', 'eval_mean_token_accuracy': '0.9122', 'epoch': '9'}                                                                                                                                                                                                    
+ 30%|██████████████████████████████████████████████████▋                                                                                                                      | 36/120 [1:51:42<3:38:40, 156.20s/it2026-03-05 00:44:53,911 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"                                       
+2026-03-05 00:44:53,934 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+2026-03-05 00:44:54,027 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-05 00:44:54,047 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+/home/perseus/Venvs/PerseusDev/lib/python3.12/site-packages/torch/utils/data/dataloader.py:775: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  super().__init__(loader)
+{'loss': '0.05071', 'grad_norm': '0.08221', 'learning_rate': '0.0001766', 'entropy': '0.05945', 'num_tokens': '1.217e+05', 'mean_token_accuracy': '0.9859', 'epoch': '9.267'}                                       
+{'loss': '0.06987', 'grad_norm': '0.1001', 'learning_rate': '0.0001747', 'entropy': '0.07349', 'num_tokens': '1.258e+05', 'mean_token_accuracy': '0.9765', 'epoch': '9.533'}                                        
+{'loss': '0.05113', 'grad_norm': '0.1796', 'learning_rate': '0.0001727', 'entropy': '0.0456', 'num_tokens': '1.294e+05', 'mean_token_accuracy': '0.9845', 'epoch': '9.8'}                                           
+{'loss': '0.04086', 'grad_norm': '0.132', 'learning_rate': '0.0001707', 'entropy': '0.03522', 'num_tokens': '1.313e+05', 'mean_token_accuracy': '0.9836', 'epoch': '10'}                                            
+{'eval_loss': '0.4155', 'eval_runtime': '93.99', 'eval_samples_per_second': '0.064', 'eval_steps_per_second': '0.011', 'eval_entropy': '0.111', 'eval_num_tokens': '1.313e+05', 'eval_mean_token_accuracy': '0.9163', 'epoch': '10'}                                                                                                                                                                                                    
+ 33%|████████████████████████████████████████████████████████▎                                                                                                                | 40/120 [2:03:50<3:29:27, 157.10s/it2026-03-05 00:57:01,870 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"                                       
+2026-03-05 00:57:01,891 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+2026-03-05 00:57:01,982 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-05 00:57:02,003 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+/home/perseus/Venvs/PerseusDev/lib/python3.12/site-packages/torch/utils/data/dataloader.py:775: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  super().__init__(loader)
+{'loss': '0.05044', 'grad_norm': '0.09452', 'learning_rate': '0.0001686', 'entropy': '0.05722', 'num_tokens': '1.349e+05', 'mean_token_accuracy': '0.9821', 'epoch': '10.27'}                                       
+{'loss': '0.05149', 'grad_norm': '0.09155', 'learning_rate': '0.0001665', 'entropy': '0.05817', 'num_tokens': '1.378e+05', 'mean_token_accuracy': '0.986', 'epoch': '10.53'}                                        
+{'loss': '0.0431', 'grad_norm': '0.08156', 'learning_rate': '0.0001643', 'entropy': '0.05381', 'num_tokens': '1.419e+05', 'mean_token_accuracy': '0.9863', 'epoch': '10.8'}                                         
+{'loss': '0.03766', 'grad_norm': '0.1631', 'learning_rate': '0.000162', 'entropy': '0.03726', 'num_tokens': '1.445e+05', 'mean_token_accuracy': '0.9882', 'epoch': '11'}                                            
+{'eval_loss': '0.4433', 'eval_runtime': '92.62', 'eval_samples_per_second': '0.065', 'eval_steps_per_second': '0.011', 'eval_entropy': '0.09898', 'eval_num_tokens': '1.445e+05', 'eval_mean_token_accuracy': '0.9137', 'epoch': '11'}                                                                                                                                                                                                  
+ 37%|█████████████████████████████████████████████████████████████▉                                                                                                           | 44/120 [2:15:44<3:26:05, 162.71s/it2026-03-05 01:08:56,781 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"                                       
+2026-03-05 01:08:56,792 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+2026-03-05 01:08:56,876 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-05 01:08:56,888 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+/home/perseus/Venvs/PerseusDev/lib/python3.12/site-packages/torch/utils/data/dataloader.py:775: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  super().__init__(loader)
+{'loss': '0.04614', 'grad_norm': '0.1801', 'learning_rate': '0.0001597', 'entropy': '0.03408', 'num_tokens': '1.481e+05', 'mean_token_accuracy': '0.9896', 'epoch': '11.27'}                                        
+{'loss': '0.04378', 'grad_norm': '0.0881', 'learning_rate': '0.0001574', 'entropy': '0.043', 'num_tokens': '1.51e+05', 'mean_token_accuracy': '0.9863', 'epoch': '11.53'}                                           
+{'loss': '0.03822', 'grad_norm': '0.07397', 'learning_rate': '0.000155', 'entropy': '0.05414', 'num_tokens': '1.551e+05', 'mean_token_accuracy': '0.9883', 'epoch': '11.8'}                                         
+{'loss': '0.03065', 'grad_norm': '0.211', 'learning_rate': '0.0001525', 'entropy': '0.03907', 'num_tokens': '1.576e+05', 'mean_token_accuracy': '0.993', 'epoch': '12'}                                             
+{'eval_loss': '0.4127', 'eval_runtime': '90.74', 'eval_samples_per_second': '0.066', 'eval_steps_per_second': '0.011', 'eval_entropy': '0.1173', 'eval_num_tokens': '1.576e+05', 'eval_mean_token_accuracy': '0.912', 'epoch': '12'}                                                                                                                                                                                                    
+ 40%|███████████████████████████████████████████████████████████████████▌                                                                                                     | 48/120 [2:27:45<3:16:57, 164.13s/it2026-03-05 01:20:56,967 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"                                       
+2026-03-05 01:20:56,988 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+2026-03-05 01:20:57,077 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-05 01:20:57,098 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+/home/perseus/Venvs/PerseusDev/lib/python3.12/site-packages/torch/utils/data/dataloader.py:775: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  super().__init__(loader)
+{'loss': '0.02855', 'grad_norm': '0.06139', 'learning_rate': '0.00015', 'entropy': '0.04424', 'num_tokens': '1.611e+05', 'mean_token_accuracy': '0.992', 'epoch': '12.27'}                                          
+{'loss': '0.03153', 'grad_norm': '0.101', 'learning_rate': '0.0001475', 'entropy': '0.04383', 'num_tokens': '1.646e+05', 'mean_token_accuracy': '0.9903', 'epoch': '12.53'}                                         
+{'loss': '0.03428', 'grad_norm': '0.07649', 'learning_rate': '0.0001449', 'entropy': '0.05113', 'num_tokens': '1.687e+05', 'mean_token_accuracy': '0.9873', 'epoch': '12.8'}                                        
+{'loss': '0.0328', 'grad_norm': '0.1435', 'learning_rate': '0.0001423', 'entropy': '0.03129', 'num_tokens': '1.707e+05', 'mean_token_accuracy': '0.9914', 'epoch': '13'}                                            
+{'eval_loss': '0.4583', 'eval_runtime': '93.06', 'eval_samples_per_second': '0.064', 'eval_steps_per_second': '0.011', 'eval_entropy': '0.09348', 'eval_num_tokens': '1.707e+05', 'eval_mean_token_accuracy': '0.9146', 'epoch': '13'}                                                                                                                                                                                                  
+ 43%|█████████████████████████████████████████████████████████████████████████▏                                                                                               | 52/120 [2:39:45<3:02:08, 160.71s/it2026-03-05 01:32:57,524 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"                                       
+2026-03-05 01:32:57,544 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+2026-03-05 01:32:57,647 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-05 01:32:57,667 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+/home/perseus/Venvs/PerseusDev/lib/python3.12/site-packages/torch/utils/data/dataloader.py:775: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  super().__init__(loader)
+{'loss': '0.0162', 'grad_norm': '0.0471', 'learning_rate': '0.0001396', 'entropy': '0.02332', 'num_tokens': '1.737e+05', 'mean_token_accuracy': '0.9948', 'epoch': '13.27'}                                         
+{'loss': '0.02238', 'grad_norm': '0.09313', 'learning_rate': '0.0001369', 'entropy': '0.02754', 'num_tokens': '1.767e+05', 'mean_token_accuracy': '0.9933', 'epoch': '13.53'}                                       
+{'loss': '0.02109', 'grad_norm': '0.09591', 'learning_rate': '0.0001342', 'entropy': '0.0279', 'num_tokens': '1.808e+05', 'mean_token_accuracy': '0.9924', 'epoch': '13.8'}                                         
+{'loss': '0.02999', 'grad_norm': '0.1096', 'learning_rate': '0.0001315', 'entropy': '0.03569', 'num_tokens': '1.838e+05', 'mean_token_accuracy': '0.9906', 'epoch': '14'}                                           
+{'eval_loss': '0.4868', 'eval_runtime': '92.01', 'eval_samples_per_second': '0.065', 'eval_steps_per_second': '0.011', 'eval_entropy': '0.08441', 'eval_num_tokens': '1.838e+05', 'eval_mean_token_accuracy': '0.9154', 'epoch': '14'}                                                                                                                                                                                                  
+ 47%|██████████████████████████████████████████████████████████████████████████████▊                                                                                          | 56/120 [2:51:45<3:00:33, 169.28s/it2026-03-05 01:44:56,967 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"                                       
+2026-03-05 01:44:56,989 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+2026-03-05 01:44:57,079 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-05 01:44:57,099 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+/home/perseus/Venvs/PerseusDev/lib/python3.12/site-packages/torch/utils/data/dataloader.py:775: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  super().__init__(loader)
+{'loss': '0.01194', 'grad_norm': '0.03607', 'learning_rate': '0.0001287', 'entropy': '0.01944', 'num_tokens': '1.874e+05', 'mean_token_accuracy': '0.9952', 'epoch': '14.27'}                                       
+{'loss': '0.01951', 'grad_norm': '0.05918', 'learning_rate': '0.0001259', 'entropy': '0.02217', 'num_tokens': '1.903e+05', 'mean_token_accuracy': '0.9922', 'epoch': '14.53'}                                       
+{'loss': '0.02025', 'grad_norm': '0.07477', 'learning_rate': '0.0001231', 'entropy': '0.03159', 'num_tokens': '1.944e+05', 'mean_token_accuracy': '0.9941', 'epoch': '14.8'}                                        
+{'loss': '0.01357', 'grad_norm': '0.04951', 'learning_rate': '0.0001202', 'entropy': '0.0212', 'num_tokens': '1.97e+05', 'mean_token_accuracy': '0.9949', 'epoch': '15'}                                            
+{'eval_loss': '0.5091', 'eval_runtime': '96.29', 'eval_samples_per_second': '0.062', 'eval_steps_per_second': '0.01', 'eval_entropy': '0.08091', 'eval_num_tokens': '1.97e+05', 'eval_mean_token_accuracy': '0.915', 'epoch': '15'}                                                                                                                                                                                                     
+ 50%|████████████████████████████████████████████████████████████████████████████████████▌                                                                                    | 60/120 [3:03:49<2:46:25, 166.43s/it2026-03-05 01:57:00,901 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"                                       
+2026-03-05 01:57:00,922 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+2026-03-05 01:57:01,011 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-05 01:57:01,032 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+/home/perseus/Venvs/PerseusDev/lib/python3.12/site-packages/torch/utils/data/dataloader.py:775: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  super().__init__(loader)
+{'loss': '0.01136', 'grad_norm': '0.05153', 'learning_rate': '0.0001174', 'entropy': '0.01957', 'num_tokens': '2.005e+05', 'mean_token_accuracy': '0.9962', 'epoch': '15.27'}                                       
+{'loss': '0.01277', 'grad_norm': '0.03763', 'learning_rate': '0.0001145', 'entropy': '0.0195', 'num_tokens': '2.046e+05', 'mean_token_accuracy': '0.9958', 'epoch': '15.53'}                                        
+{'loss': '0.01392', 'grad_norm': '0.05561', 'learning_rate': '0.0001116', 'entropy': '0.02119', 'num_tokens': '2.081e+05', 'mean_token_accuracy': '0.9954', 'epoch': '15.8'}                                        
+{'loss': '0.01121', 'grad_norm': '0.05137', 'learning_rate': '0.0001087', 'entropy': '0.01514', 'num_tokens': '2.101e+05', 'mean_token_accuracy': '0.9951', 'epoch': '16'}                                          
+{'eval_loss': '0.5357', 'eval_runtime': '92.23', 'eval_samples_per_second': '0.065', 'eval_steps_per_second': '0.011', 'eval_entropy': '0.07462', 'eval_num_tokens': '2.101e+05', 'eval_mean_token_accuracy': '0.9154', 'epoch': '16'}                                                                                                                                                                                                  
+ 53%|██████████████████████████████████████████████████████████████████████████████████████████▏                                                                              | 64/120 [3:15:51<2:29:19, 160.00s/it2026-03-05 02:09:03,280 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"                                       
+2026-03-05 02:09:03,300 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+2026-03-05 02:09:03,388 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-05 02:09:03,406 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+/home/perseus/Venvs/PerseusDev/lib/python3.12/site-packages/torch/utils/data/dataloader.py:775: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  super().__init__(loader)
+{'loss': '0.009828', 'grad_norm': '0.03392', 'learning_rate': '0.0001058', 'entropy': '0.01445', 'num_tokens': '2.137e+05', 'mean_token_accuracy': '0.9961', 'epoch': '16.27'}                                      
+{'loss': '0.007847', 'grad_norm': '0.0296', 'learning_rate': '0.0001029', 'entropy': '0.0155', 'num_tokens': '2.172e+05', 'mean_token_accuracy': '0.9963', 'epoch': '16.53'}                                        
+{'loss': '0.01223', 'grad_norm': '0.04483', 'learning_rate': '0.0001', 'entropy': '0.01684', 'num_tokens': '2.202e+05', 'mean_token_accuracy': '0.995', 'epoch': '16.8'}                                            
+{'loss': '0.009043', 'grad_norm': '0.04822', 'learning_rate': '9.709e-05', 'entropy': '0.0151', 'num_tokens': '2.232e+05', 'mean_token_accuracy': '0.9964', 'epoch': '17'}                                          
+{'eval_loss': '0.5586', 'eval_runtime': '92.23', 'eval_samples_per_second': '0.065', 'eval_steps_per_second': '0.011', 'eval_entropy': '0.0703', 'eval_num_tokens': '2.232e+05', 'eval_mean_token_accuracy': '0.9145', 'epoch': '17'}                                                                                                                                                                                                   
+ 57%|███████████████████████████████████████████████████████████████████████████████████████████████▊                                                                         | 68/120 [3:27:40<2:20:27, 162.07s/it2026-03-05 02:20:51,834 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"                                       
+2026-03-05 02:20:51,847 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+2026-03-05 02:20:51,929 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-05 02:20:51,941 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+/home/perseus/Venvs/PerseusDev/lib/python3.12/site-packages/torch/utils/data/dataloader.py:775: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  super().__init__(loader)
+{'loss': '0.00581', 'grad_norm': '0.02646', 'learning_rate': '9.419e-05', 'entropy': '0.01161', 'num_tokens': '2.263e+05', 'mean_token_accuracy': '0.998', 'epoch': '17.27'}                                        
+{'loss': '0.00679', 'grad_norm': '0.02799', 'learning_rate': '9.128e-05', 'entropy': '0.0132', 'num_tokens': '2.304e+05', 'mean_token_accuracy': '0.9973', 'epoch': '17.53'}                                        
+{'loss': '0.007555', 'grad_norm': '0.02758', 'learning_rate': '8.839e-05', 'entropy': '0.01392', 'num_tokens': '2.339e+05', 'mean_token_accuracy': '0.9972', 'epoch': '17.8'}                                       
+{'loss': '0.01287', 'grad_norm': '0.1174', 'learning_rate': '8.551e-05', 'entropy': '0.01332', 'num_tokens': '2.364e+05', 'mean_token_accuracy': '0.9946', 'epoch': '18'}                                           
+{'eval_loss': '0.5783', 'eval_runtime': '89.65', 'eval_samples_per_second': '0.067', 'eval_steps_per_second': '0.011', 'eval_entropy': '0.06674', 'eval_num_tokens': '2.364e+05', 'eval_mean_token_accuracy': '0.9153', 'epoch': '18'}                                                                                                                                                                                                  
+ 60%|█████████████████████████████████████████████████████████████████████████████████████████████████████▍                                                                   | 72/120 [3:39:38<2:10:52, 163.59s/it2026-03-05 02:32:50,652 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"                                       
+2026-03-05 02:32:50,701 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+2026-03-05 02:32:50,789 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-05 02:32:50,849 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+/home/perseus/Venvs/PerseusDev/lib/python3.12/site-packages/torch/utils/data/dataloader.py:775: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  super().__init__(loader)
+{'loss': '0.007439', 'grad_norm': '0.02551', 'learning_rate': '8.264e-05', 'entropy': '0.0126', 'num_tokens': '2.393e+05', 'mean_token_accuracy': '0.9958', 'epoch': '18.27'}                                       
+{'loss': '0.00664', 'grad_norm': '0.03225', 'learning_rate': '7.978e-05', 'entropy': '0.01074', 'num_tokens': '2.423e+05', 'mean_token_accuracy': '0.9956', 'epoch': '18.53'}                                       
+{'loss': '0.007445', 'grad_norm': '0.03235', 'learning_rate': '7.694e-05', 'entropy': '0.01047', 'num_tokens': '2.464e+05', 'mean_token_accuracy': '0.9971', 'epoch': '18.8'}                                       
+{'loss': '0.007048', 'grad_norm': '0.03532', 'learning_rate': '7.412e-05', 'entropy': '0.01267', 'num_tokens': '2.495e+05', 'mean_token_accuracy': '0.9974', 'epoch': '19'}                                         
+{'eval_loss': '0.5866', 'eval_runtime': '92.52', 'eval_samples_per_second': '0.065', 'eval_steps_per_second': '0.011', 'eval_entropy': '0.06575', 'eval_num_tokens': '2.495e+05', 'eval_mean_token_accuracy': '0.9156', 'epoch': '19'}                                                                                                                                                                                                  
+ 63%|███████████████████████████████████████████████████████████████████████████████████████████████████████████                                                              | 76/120 [3:51:40<2:04:49, 170.21s/it2026-03-05 02:44:51,877 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"                                       
+2026-03-05 02:44:51,892 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+2026-03-05 02:44:51,977 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-05 02:44:51,992 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+/home/perseus/Venvs/PerseusDev/lib/python3.12/site-packages/torch/utils/data/dataloader.py:775: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  super().__init__(loader)
+{'loss': '0.008342', 'grad_norm': '0.03397', 'learning_rate': '7.132e-05', 'entropy': '0.01236', 'num_tokens': '2.53e+05', 'mean_token_accuracy': '0.9972', 'epoch': '19.27'}                                       
+{'loss': '0.005893', 'grad_norm': '0.02865', 'learning_rate': '6.855e-05', 'entropy': '0.0101', 'num_tokens': '2.566e+05', 'mean_token_accuracy': '0.9967', 'epoch': '19.53'}                                       
+{'loss': '0.006122', 'grad_norm': '0.02007', 'learning_rate': '6.58e-05', 'entropy': '0.01108', 'num_tokens': '2.602e+05', 'mean_token_accuracy': '0.9975', 'epoch': '19.8'}                                        
+{'loss': '0.006301', 'grad_norm': '0.02615', 'learning_rate': '6.308e-05', 'entropy': '0.01124', 'num_tokens': '2.626e+05', 'mean_token_accuracy': '0.9963', 'epoch': '20'}                                         
+{'eval_loss': '0.5865', 'eval_runtime': '91.47', 'eval_samples_per_second': '0.066', 'eval_steps_per_second': '0.011', 'eval_entropy': '0.06634', 'eval_num_tokens': '2.626e+05', 'eval_mean_token_accuracy': '0.9151', 'epoch': '20'}                                                                                                                                                                                                  
+ 67%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████▋                                                        | 80/120 [4:03:47<1:49:55, 164.88s/it2026-03-05 02:56:59,752 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"                                       
+2026-03-05 02:56:59,773 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+2026-03-05 02:56:59,866 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-05 02:56:59,888 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+/home/perseus/Venvs/PerseusDev/lib/python3.12/site-packages/torch/utils/data/dataloader.py:775: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  super().__init__(loader)
+{'loss': '0.005984', 'grad_norm': '0.02592', 'learning_rate': '6.039e-05', 'entropy': '0.01176', 'num_tokens': '2.663e+05', 'mean_token_accuracy': '0.9974', 'epoch': '20.27'}                                      
+{'loss': '0.00597', 'grad_norm': '0.02299', 'learning_rate': '5.774e-05', 'entropy': '0.01055', 'num_tokens': '2.697e+05', 'mean_token_accuracy': '0.9969', 'epoch': '20.53'}                                       
+{'loss': '0.004871', 'grad_norm': '0.02372', 'learning_rate': '5.512e-05', 'entropy': '0.008716', 'num_tokens': '2.738e+05', 'mean_token_accuracy': '0.9983', 'epoch': '20.8'}                                      
+{'loss': '0.009348', 'grad_norm': '0.05767', 'learning_rate': '5.254e-05', 'entropy': '0.01282', 'num_tokens': '2.758e+05', 'mean_token_accuracy': '0.9942', 'epoch': '21'}                                         
+{'eval_loss': '0.5897', 'eval_runtime': '90.99', 'eval_samples_per_second': '0.066', 'eval_steps_per_second': '0.011', 'eval_entropy': '0.06586', 'eval_num_tokens': '2.758e+05', 'eval_mean_token_accuracy': '0.9143', 'epoch': '21'}                                                                                                                                                                                                  
+ 70%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▎                                                  | 84/120 [4:15:46<1:35:51, 159.77s/it2026-03-05 03:08:58,212 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"                                       
+2026-03-05 03:08:58,232 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+2026-03-05 03:08:58,328 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-05 03:08:58,350 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+/home/perseus/Venvs/PerseusDev/lib/python3.12/site-packages/torch/utils/data/dataloader.py:775: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  super().__init__(loader)
+{'loss': '0.005665', 'grad_norm': '0.02342', 'learning_rate': '5e-05', 'entropy': '0.01099', 'num_tokens': '2.799e+05', 'mean_token_accuracy': '0.9978', 'epoch': '21.27'}                                          
+{'loss': '0.006266', 'grad_norm': '0.02639', 'learning_rate': '4.75e-05', 'entropy': '0.0111', 'num_tokens': '2.828e+05', 'mean_token_accuracy': '0.9954', 'epoch': '21.53'}                                        
+{'loss': '0.00492', 'grad_norm': '0.02302', 'learning_rate': '4.505e-05', 'entropy': '0.008419', 'num_tokens': '2.864e+05', 'mean_token_accuracy': '0.9976', 'epoch': '21.8'}                                       
+{'loss': '0.005598', 'grad_norm': '0.02404', 'learning_rate': '4.264e-05', 'entropy': '0.01047', 'num_tokens': '2.889e+05', 'mean_token_accuracy': '0.9968', 'epoch': '22'}                                         
+{'eval_loss': '0.5933', 'eval_runtime': '91.3', 'eval_samples_per_second': '0.066', 'eval_steps_per_second': '0.011', 'eval_entropy': '0.06478', 'eval_num_tokens': '2.889e+05', 'eval_mean_token_accuracy': '0.9151', 'epoch': '22'}                                                                                                                                                                                                   
+ 73%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▉                                             | 88/120 [4:27:46<1:25:25, 160.16s/it2026-03-05 03:20:58,275 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"                                       
+2026-03-05 03:20:58,296 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+2026-03-05 03:20:58,385 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-05 03:20:58,405 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+/home/perseus/Venvs/PerseusDev/lib/python3.12/site-packages/torch/utils/data/dataloader.py:775: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  super().__init__(loader)
+{'loss': '0.00659', 'grad_norm': '0.04074', 'learning_rate': '4.028e-05', 'entropy': '0.009957', 'num_tokens': '2.92e+05', 'mean_token_accuracy': '0.996', 'epoch': '22.27'}                                        
+{'loss': '0.004048', 'grad_norm': '0.01481', 'learning_rate': '3.798e-05', 'entropy': '0.00823', 'num_tokens': '2.961e+05', 'mean_token_accuracy': '0.9983', 'epoch': '22.53'}                                      
+{'loss': '0.005307', 'grad_norm': '0.02', 'learning_rate': '3.572e-05', 'entropy': '0.01029', 'num_tokens': '2.996e+05', 'mean_token_accuracy': '0.9976', 'epoch': '22.8'}                                          
+{'loss': '0.006376', 'grad_norm': '0.03413', 'learning_rate': '3.352e-05', 'entropy': '0.01047', 'num_tokens': '3.02e+05', 'mean_token_accuracy': '0.9972', 'epoch': '23'}                                          
+{'eval_loss': '0.5973', 'eval_runtime': '90.21', 'eval_samples_per_second': '0.067', 'eval_steps_per_second': '0.011', 'eval_entropy': '0.06389', 'eval_num_tokens': '3.02e+05', 'eval_mean_token_accuracy': '0.9151', 'epoch': '23'}                                                                                                                                                                                                   
+ 77%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▌                                       | 92/120 [4:39:41<1:15:33, 161.91s/it2026-03-05 03:32:53,746 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"                                       
+2026-03-05 03:32:53,768 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+2026-03-05 03:32:53,857 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-05 03:32:53,879 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+/home/perseus/Venvs/PerseusDev/lib/python3.12/site-packages/torch/utils/data/dataloader.py:775: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  super().__init__(loader)
+{'loss': '0.005844', 'grad_norm': '0.02712', 'learning_rate': '3.138e-05', 'entropy': '0.01028', 'num_tokens': '3.05e+05', 'mean_token_accuracy': '0.9968', 'epoch': '23.27'}                                       
+{'loss': '0.004772', 'grad_norm': '0.02334', 'learning_rate': '2.929e-05', 'entropy': '0.008396', 'num_tokens': '3.091e+05', 'mean_token_accuracy': '0.998', 'epoch': '23.53'}                                      
+{'loss': '0.005154', 'grad_norm': '0.0332', 'learning_rate': '2.726e-05', 'entropy': '0.009622', 'num_tokens': '3.127e+05', 'mean_token_accuracy': '0.9976', 'epoch': '23.8'}                                       
+{'loss': '0.005481', 'grad_norm': '0.02641', 'learning_rate': '2.53e-05', 'entropy': '0.009182', 'num_tokens': '3.152e+05', 'mean_token_accuracy': '0.9965', 'epoch': '24'}                                         
+{'eval_loss': '0.6007', 'eval_runtime': '92.5', 'eval_samples_per_second': '0.065', 'eval_steps_per_second': '0.011', 'eval_entropy': '0.06344', 'eval_num_tokens': '3.152e+05', 'eval_mean_token_accuracy': '0.9153', 'epoch': '24'}                                                                                                                                                                                                   
+ 80%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▏                                 | 96/120 [4:51:48<1:05:38, 164.09s/it2026-03-05 03:45:00,715 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"                                       
+2026-03-05 03:45:00,738 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+2026-03-05 03:45:00,828 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-05 03:45:00,849 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+/home/perseus/Venvs/PerseusDev/lib/python3.12/site-packages/torch/utils/data/dataloader.py:775: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  super().__init__(loader)
+{'loss': '0.005428', 'grad_norm': '0.02406', 'learning_rate': '2.34e-05', 'entropy': '0.01086', 'num_tokens': '3.187e+05', 'mean_token_accuracy': '0.9979', 'epoch': '24.27'}                                       
+{'loss': '0.006646', 'grad_norm': '0.02798', 'learning_rate': '2.156e-05', 'entropy': '0.01073', 'num_tokens': '3.211e+05', 'mean_token_accuracy': '0.9966', 'epoch': '24.53'}                                      
+{'loss': '0.004348', 'grad_norm': '0.01745', 'learning_rate': '1.979e-05', 'entropy': '0.00746', 'num_tokens': '3.252e+05', 'mean_token_accuracy': '0.9976', 'epoch': '24.8'}                                       
+{'loss': '0.003932', 'grad_norm': '0.0209', 'learning_rate': '1.808e-05', 'entropy': '0.007142', 'num_tokens': '3.283e+05', 'mean_token_accuracy': '0.9984', 'epoch': '25'}                                         
+{'eval_loss': '0.6039', 'eval_runtime': '91.7', 'eval_samples_per_second': '0.065', 'eval_steps_per_second': '0.011', 'eval_entropy': '0.06299', 'eval_num_tokens': '3.283e+05', 'eval_mean_token_accuracy': '0.9153', 'epoch': '25'}                                                                                                                                                                                                   
+ 83%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▋                            | 100/120 [5:03:54<56:45, 170.28s/it2026-03-05 03:57:06,276 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"                                       
+2026-03-05 03:57:06,297 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+2026-03-05 03:57:06,384 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-05 03:57:06,407 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+/home/perseus/Venvs/PerseusDev/lib/python3.12/site-packages/torch/utils/data/dataloader.py:775: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  super().__init__(loader)
+{'loss': '0.004653', 'grad_norm': '0.0189', 'learning_rate': '1.645e-05', 'entropy': '0.008592', 'num_tokens': '3.319e+05', 'mean_token_accuracy': '0.9983', 'epoch': '25.27'}                                      
+{'loss': '0.004092', 'grad_norm': '0.02033', 'learning_rate': '1.489e-05', 'entropy': '0.007894', 'num_tokens': '3.36e+05', 'mean_token_accuracy': '0.998', 'epoch': '25.53'}                                       
+{'loss': '0.00556', 'grad_norm': '0.03217', 'learning_rate': '1.34e-05', 'entropy': '0.009275', 'num_tokens': '3.395e+05', 'mean_token_accuracy': '0.9969', 'epoch': '25.8'}                                        
+{'loss': '0.00594', 'grad_norm': '0.02897', 'learning_rate': '1.198e-05', 'entropy': '0.01078', 'num_tokens': '3.414e+05', 'mean_token_accuracy': '0.9966', 'epoch': '26'}                                          
+{'eval_loss': '0.6054', 'eval_runtime': '89', 'eval_samples_per_second': '0.067', 'eval_steps_per_second': '0.011', 'eval_entropy': '0.06293', 'eval_num_tokens': '3.414e+05', 'eval_mean_token_accuracy': '0.9154', 'epoch': '26'}                                                                                                                                                                                                     
+ 87%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▎                      | 104/120 [5:15:49<42:14, 158.38s/it2026-03-05 04:09:01,815 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"                                       
+2026-03-05 04:09:01,835 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+2026-03-05 04:09:01,925 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-05 04:09:01,947 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+/home/perseus/Venvs/PerseusDev/lib/python3.12/site-packages/torch/utils/data/dataloader.py:775: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  super().__init__(loader)
+{'loss': '0.005175', 'grad_norm': '0.02243', 'learning_rate': '1.064e-05', 'entropy': '0.009409', 'num_tokens': '3.45e+05', 'mean_token_accuracy': '0.9967', 'epoch': '26.27'}                                      
+{'loss': '0.004533', 'grad_norm': '0.01885', 'learning_rate': '9.369e-06', 'entropy': '0.009041', 'num_tokens': '3.485e+05', 'mean_token_accuracy': '0.9973', 'epoch': '26.53'}                                     
+{'loss': '0.004757', 'grad_norm': '0.02788', 'learning_rate': '8.178e-06', 'entropy': '0.008299', 'num_tokens': '3.521e+05', 'mean_token_accuracy': '0.9983', 'epoch': '26.8'}                                      
+{'loss': '0.00444', 'grad_norm': '0.02682', 'learning_rate': '7.065e-06', 'entropy': '0.009098', 'num_tokens': '3.546e+05', 'mean_token_accuracy': '0.9979', 'epoch': '27'}                                         
+{'eval_loss': '0.6061', 'eval_runtime': '91.89', 'eval_samples_per_second': '0.065', 'eval_steps_per_second': '0.011', 'eval_entropy': '0.06289', 'eval_num_tokens': '3.546e+05', 'eval_mean_token_accuracy': '0.9154', 'epoch': '27'}                                                                                                                                                                                                  
+ 90%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████                 | 108/120 [5:27:44<32:06, 160.51s/it2026-03-05 04:20:56,343 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"                                       
+2026-03-05 04:20:56,365 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+2026-03-05 04:20:56,461 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-05 04:20:56,482 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+/home/perseus/Venvs/PerseusDev/lib/python3.12/site-packages/torch/utils/data/dataloader.py:775: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  super().__init__(loader)
+{'loss': '0.003962', 'grad_norm': '0.01744', 'learning_rate': '6.031e-06', 'entropy': '0.007834', 'num_tokens': '3.587e+05', 'mean_token_accuracy': '0.9988', 'epoch': '27.27'}                                     
+{'loss': '0.00475', 'grad_norm': '0.02173', 'learning_rate': '5.076e-06', 'entropy': '0.009316', 'num_tokens': '3.617e+05', 'mean_token_accuracy': '0.998', 'epoch': '27.53'}                                       
+{'loss': '0.004785', 'grad_norm': '0.02246', 'learning_rate': '4.201e-06', 'entropy': '0.008456', 'num_tokens': '3.652e+05', 'mean_token_accuracy': '0.9967', 'epoch': '27.8'}                                      
+{'loss': '0.005445', 'grad_norm': '0.03339', 'learning_rate': '3.407e-06', 'entropy': '0.01053', 'num_tokens': '3.677e+05', 'mean_token_accuracy': '0.9968', 'epoch': '28'}                                         
+{'eval_loss': '0.6064', 'eval_runtime': '86.55', 'eval_samples_per_second': '0.069', 'eval_steps_per_second': '0.012', 'eval_entropy': '0.06284', 'eval_num_tokens': '3.677e+05', 'eval_mean_token_accuracy': '0.9154', 'epoch': '28'}                                                                                                                                                                                                  
+ 93%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▋           | 112/120 [5:39:34<21:12, 159.10s/it2026-03-05 04:32:46,785 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"                                       
+2026-03-05 04:32:46,807 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+2026-03-05 04:32:46,897 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-05 04:32:46,920 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+/home/perseus/Venvs/PerseusDev/lib/python3.12/site-packages/torch/utils/data/dataloader.py:775: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  super().__init__(loader)
+{'loss': '0.005727', 'grad_norm': '0.02542', 'learning_rate': '2.696e-06', 'entropy': '0.01017', 'num_tokens': '3.706e+05', 'mean_token_accuracy': '0.9957', 'epoch': '28.27'}                                      
+{'loss': '0.004523', 'grad_norm': '0.01836', 'learning_rate': '2.066e-06', 'entropy': '0.009216', 'num_tokens': '3.741e+05', 'mean_token_accuracy': '0.9989', 'epoch': '28.53'}                                     
+{'loss': '0.004172', 'grad_norm': '0.02059', 'learning_rate': '1.519e-06', 'entropy': '0.008179', 'num_tokens': '3.782e+05', 'mean_token_accuracy': '0.9983', 'epoch': '28.8'}                                      
+{'loss': '0.004314', 'grad_norm': '0.02897', 'learning_rate': '1.056e-06', 'entropy': '0.007808', 'num_tokens': '3.808e+05', 'mean_token_accuracy': '0.9981', 'epoch': '29'}                                        
+{'eval_loss': '0.6065', 'eval_runtime': '94.47', 'eval_samples_per_second': '0.064', 'eval_steps_per_second': '0.011', 'eval_entropy': '0.06282', 'eval_num_tokens': '3.808e+05', 'eval_mean_token_accuracy': '0.9153', 'epoch': '29'}                                                                                                                                                                                                  
+ 97%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▎     | 116/120 [5:51:37<10:58, 164.74s/it2026-03-05 04:44:49,383 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"                                       
+2026-03-05 04:44:49,404 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+2026-03-05 04:44:49,493 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-05 04:44:49,514 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+/home/perseus/Venvs/PerseusDev/lib/python3.12/site-packages/torch/utils/data/dataloader.py:775: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  super().__init__(loader)
+{'loss': '0.005083', 'grad_norm': '0.02803', 'learning_rate': '6.762e-07', 'entropy': '0.009552', 'num_tokens': '3.838e+05', 'mean_token_accuracy': '0.998', 'epoch': '29.27'}                                      
+{'loss': '0.005771', 'grad_norm': '0.02547', 'learning_rate': '3.805e-07', 'entropy': '0.01003', 'num_tokens': '3.868e+05', 'mean_token_accuracy': '0.9962', 'epoch': '29.53'}                                      
+{'loss': '0.003799', 'grad_norm': '0.0173', 'learning_rate': '1.692e-07', 'entropy': '0.006887', 'num_tokens': '3.909e+05', 'mean_token_accuracy': '0.998', 'epoch': '29.8'}                                        
+{'loss': '0.00462', 'grad_norm': '0.02747', 'learning_rate': '4.23e-08', 'entropy': '0.009571', 'num_tokens': '3.94e+05', 'mean_token_accuracy': '0.999', 'epoch': '30'}                                            
+{'eval_loss': '0.6066', 'eval_runtime': '93.45', 'eval_samples_per_second': '0.064', 'eval_steps_per_second': '0.011', 'eval_entropy': '0.06281', 'eval_num_tokens': '3.94e+05', 'eval_mean_token_accuracy': '0.9153', 'epoch': '30'}                                                                                                                                                                                                   
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 120/120 [6:03:52<00:00, 173.11s/it2026-03-05 04:57:03,887 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"                                       
+2026-03-05 04:57:03,908 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+2026-03-05 04:57:03,996 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-05 04:57:04,018 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+{'train_runtime': '2.183e+04', 'train_samples_per_second': '0.021', 'train_steps_per_second': '0.005', 'train_loss': '0.1073', 'epoch': '30'}                                                                       
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 120/120 [6:03:52<00:00, 181.94s/it]
+2026-03-05 04:57:04,359 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-05 04:57:04,380 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+2026-03-05 04:57:04,468 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-05 04:57:04,489 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Qwen/Qwen2.5-Coder-1.5B-Instruct/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json "HTTP/1.1 200 OK"
+2026-03-05 04:57:04,572 - __main__ - INFO - Saved final adapter to perseus_data/checkpoints/final
+2026-03-05 04:57:04,574 - __main__ - INFO - 
+=== Sample Generations ===
+2026-03-05 04:58:49,220 - __main__ - INFO - 
+--- Sample 1 ---
+2026-03-05 04:58:49,222 - __main__ - INFO - Generated (first 300 chars):
++0x0:	endbr64
++0x4:	push	rbp
++0x5:	mov	rbp, rsp
++0x8:	sub	rsp, 0x10
++0xc:	mov	dword ptr [rbp - 4], edi
++0xf:	mov	qword ptr [rbp - 8], rsi
++0x13:	mov	qword ptr [rbp - 10], rdx
++0x17:	mov	rax, qword ptr fs:[0x28]
++0x1b:	mov	qword ptr [rbp - 12], rax
++0x1f:	mov	dword ptr [rip + 0x2d56], 0
++0x24:	nop
++0
+2026-03-05 04:58:49,222 - __main__ - INFO - Expected (first 300 chars):
++0x0:	endbr64
++0x4:	push	rbp
++0x5:	mov	rbp, rsp
++0x8:	sub	rsp, 0x20
++0xc:	mov	rax, qword ptr fs:[0x28]
++0x15:	mov	qword ptr [rbp - 8], rax
++0x19:	xor	eax, eax
++0x1b:	movabs	rax, 0x6f57206f6c6c6548
++0x25:	mov	qword ptr [rbp - 0x14], rax
++0x29:	mov	dword ptr [rbp - 0xc], 0x646c72
++0x30:	lea	rax, [rbp 
+2026-03-05 05:00:40,572 - __main__ - INFO - 
+--- Sample 2 ---
+2026-03-05 05:00:40,573 - __main__ - INFO - Generated (first 300 chars):
++0x0:	endbr64
++0x4:	push	rbp
++0x5:	mov	rbp, rsp
++0x8:	push	rbx
++0x9:	sub	rsp, 0x18
++0xd:	mov	dword ptr [rbp - 0x14], edi
++0x10:	mov	rax, qword ptr [rbp - 0x14]
++0x14:	mov	rax, qword ptr [rax]
++0x17:	mov	qword ptr [rbp - 0x18], rax
++0x1b:	mov	rax, qword ptr [rbp - 0x14]
++0x1f:	mov	qword ptr [rbp - 8]
+2026-03-05 05:00:40,573 - __main__ - INFO - Expected (first 300 chars):
++0x0:	endbr64
++0x4:	push	rbp
++0x5:	mov	rbp, rsp
++0x8:	sub	rsp, 0x20
++0xc:	mov	qword ptr [rbp - 0x18], rdi
++0x10:	mov	rax, qword ptr [rbp - 0x18]
++0x14:	mov	rdi, rax
++0x17:	call	strlen
++0x1c:	mov	dword ptr [rbp - 4], eax
++0x1f:	mov	dword ptr [rbp - 8], 0
++0x26:	jmp	+0x7d
++0x28:	mov	eax, dword ptr [rb
+

@@ -34,7 +34,7 @@ SYSTEM_PROMPT = (
 
 @dataclass
 class TrainConfig:
-    model_name: str = "Qwen/Qwen2.5-Coder-7B-Instruct"
+    model_name: str = "Qwen/Qwen2.5-Coder-1.5B-Instruct" #"Qwen/Qwen2.5-Coder-7B-Instruct"
     train_data: str = "perseus_data/training/train.jsonl"
     val_data: str = "perseus_data/training/val.jsonl"
     output_dir: str = "perseus_data/checkpoints"
@@ -100,21 +100,38 @@ class PerseusTrainer:
             f"<|im_start|>assistant\n{example['output']}<|im_end|>"
         )
 
-    # Load model with 4-bit quantization
     def setup_model(self) -> tuple[AutoModelForCausalLM, AutoTokenizer]:
-        bnb_config = BitsAndBytesConfig(
-            load_in_4bit=True,
-            bnb_4bit_quant_type="nf4",
-            bnb_4bit_compute_dtype=torch.bfloat16,
-            bnb_4bit_use_double_quant=True,
-        )
+        has_gpu = torch.cuda.is_available()
+
+        if has_gpu:
+            logger.info("GPU detected — using 4-bit quantization")
+            bnb_config = BitsAndBytesConfig(
+                load_in_4bit=True,
+                bnb_4bit_quant_type="nf4",
+                bnb_4bit_compute_dtype=torch.bfloat16,
+                bnb_4bit_use_double_quant=True,
+            )
+            model_kwargs = {
+                "quantization_config": bnb_config,
+                "device_map": "auto",
+            }
+        else:
+            logger.info("No GPU detected — loading in float32 on CPU")
+            logger.info(
+                "Note: training a 7B model on CPU will be very slow. "
+                "Consider using a smaller model (e.g., Qwen/Qwen2.5-Coder-1.5B-Instruct) "
+                "or running on a machine with a GPU."
+            )
+            model_kwargs = {
+                "torch_dtype": torch.float32,
+                "device_map": "cpu",
+            }
 
         logger.info(f"Loading model: {self.config.model_name}")
         model = AutoModelForCausalLM.from_pretrained(
             self.config.model_name,
-            quantization_config=bnb_config,
-            device_map="auto",
             trust_remote_code=True,
+            **model_kwargs,
         )
 
         tokenizer = AutoTokenizer.from_pretrained(
@@ -126,7 +143,10 @@ class PerseusTrainer:
             tokenizer.pad_token = tokenizer.eos_token
             model.config.pad_token_id = tokenizer.eos_token_id
 
-        model = prepare_model_for_kbit_training(model)
+        tokenizer.model_max_length = self.config.max_seq_length
+
+        if has_gpu:
+            model = prepare_model_for_kbit_training(model)
 
         return model, tokenizer
 
@@ -179,14 +199,13 @@ class PerseusTrainer:
             warmup_ratio=self.config.warmup_ratio,
             weight_decay=self.config.weight_decay,
             max_grad_norm=0.3,
-            fp16=not torch.cuda.is_bf16_supported(),
-            bf16=torch.cuda.is_bf16_supported(),
+            fp16=torch.cuda.is_available() and not torch.cuda.is_bf16_supported(),
+            bf16=torch.cuda.is_available() and torch.cuda.is_bf16_supported(),
             logging_steps=self.config.logging_steps,
             eval_strategy="epoch" if val_dataset else "no",
             save_strategy=self.config.save_strategy,
             save_total_limit=self.config.save_total_limit,
             report_to=report_to,
-            max_seq_length=self.config.max_seq_length,
             dataset_text_field="text",
             gradient_checkpointing=True,
             gradient_checkpointing_kwargs={"use_reentrant": False},
@@ -195,7 +214,7 @@ class PerseusTrainer:
 
         trainer = SFTTrainer(
             model=model,
-            tokenizer=tokenizer,
+            processing_class=tokenizer,
             train_dataset=train_dataset,
             eval_dataset=val_dataset,
             args=training_args,
