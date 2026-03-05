@@ -27,7 +27,8 @@ def run_full_pipeline(
         repos_dir,
         obfuscation_types,
         max_samples,
-        skip_collection
+        skip_collection,
+        prepare_training=False
 ):
     logger.info("="*80)
     logger.info("Perseus Data Pipeline - Starting")
@@ -82,12 +83,20 @@ def run_full_pipeline(
 
     #logger.info(f"Extracted features for {feature_count} samples")
 
+    if prepare_training:
+        logger.info("\nPreparing training data...")
+        from prepare_training_data import TrainingDataPreparer
+        preparer = TrainingDataPreparer(data_root=data_root)
+        train_data, val_data = preparer.prepare_all()
+        training_dir = data_root / 'training'
+        preparer.save_jsonl(train_data, training_dir / 'train.jsonl')
+        preparer.save_jsonl(val_data, training_dir / 'val.jsonl')
+        preparer.save_stats(train_data, val_data, training_dir / 'data_stats.json')
+
     logger.info("\n" + "="*80)
     logger.info("Pipeline Complete!")
     logger.info("="*80)
     logger.info(f"Data root: {data_root}")
-    #logger.info(f"Check {data_root}/metadata/ for sample metadata")
-    #logger.info(f"Check {data_root}/features/ for extracted features")
 
 def main():
     parser = argparse.ArgumentParser(description='Perseus Data Pipeline')
@@ -98,6 +107,7 @@ def main():
     parser.add_argument('--max-samples', type=int, default=None, help='Maximum number of samples to process (default: all)')
     parser.add_argument('--skip-collection', action='store_true', help='Skip source collection step (use existing sources)')
     parser.add_argument('--collect-only', action='store_true', help='Only run collection step, skip processing')
+    parser.add_argument('--prepare-training', action='store_true', help='Prepare training data after processing')
 
     args = parser.parse_args()
 
@@ -114,7 +124,8 @@ def main():
                 repos_dir=args.repos_dir,
                 obfuscation_types=args.obfuscations,
                 max_samples=args.max_samples,
-                skip_collection=args.skip_collection
+                skip_collection=args.skip_collection,
+                prepare_training=args.prepare_training
         )
 
 if __name__ == '__main__':

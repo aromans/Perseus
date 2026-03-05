@@ -66,6 +66,11 @@ class DataPipeline:
             (self.dirs['disassembled'] / obf_type).mkdir(exist_ok=True)
             (self.dirs['features']     / obf_type).mkdir(exist_ok=True)
 
+        (self.dirs['obfuscated']   / 'clean').mkdir(exist_ok=True)
+        (self.dirs['compiled']     / 'clean').mkdir(exist_ok=True)
+        (self.dirs['disassembled'] / 'clean').mkdir(exist_ok=True)
+        (self.dirs['features']     / 'clean').mkdir(exist_ok=True)
+
     def apply_obfuscation(
         self,
         source_file,
@@ -78,10 +83,18 @@ class DataPipeline:
             return False
 
         cmd_template = self.OBFUSCATION_COMMANDS[obf_type]
+        if dump_file:
+            dump_path = Path(dump_file).resolve()
+            dump_dir = str(dump_path.parent)
+            dump_name = dump_path.name
+        else:
+            dump_dir = None
+            dump_name = '/dev/null'
+
         cmd = cmd_template.format(
-                input_file=source_file,
-                output_file=output_file,
-                dump_file=dump_file or '/dev/null'
+                input_file=Path(source_file).resolve(),
+                output_file=Path(output_file).resolve(),
+                dump_file=dump_name
         )
 
         try:
@@ -92,7 +105,8 @@ class DataPipeline:
                     shell=True,
                     capture_output=True,
                     text=True,
-                    timeout=300
+                    timeout=300,
+                    cwd=dump_dir
             )
 
             if result.returncode == 0 and output_file.exists():
@@ -154,22 +168,31 @@ class DataPipeline:
         output_dir.mkdir(parents=True, exist_ok=True)
         try:
             from capstone import Cs, CS_ARCH_X86, CS_MODE_64
+            from elftools.elf.elffile import ELFFile
 
             with open(binary_path, 'rb') as f:
-                code = f.read()
+                elf = ELFFile(f)
+                text_section = elf.get_section_by_name('.text')
+                if text_section is None:
+                    logger.error(f"No .text section found in {binary_path}")
+                    return False
+
+                code = text_section.data()
+                text_addr = text_section['sh_addr']
 
             md = Cs(CS_ARCH_X86, CS_MODE_64)
+            md.detail = True
             disasm_output = output_dir / f'{binary_path.stem}_disasm.txt'
 
             with open(disasm_output, 'w') as f:
-                for i in md.disasm(code, 0x1000):
+                for i in md.disasm(code, text_addr):
                     f.write(f"0x{i.address:x}:\t{i.mnemonic}\t{i.op_str}\n")
 
             logger.info(f"Disassembled with Capstone: {disasm_output}")
             return True
-    
-        except ImportError:
-            logger.error("Capstone not installed. Install with: pip install capstone")
+
+        except ImportError as e:
+            logger.error(f"Missing dependency: {e}. Install with: pip install capstone pyelftools")
             return False
         except Exception as e:
             logger.error(f"Capstone disassembly error: {e}")
@@ -207,6 +230,7 @@ class DataPipeline:
             if not self.apply_obfuscation(file, obf_type, obf_file, dump_file):
                 return None
         else:
+            print(file)
             shutil.copy(file, obf_file)
 
         binary_file = self.dirs['compiled'] / variant_name / f"{variant_id}.bin"

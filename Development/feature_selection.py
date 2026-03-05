@@ -175,7 +175,7 @@ class FeatureExtractor:
                     if target_str.startswith('0x'):
                         target = int(target_str, 16)
                         if target in cfg.nodes:
-                            edge_type = 'call' if mnem == 'call' else 'conditional' if mnen != 'jmp' else 'unconditional'
+                            edge_type = 'call' if mnem == 'call' else 'conditional' if mnem != 'jmp' else 'unconditional'
                             cfg.add_edge(addr, target, edge_type=edge_type)
                 except (ValueError, IndexError):
                     pass
@@ -322,9 +322,14 @@ class FeatureExtractor:
             json.dump(asdict(cfg_features), f, indent=2)
 
         cfg_graphml = output_dir / 'cfg.graphml'
-        nx.write_graphml(cfg, str(cfg_graphml))
+        cfg_for_export = cfg.copy()
+        for node in cfg_for_export.nodes:
+            node_data = cfg_for_export.nodes[node]
+            if 'instructions' in node_data:
+                node_data['instructions'] = json.dumps(node_data['instructions'])
+        nx.write_graphml(cfg_for_export, str(cfg_graphml))
 
-        instr_features = self.extract_instructions_features(instructions)
+        instr_features = self.extract_instruction_features(instructions)
         instr_output = output_dir / 'instruction_features.json'
         with open(instr_output, 'w') as f:
             json.dump(asdict(instr_features), f, indent=2)
