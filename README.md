@@ -25,7 +25,7 @@ The pipeline handles everything from source collection and obfuscation through t
 
 **1. Clone the Repo**
 ```bash
-git clone <repo-url>
+git clone git@github.com:aromans/Perseus.git
 cd Perseus
 ```
 
