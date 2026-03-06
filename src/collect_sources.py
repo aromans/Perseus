@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 
 import os
+import re
+import random
+import tempfile
 import subprocess
 import shutil
 from pathlib import Path
 from typing import List, Tuple
 import logging
+import argparse
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -21,6 +25,118 @@ class SourceCollector:
 
         self.benign_dir.mkdir(exist_ok=True)
         self.malicious_dir.mkdir(exist_ok=True)
+
+    def _passes_static_filter(self, path: Path, min_lines: int = 10) -> bool:
+        """Quick content check: minimum non-trivial lines and at least one control flow construct."""
+        try:
+            content = path.read_text(errors='ignore')
+            lines = [
+                l for l in content.splitlines()
+                if l.strip()
+                and not l.strip().startswith('//')
+                and not l.strip().startswith('*')
+                and not l.strip().startswith('/*')
+            ]
+            if len(lines) < min_lines:
+                return False
+            return any(kw in content for kw in ('if ', 'for ', 'while ', 'switch ', 'do {', 'do\n'))
+        except Exception:
+            return False
+
+    def _try_compile(self, path: Path) -> bool:
+        """Test-compile a file (injecting a stub main if absent). Returns True if gcc succeeds."""
+        try:
+            content = path.read_text(errors='ignore')
+            if 'int main(' not in content and 'void main(' not in content:
+                content += '\nint main(void) { return 0; }\n'
+
+            with tempfile.NamedTemporaryFile(suffix='.c', mode='w', delete=False) as f:
+                f.write(content)
+                tmp = Path(f.name)
+
+            result = subprocess.run(
+                ['gcc', '-O0', '-o', '/dev/null', str(tmp), '-lm', '-w'],
+                capture_output=True,
+                timeout=30,
+            )
+            tmp.unlink(missing_ok=True)
+            return result.returncode == 0
+        except Exception:
+            return False
+
+    def _sanitize_name(self, path: Path, seen: set) -> str:
+        """Derive a short unique name from an AnghaBench filename.
+        AnghaBench names follow <repo>_<file>_<funcname>.c — we take the last segment."""
+        parts = path.stem.split('_')
+        base = re.sub(r'[^a-zA-Z0-9]', '_', parts[-1])[:40].strip('_') or 'angha'
+        name, counter = base, 1
+        while name in seen:
+            name = f"{base}_{counter}"
+            counter += 1
+        return name
+
+    def collect_anghabench_samples(
+        self,
+        angha_dir: Path,
+        n_samples: int = 100,
+        min_lines: int = 10,
+        seed: int = 42,
+    ) -> List[Path]:
+        """Sample n compilable, non-trivial functions from a local AnghaBench clone.
+
+        Clone AnghaBench with:
+            git clone https://github.com/brenocfg/AnghaBench
+        For a partial clone of one subdirectory:
+            git clone --depth 1 --filter=blob:none --sparse https://github.com/brenocfg/AnghaBench
+            cd AnghaBench && git sparse-checkout set <subdir>
+        """
+        angha_dir = Path(angha_dir)
+        if not angha_dir.exists():
+            try:
+                logger.info(f"Cloning AnghaBench into {angha_dir} (this may take a while)...")
+                angha_dir.parent.mkdir(parents=True, exist_ok=True)
+                subprocess.run([
+                    'git', 'clone', '--depth', '1',
+                    'https://github.com/brenocfg/AnghaBench.git',
+                    str(angha_dir)
+                ], check=True)
+            except subprocess.CalledProcessError as e:
+                logger.error(f"Failed to clone AnghaBench: {e}")
+                return []
+
+        all_files = list(angha_dir.rglob('*.c'))
+        logger.info(f"Found {len(all_files)} AnghaBench candidate files in {angha_dir}")
+
+        random.seed(seed)
+        random.shuffle(all_files)
+
+        collected = []
+        seen_names = set()
+
+        for path in all_files:
+            if len(collected) >= n_samples:
+                break
+
+            if not self._passes_static_filter(path, min_lines):
+                continue
+
+            if not self._try_compile(path):
+                continue
+
+            name = self._sanitize_name(path, seen_names)
+            seen_names.add(name)
+
+            content = path.read_text(errors='ignore')
+            if 'int main(' not in content and 'void main(' not in content:
+                content += '\nint main(void) { return 0; }\n'
+
+            out_path = self.benign_dir / f'{name}.c'
+            out_path.write_text(content)
+            collected.append(out_path)
+            logger.info(f"  [{len(collected)}/{n_samples}] {name}")
+
+        logger.info(f"Collected {len(collected)} AnghaBench samples -> {self.benign_dir}")
+        return collected
 
     def collect_thezoo_samples(self, zoo_dir) -> List[Path]: 
         collected = []
@@ -219,45 +335,68 @@ int main() {
 
         return samples
 
-    def collect_all(self, repos_dir) -> List[Tuple[Path, bool]]:
+    def collect_all(
+        self,
+        repos_dir: Path,
+        angha_dir: Path = None,
+        angha_samples: int = 100,
+        angha_min_lines: int = 10,
+        angha_seed: int = 42,
+    ) -> List[Tuple[Path, bool]]:
         repos_dir.mkdir(parents=True, exist_ok=True)
 
         self.create_simple_benign_samples()
 
-        # TODO: Finish collection & copy logic and uncomment each function
+        if angha_dir:
+            self.collect_anghabench_samples(
+                angha_dir,
+                n_samples=angha_samples,
+                min_lines=angha_min_lines,
+                seed=angha_seed,
+            )
 
-        # theZoo repo (malicious)
+        # theZoo repo (malicious) — TODO: unzip with password 'infected', filter x86/x64 C files
         #zoo_dir = repos_dir / 'theZoo'
         #self.collect_thezoo_samples(zoo_dir)
 
-        # Coreutils repo (benign)
+        # Coreutils repo (benign) — TODO: copy standalone-compilable utilities
         #coreutils_dir = repos_dir / 'coreutils'
         #self.collect_coreutils_samples(coreutils_dir)
-
-        # Busybox repo (benign)
-        #busybox_dir = repos_dir / 'busybox'
-        #self.collect_busybox_samples(busybox_dir)
 
         return self.get_all_samples()
 
 def main():
-    
-    # Setup directories
-    output_dir = Path('./data/source')
-    repos_dir  = Path('./repos')
+    parser = argparse.ArgumentParser(description='Perseus Source Collector')
+    parser.add_argument('--output-dir', type=Path, default=Path('./data/source'),
+                        help='Output directory for collected sources (default: ./data/source)')
+    parser.add_argument('--repos-dir', type=Path, default=Path('./repos'),
+                        help='Directory for cloned repos (default: ./repos)')
+    parser.add_argument('--angha-dir', type=Path, default=None,
+                        help='Path to local AnghaBench clone (optional)')
+    parser.add_argument('--angha-samples', type=int, default=100,
+                        help='Number of AnghaBench functions to sample (default: 100)')
+    parser.add_argument('--angha-min-lines', type=int, default=10,
+                        help='Minimum lines of code for AnghaBench filter (default: 10)')
+    parser.add_argument('--angha-seed', type=int, default=42,
+                        help='Random seed for reproducible AnghaBench sampling (default: 42)')
+    args = parser.parse_args()
 
-    collector = SourceCollector(output_dir)
-    samples   = collector.collect_all(repos_dir)
+    collector = SourceCollector(args.output_dir)
+    samples = collector.collect_all(
+        repos_dir=args.repos_dir,
+        angha_dir=args.angha_dir,
+        angha_samples=args.angha_samples,
+        angha_min_lines=args.angha_min_lines,
+        angha_seed=args.angha_seed,
+    )
 
     logger.info(f"\nCollection Summary:")
     logger.info(f"Total samples: {len(samples)}")
-    logger.info(f"Benign: {sum(1 for _, is_mal in samples if not is_mal)}")
+    logger.info(f"Benign:    {sum(1 for _, is_mal in samples if not is_mal)}")
     logger.info(f"Malicious: {sum(1 for _, is_mal in samples if is_mal)}")
-
     logger.info(f"\nFirst 5 samples:")
     for path, is_mal in samples[:5]:
-        label = "malicious" if is_mal else "benign"
-        logger.info(f"  {path.name} ({label})")
+        logger.info(f"  {path.name} ({'malicious' if is_mal else 'benign'})")
 
 if __name__ == '__main__':
     main()

@@ -11,7 +11,7 @@ sys.path.insert(0, str(Path(__file__).parent / 'src'))
 from collect_sources import SourceCollector
 from process_data import DataPipeline
 from feature_selection import FeatureExtractor
-from config import OBF_TYPES
+from config import OBF_TYPES, load_config
 
 logging.basicConfig(
     level=logging.INFO,
@@ -29,7 +29,11 @@ def run_full_pipeline(
         obfuscation_types,
         max_samples,
         skip_collection,
-        prepare_training=False
+        prepare_training=False,
+        angha_dir=None,
+        angha_samples=100,
+        angha_min_lines=10,
+        angha_seed=42,
 ):
     logger.info("="*80)
     logger.info("Perseus Data Pipeline - Starting")
@@ -39,7 +43,13 @@ def run_full_pipeline(
     if not skip_collection:
         source_dir = data_root / 'source'
         collector = SourceCollector(source_dir)
-        samples = collector.collect_all(repos_dir)
+        samples = collector.collect_all(
+            repos_dir,
+            angha_dir=angha_dir,
+            angha_samples=angha_samples,
+            angha_min_lines=angha_min_lines,
+            angha_seed=angha_seed,
+        )
         logger.info(f"Collected {len(samples)} total samples")
         logger.info(f"  - Benign: {sum(1 for _, is_mal in samples if not is_mal)}")
         logger.info(f"  - Malicious: {sum(1 for _, is_mal in samples if is_mal)}")
@@ -101,15 +111,27 @@ def run_full_pipeline(
     logger.info(f"Data root: {data_root}")
 
 def main():
+    cfg   = load_config()
+    angha = cfg.get('anghabench', {})
+
     parser = argparse.ArgumentParser(description='Perseus Data Pipeline')
 
     parser.add_argument('--data-root', type=Path, default=Path('./data'), help='Root directory for all data (default: ./data)')
-    parser.add_argument('--repos-dir', type=Path, default=Path('./repos'), help='Directory for cloned reposirtories (default: ./repos)')
+    parser.add_argument('--repos-dir', type=Path, default=Path('./repos'), help='Directory for cloned repositories (default: ./repos)')
     parser.add_argument('--obfuscations', nargs='+', default=OBF_TYPES, choices=OBF_TYPES, help='Obfuscation types to apply (default: all from config.yaml)')
     parser.add_argument('--max-samples', type=int, default=None, help='Maximum number of samples to process (default: all)')
     parser.add_argument('--skip-collection', action='store_true', help='Skip source collection step (use existing sources)')
     parser.add_argument('--collect-only', action='store_true', help='Only run collection step, skip processing')
     parser.add_argument('--prepare-training', action='store_true', help='Prepare training data after processing')
+    parser.add_argument('--angha-dir', type=Path,
+                        default=Path(angha.get('repo_dir', 'repos/AnghaBench')) if angha.get('enabled') else None,
+                        help='Path to AnghaBench clone — overrides config.yaml (auto-cloned if absent)')
+    parser.add_argument('--angha-samples', type=int, default=angha.get('n_samples', 100),
+                        help='Number of AnghaBench functions to sample (default: from config.yaml)')
+    parser.add_argument('--angha-min-lines', type=int, default=angha.get('min_lines', 10),
+                        help='Minimum lines of code for AnghaBench filter (default: from config.yaml)')
+    parser.add_argument('--angha-seed', type=int, default=angha.get('seed', 42),
+                        help='Random seed for reproducible AnghaBench sampling (default: from config.yaml)')
 
     args = parser.parse_args()
 
@@ -117,7 +139,13 @@ def main():
         logger.info("Running collection only...")
         source_dir = args.data_root / 'source'
         collector = SourceCollector(source_dir)
-        samples = collector.collect_all(args.repos_dir)
+        samples = collector.collect_all(
+            args.repos_dir,
+            angha_dir=args.angha_dir,
+            angha_samples=args.angha_samples,
+            angha_min_lines=args.angha_min_lines,
+            angha_seed=args.angha_seed,
+        )
         logger.info(f"Collected {len(samples)} samples")
         logger.info(f"Sources saved to {source_dir}")
     else:
@@ -127,7 +155,11 @@ def main():
                 obfuscation_types=args.obfuscations,
                 max_samples=args.max_samples,
                 skip_collection=args.skip_collection,
-                prepare_training=args.prepare_training
+                prepare_training=args.prepare_training,
+                angha_dir=args.angha_dir,
+                angha_samples=args.angha_samples,
+                angha_min_lines=args.angha_min_lines,
+                angha_seed=args.angha_seed,
         )
 
 if __name__ == '__main__':

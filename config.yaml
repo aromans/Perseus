@@ -52,3 +52,10 @@ pipeline:
     - mba
     - control_flow
     - virtualization
+
+anghabench:
+  enabled: false          # Set to true to include AnghaBench samples in the pipeline
+  repo_dir: "repos/AnghaBench"
+  n_samples: 100
+  min_lines: 10
+  seed: 42
