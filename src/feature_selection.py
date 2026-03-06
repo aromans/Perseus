@@ -340,8 +340,8 @@ class FeatureExtractor:
 def main():
     extractor = FeatureExtractor()
 
-    disasm_dir = Path('./perseus_data/disassembled/mba/sample1')
-    output_dir = Path('./perseus_data/features/mba/sample1')
+    disasm_dir = Path('./data/disassembled/mba/sample1')
+    output_dir = Path('./data/features/mba/sample1')
 
     extractor.process_disassembly(disasm_dir, output_dir)
 

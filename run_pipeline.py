@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import List, Tuple
 import sys
 
-sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).parent / 'src'))
 
 from collect_sources import SourceCollector
 from process_data import DataPipeline
@@ -43,9 +43,9 @@ def run_full_pipeline(
         logger.info(f"  - Benign: {sum(1 for _, is_mal in samples if not is_mal)}")
         logger.info(f"  - Malicious: {sum(1 for _, is_mal in samples if is_mal)}")
     else:
-        source_dir = data_root / 'source'
-        benign_dir = data_root / 'benign'
-        malicious_dir = data_root / 'malicious'
+        source_dir    = data_root / 'source'
+        benign_dir    = source_dir / 'benign'
+        malicious_dir = source_dir / 'malicious'
 
         samples = []
         for c_file in benign_dir.glob('*.c'):
@@ -87,11 +87,12 @@ def run_full_pipeline(
         logger.info("\nPreparing training data...")
         from prepare_training_data import TrainingDataPreparer
         preparer = TrainingDataPreparer(data_root=data_root)
-        train_data, val_data = preparer.prepare_all()
+        train_data, val_data, test_data = preparer.prepare_all()
         training_dir = data_root / 'training'
         preparer.save_jsonl(train_data, training_dir / 'train.jsonl')
         preparer.save_jsonl(val_data, training_dir / 'val.jsonl')
-        preparer.save_stats(train_data, val_data, training_dir / 'data_stats.json')
+        preparer.save_jsonl(test_data, training_dir / 'test.jsonl')
+        preparer.save_stats(train_data, val_data, test_data, training_dir / 'data_stats.json')
 
     logger.info("\n" + "="*80)
     logger.info("Pipeline Complete!")
@@ -101,7 +102,7 @@ def run_full_pipeline(
 def main():
     parser = argparse.ArgumentParser(description='Perseus Data Pipeline')
 
-    parser.add_argument('--data-root', type=Path, default=Path('./perseus_data'), help='Root directory for all data (default: ./perseus_data)')
+    parser.add_argument('--data-root', type=Path, default=Path('./data'), help='Root directory for all data (default: ./data)')
     parser.add_argument('--repos-dir', type=Path, default=Path('./repos'), help='Directory for cloned reposirtories (default: ./repos)')
     parser.add_argument('--obfuscations', nargs='+', default=['mba', 'virtualization', 'control_flow'], choices=['mba', 'virtualization', 'control_flow'], help='Obfuscation types to apply (default: all)')
     parser.add_argument('--max-samples', type=int, default=None, help='Maximum number of samples to process (default: all)')

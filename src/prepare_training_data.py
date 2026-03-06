@@ -289,49 +289,55 @@ class TrainingDataPreparer:
 
     def prepare_all(
         self,
-        val_sample = None
-    ) -> Tuple[List[Dict], List[Dict]]:
+        train_ratio: float = 0.5,
+        val_ratio: float = 0.25,
+        test_ratio: float = 0.25,
+    ) -> Tuple[List[Dict], List[Dict], List[Dict]]:
 
         samples = self.discover_samples()
         if not samples:
             logger.error("No samples found")
-            return [], []
+            return [], [], []
 
+        samples = sorted(samples)
         logger.info(f"Found samples: {samples}")
 
-        # hold out the last sample for validation
-        if val_sample is None:
-            val_sample = samples[-1]
-        elif val_sample not in samples:
-            logger.warning(f"Val sample '{val_sample}' not found, using '{samples[-1]}'")
-            val_sample = samples[-1]
+        n = len(samples)
+        n_test = round(n * test_ratio)
+        n_val = round(n * val_ratio)
+        n_train = n - n_val - n_test
 
-        logger.info(f"Validation sample: {val_sample}")
+        train_samples = set(samples[:n_train])
+        val_samples   = set(samples[n_train:n_train + n_val])
+        test_samples  = set(samples[n_train + n_val:])
+
+        logger.info(f"Train samples ({n_train}): {sorted(train_samples)}")
+        logger.info(f"Val samples  ({n_val}):   {sorted(val_samples)}")
+        logger.info(f"Test samples ({n_test}):  {sorted(test_samples)}")
 
         all_pairs = []
         for sample in samples:
             for obf_type in OBF_TYPES:
                 pairs = self.create_training_pairs(sample, obf_type)
-                logger.info(
-                    f"  {sample}/{obf_type}: {len(pairs)} function pairs"
-                )
+                logger.info(f"  {sample}/{obf_type}: {len(pairs)} function pairs")
                 all_pairs.extend(pairs)
 
         logger.info(f"Total pairs: {len(all_pairs)}")
 
-        # Split
-        train_data = []
-        val_data = []
+        train_data, val_data, test_data = [], [], []
         for pair in all_pairs:
             record = asdict(pair)
-            if pair.metadata['sample'] == val_sample:
+            sample = pair.metadata['sample']
+            if sample in test_samples:
+                test_data.append(record)
+            elif sample in val_samples:
                 val_data.append(record)
             else:
                 train_data.append(record)
 
-        logger.info(f"Train: {len(train_data)}, Val: {len(val_data)}")
+        logger.info(f"Train: {len(train_data)}, Val: {len(val_data)}, Test: {len(test_data)}")
 
-        return train_data, val_data
+        return train_data, val_data, test_data
 
     def save_jsonl(self, records, output_path):
         output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -340,7 +346,7 @@ class TrainingDataPreparer:
                 f.write(json.dumps(record) + '\n')
         logger.info(f"Saved {len(records)} records to {output_path}")
 
-    def save_stats(self, train_data, val_data, output_path):
+    def save_stats(self, train_data, val_data, test_data, output_path):
         def compute_stats(data):
             if not data:
                 return {}
@@ -362,6 +368,7 @@ class TrainingDataPreparer:
         stats = {
             'train': compute_stats(train_data),
             'val': compute_stats(val_data),
+            'test': compute_stats(test_data),
         }
 
         output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -372,20 +379,29 @@ class TrainingDataPreparer:
 
 def main():
     parser = argparse.ArgumentParser(description='Prepare training data for deobfuscation')
-    parser.add_argument('--data-root', type=Path, default=Path('./perseus_data'),
-                        help='Root data directory (default: ./perseus_data)')
-    parser.add_argument('--val-sample', type=str, default=None,
-                        help='Sample name to hold out for validation (default: last sample)')
+    parser.add_argument('--data-root', type=Path, default=Path('./data'),
+                        help='Root data directory (default: ./data)')
+    parser.add_argument('--train-ratio', type=float, default=0.5,
+                        help='Fraction of samples for training (default: 0.5)')
+    parser.add_argument('--val-ratio', type=float, default=0.25,
+                        help='Fraction of samples for validation (default: 0.25)')
+    parser.add_argument('--test-ratio', type=float, default=0.25,
+                        help='Fraction of samples for test (default: 0.25)')
     args = parser.parse_args()
 
     preparer = TrainingDataPreparer(data_root=args.data_root)
-    train_data, val_data = preparer.prepare_all(val_sample=args.val_sample)
+    train_data, val_data, test_data = preparer.prepare_all(
+        train_ratio=args.train_ratio,
+        val_ratio=args.val_ratio,
+        test_ratio=args.test_ratio,
+    )
 
-    if train_data or val_data:
+    if train_data or val_data or test_data:
         training_dir = args.data_root / 'training'
         preparer.save_jsonl(train_data, training_dir / 'train.jsonl')
         preparer.save_jsonl(val_data, training_dir / 'val.jsonl')
-        preparer.save_stats(train_data, val_data, training_dir / 'data_stats.json')
+        preparer.save_jsonl(test_data, training_dir / 'test.jsonl')
+        preparer.save_stats(train_data, val_data, test_data, training_dir / 'data_stats.json')
 
 
 if __name__ == '__main__':

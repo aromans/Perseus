@@ -312,7 +312,7 @@ class DataPipeline:
         logger.info(f"Metadata saved to {metadata_dir}")
 
 def main():
-    data_root = Path('./perseus_data')
+    data_root = Path('./data')
 
     obfuscation_types = ['mba', 'virtualization', 'control_flow']
 
@@ -323,9 +323,9 @@ def main():
     )
 
     source_files = [
-            (Path('./perseus_data/source/benign/fibonacci.c'), False),
-            #(Path('./perseus_data/source/benign/simple_arithmetic.c'), False),
-            #(Path('./perseus_data/source/benign/string_rev.c'), False)
+            (Path('./data/source/benign/fibonacci.c'), False),
+            #(Path('./data/source/benign/simple_arithmetic.c'), False),
+            #(Path('./data/source/benign/string_rev.c'), False)
     ]
 
     pipeline.process_dataset(source_files, obfuscation_types)

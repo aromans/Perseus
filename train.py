@@ -35,9 +35,9 @@ SYSTEM_PROMPT = (
 @dataclass
 class TrainConfig:
     model_name: str = "Qwen/Qwen2.5-Coder-1.5B-Instruct" #"Qwen/Qwen2.5-Coder-7B-Instruct"
-    train_data: str = "perseus_data/training/train.jsonl"
-    val_data: str = "perseus_data/training/val.jsonl"
-    output_dir: str = "perseus_data/checkpoints"
+    train_data: str = "data/training/train.jsonl"
+    val_data: str = "data/training/val.jsonl"
+    output_dir: str = "data/checkpoints"
     num_epochs: int = 30
     batch_size: int = 1
     gradient_accumulation: int = 4

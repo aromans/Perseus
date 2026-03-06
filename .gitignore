@@ -1,4 +1,9 @@
+.claude/*
+
 Tools/
 Tools/*
-Development/perseus_data/*
-Development/wandb/*
+
+perseus_data/*
+wandb/*
+
+__pycache__/*

@@ -6,7 +6,7 @@ from collections import defaultdict
 import matplotlib.pyplot as plt
 import numpy as np
 
-DATA_ROOT = Path('./perseus_data/features')
+DATA_ROOT = Path('./data/features')
 
 SAMPLES = ['fibonacci', 'simple_arithmetic', 'string_rev']
 OBF_TYPES = ['clean', 'mba', 'control_flow', 'virtualization']
@@ -82,7 +82,7 @@ def print_table(stats):
             print(row)
 
 
-def plot_comparison(stats, output_dir=Path('./perseus_data/images')):
+def plot_comparison(stats, output_dir=Path('./data/images')):
     output_dir.mkdir(parents=True, exist_ok=True)
 
     # -- Per-sample grouped bar charts --

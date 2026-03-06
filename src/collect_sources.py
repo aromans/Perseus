@@ -176,6 +176,35 @@ int main() {
         
         samples.append(sample3)
 
+        # Sample 4: Fibonacci sum (iterative fib + fib_add)
+        sample4 = self.benign_dir / 'fib_add.c'
+        with open(sample4, 'w') as f:
+            f.write('''#include <stdio.h>
+
+int fib(int n) {
+    int a = 0, b = 1;
+    for (int i = 0; i < n; i++) {
+        int tmp = a + b;
+        a = b;
+        b = tmp;
+    }
+    return a;
+}
+
+int fib_add(int n) {
+    return fib(n) + fib(n + 1);
+}
+
+int main() {
+    for (int i = 0; i < 10; i++) {
+        printf("fib_add(%d) = %d\\n", i, fib_add(i));
+    }
+    return 0;
+}
+''')
+
+        samples.append(sample4)
+
         logger.info(f"Created {len(samples)} simple benign samples")
         return samples
 
@@ -214,7 +243,7 @@ int main() {
 def main():
     
     # Setup directories
-    output_dir = Path('./perseus_data/source')
+    output_dir = Path('./data/source')
     repos_dir  = Path('./repos')
 
     collector = SourceCollector(output_dir)
