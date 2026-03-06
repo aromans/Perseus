@@ -2,12 +2,16 @@
   <img src="./Perseus.png" height="180">
 </div>
 
+<div align="center">
+
 ![Python](https://img.shields.io/badge/Python-3.12-yellow.svg?logo=python)
 ![Transformers](https://img.shields.io/badge/NLP-Transformers-F59E0B.svg?logo=huggingface)
 ![PEFT](https://img.shields.io/badge/Fine--Tuning-PEFT%2FLoRA-7A3EFF.svg)
 ![Model](https://img.shields.io/badge/Model-Qwen2.5--Coder--1.5B-0EA5E9.svg)
 ![Tigress](https://img.shields.io/badge/Obfuscator-Tigress-DC2626.svg)
 ![Status](https://img.shields.io/badge/🔬-Research-2563EB.svg)
+
+</div>
 
 ## About
 
