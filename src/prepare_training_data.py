@@ -7,6 +7,7 @@ import logging
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass, asdict
+from config import OBF_TYPES
 
 logging.basicConfig(
     level=logging.INFO,
@@ -25,8 +26,6 @@ CRT_FUNCTIONS = {
     '__gmon_start__', '_ITM_deregisterTMCloneTable',
     '_ITM_registerTMCloneTable',
 }
-
-OBF_TYPES = ['mba', 'control_flow', 'virtualization']
 
 
 @dataclass

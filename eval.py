@@ -13,33 +13,16 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent / 'src'))
 
-import yaml
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from peft import PeftModel
-
-
-def load_config(path: str = "config.yaml") -> dict:
-    p = Path(path)
-    if p.exists():
-        with open(p) as f:
-            return yaml.safe_load(f) or {}
-    return {}
+from config import load_config, OBF_TYPES, SYSTEM_PROMPT
 
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
-
-BASE_MODEL = "Qwen/Qwen2.5-Coder-1.5B-Instruct"
-OBF_TYPES  = ['mba', 'control_flow', 'virtualization']
-SYSTEM_PROMPT = (
-    "You are a binary deobfuscation assistant. Given obfuscated x86-64 assembly code, "
-    "you produce the equivalent clean, deobfuscated assembly. Preserve the function's "
-    "semantics while removing obfuscation patterns such as MBA (mixed boolean-arithmetic), "
-    "control flow flattening, and virtualization."
-)
 
 
 def build_prompt(example: dict) -> str:
@@ -68,7 +51,7 @@ def exact_match(generated: str, expected: str) -> bool:
 
 class EvalPipeline:
 
-    def __init__(self, data_root: Path, adapter_path: str, base_model: str = BASE_MODEL):
+    def __init__(self, data_root: Path, adapter_path: str, base_model: str):
         self.data_root    = data_root
         self.adapter_path = adapter_path
         self.base_model   = base_model
@@ -249,8 +232,9 @@ def main():
     parser.add_argument('--data-root', type=Path,
                         default=Path('./data'),
                         help='Root data directory (default: ./data)')
-    parser.add_argument('--base-model', type=str, default=model_default,
-                        help=f'Base model name (default: from config.yaml)')
+    parser.add_argument('--base-model', type=str,
+                        default=model_default,
+                        help='Base model name (default: from config.yaml)')
     parser.add_argument('--c-files', nargs='+', type=Path, default=None,
                         help='Optional: C source files to process and evaluate instead of test.jsonl')
     args = parser.parse_args()

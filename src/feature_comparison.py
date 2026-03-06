@@ -5,11 +5,12 @@ from pathlib import Path
 from collections import defaultdict
 import matplotlib.pyplot as plt
 import numpy as np
+from config import OBF_TYPES
 
 DATA_ROOT = Path('./data/features')
 
 SAMPLES = ['fibonacci', 'simple_arithmetic', 'string_rev']
-OBF_TYPES = ['clean', 'mba', 'control_flow', 'virtualization']
+OBF_TYPES = ['clean'] + OBF_TYPES
 OBF_LABELS = {
     'clean': 'Clean',
     'mba': 'MBA',

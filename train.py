@@ -7,15 +7,9 @@ from pathlib import Path
 from dataclasses import dataclass, field
 from typing import Optional
 
-import yaml
-
-
-def load_config(path: str = "config.yaml") -> dict:
-    p = Path(path)
-    if p.exists():
-        with open(p) as f:
-            return yaml.safe_load(f) or {}
-    return {}
+import sys
+sys.path.insert(0, str(Path(__file__).parent / 'src'))
+from config import load_config, SYSTEM_PROMPT
 
 import torch
 from datasets import Dataset
@@ -34,30 +28,26 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-SYSTEM_PROMPT = (
-    "You are a binary deobfuscation assistant. Given obfuscated x86-64 assembly code, "
-    "you produce the equivalent clean, deobfuscated assembly. Preserve the function's "
-    "semantics while removing obfuscation patterns such as MBA (mixed boolean-arithmetic), "
-    "control flow flattening, and virtualization."
-)
-
 
 @dataclass
 class TrainConfig:
-    model_name: str = "Qwen/Qwen2.5-Coder-1.5B-Instruct" #"Qwen/Qwen2.5-Coder-7B-Instruct"
+    # Sourced from config.yaml — no defaults here to avoid duplication
+    model_name: str
+    num_epochs: int
+    batch_size: int
+    gradient_accumulation: int
+    learning_rate: float
+    max_seq_length: int
+    lora_r: int
+    lora_alpha: int
+    lora_dropout: float
+    warmup_ratio: float
+    weight_decay: float
+    # Paths
     train_data: str = "data/training/train.jsonl"
     val_data: str = "data/training/val.jsonl"
     output_dir: str = "data/checkpoints"
-    num_epochs: int = 30
-    batch_size: int = 1
-    gradient_accumulation: int = 4
-    learning_rate: float = 2e-4
-    max_seq_length: int = 4096
-    lora_r: int = 16
-    lora_alpha: int = 32
-    lora_dropout: float = 0.05
-    warmup_ratio: float = 0.1
-    weight_decay: float = 0.01
+    # Flags
     use_wandb: bool = False
     dry_run: bool = False
     eval_samples: int = 2
@@ -296,31 +286,31 @@ def main():
     parser.add_argument('--config', default='config.yaml',
                         help='Path to config.yaml (default: config.yaml)')
     parser.add_argument('--model', type=str,
-                        default=m.get('name', TrainConfig.model_name),
+                        default=m.get('name', 'Qwen/Qwen2.5-Coder-1.5B-Instruct'),
                         help='Model name/path')
-    parser.add_argument('--train-data', type=str, default=TrainConfig.train_data,
+    parser.add_argument('--train-data', type=str, default='data/training/train.jsonl',
                         help='Path to training JSONL')
-    parser.add_argument('--val-data', type=str, default=TrainConfig.val_data,
+    parser.add_argument('--val-data', type=str, default='data/training/val.jsonl',
                         help='Path to validation JSONL')
-    parser.add_argument('--output-dir', type=str, default=TrainConfig.output_dir,
+    parser.add_argument('--output-dir', type=str, default='data/checkpoints',
                         help='Checkpoint output directory')
     parser.add_argument('--epochs', type=int,
-                        default=tr.get('epochs', TrainConfig.num_epochs),
+                        default=tr.get('epochs', 30),
                         help='Number of training epochs')
     parser.add_argument('--batch-size', type=int,
-                        default=tr.get('batch_size', TrainConfig.batch_size),
+                        default=tr.get('batch_size', 1),
                         help='Per-device batch size')
     parser.add_argument('--lr', type=float,
-                        default=tr.get('learning_rate', TrainConfig.learning_rate),
+                        default=tr.get('learning_rate', 2e-4),
                         help='Learning rate')
     parser.add_argument('--max-seq-length', type=int,
-                        default=tr.get('max_seq_length', TrainConfig.max_seq_length),
+                        default=tr.get('max_seq_length', 4096),
                         help='Maximum sequence length')
     parser.add_argument('--lora-r', type=int,
-                        default=lo.get('r', TrainConfig.lora_r),
+                        default=lo.get('r', 16),
                         help='LoRA rank')
     parser.add_argument('--lora-alpha', type=int,
-                        default=lo.get('alpha', TrainConfig.lora_alpha),
+                        default=lo.get('alpha', 32),
                         help='LoRA alpha')
     parser.add_argument('--wandb', action='store_true',
                         help='Enable Weights & Biases logging')
@@ -331,15 +321,19 @@ def main():
 
     config = TrainConfig(
         model_name=args.model,
-        train_data=args.train_data,
-        val_data=args.val_data,
-        output_dir=args.output_dir,
         num_epochs=args.epochs,
         batch_size=args.batch_size,
+        gradient_accumulation=tr.get('gradient_accumulation', 4),
         learning_rate=args.lr,
         max_seq_length=args.max_seq_length,
         lora_r=args.lora_r,
         lora_alpha=args.lora_alpha,
+        lora_dropout=lo.get('dropout', 0.05),
+        warmup_ratio=tr.get('warmup_ratio', 0.1),
+        weight_decay=tr.get('weight_decay', 0.01),
+        train_data=args.train_data,
+        val_data=args.val_data,
+        output_dir=args.output_dir,
         use_wandb=args.wandb,
         dry_run=args.dry_run,
     )
