@@ -5,10 +5,13 @@
 <div align="center">
 
 ![Python](https://img.shields.io/badge/Python-3.12-yellow.svg?logo=python)
+![PyTorch](https://img.shields.io/badge/ML-PyTorch-EE4C2C.svg?logo=pytorch&logoColor=white)
 ![Transformers](https://img.shields.io/badge/NLP-Transformers-F59E0B.svg?logo=huggingface)
 ![PEFT](https://img.shields.io/badge/Fine--Tuning-PEFT%2FLoRA-7A3EFF.svg)
 ![Model](https://img.shields.io/badge/Model-Qwen2.5--Coder--1.5B-0EA5E9.svg)
+![CUDA](https://img.shields.io/badge/Compute-CUDA-16A34A.svg?logo=nvidia&logoColor=white)
 ![Tigress](https://img.shields.io/badge/Obfuscator-Tigress-DC2626.svg)
+![WandB](https://img.shields.io/badge/Tracking-W%26B-FFBE00.svg?logo=weightsandbiases&logoColor=black)
 ![Status](https://img.shields.io/badge/🔬-Research-2563EB.svg)
 
 </div>
