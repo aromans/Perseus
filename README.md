@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./Perseus.png" height="120">
+  <img src="./Perseus.png" height="180">
 </div>
 
 ![Python](https://img.shields.io/badge/Python-3.12-yellow.svg?logo=python)
