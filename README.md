@@ -92,14 +92,14 @@ python3 train.py
 ```
 
 > [!NOTE]
-> Key training configuration:
-> - Base model: `Qwen/Qwen2.5-Coder-1.5B-Instruct`
+> Key training configuration (set in `config.yaml`):
+> - Base model: `Qwen/Qwen2.5-Coder-1.5B-Instruct` (swap to 7B or Codestral by editing `config.yaml`)
 > - LoRA: r=16, alpha=32, dropout=0.05 (~1.18% trainable parameters)
 > - Optimizer: AdamW, LR=2e-4, cosine schedule, warmup_ratio=0.1
 > - Checkpoints saved to `data/checkpoints/`
 
 > [!IMPORTANT]
-> Perseus currently trains on **CPU only**. Training is slow — plan accordingly.
+> Perseus automatically uses a GPU if one is available (with 4-bit quantization via bitsandbytes). If no GPU is detected, it falls back to CPU in float32. CPU training is significantly slower — a smaller model like the 1.5B is recommended in that case.
 
 Training progress is logged to [Weights & Biases](https://wandb.ai) under the project name `Perseus`. To disable:
 ```bash

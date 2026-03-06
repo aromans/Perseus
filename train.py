@@ -7,6 +7,16 @@ from pathlib import Path
 from dataclasses import dataclass, field
 from typing import Optional
 
+import yaml
+
+
+def load_config(path: str = "config.yaml") -> dict:
+    p = Path(path)
+    if p.exists():
+        with open(p) as f:
+            return yaml.safe_load(f) or {}
+    return {}
+
 import torch
 from datasets import Dataset
 from transformers import (
@@ -271,27 +281,46 @@ class PerseusTrainer:
 
 
 def main():
+    # Pre-parse to find --config before building the full parser
+    pre = argparse.ArgumentParser(add_help=False)
+    pre.add_argument('--config', default='config.yaml')
+    pre_args, _ = pre.parse_known_args()
+
+    cfg = load_config(pre_args.config)
+    m   = cfg.get('model', {})
+    lo  = cfg.get('lora', {})
+    tr  = cfg.get('training', {})
+
     parser = argparse.ArgumentParser(description='Perseus Deobfuscation Model Training')
 
-    parser.add_argument('--model', type=str, default=TrainConfig.model_name,
-                        help=f'Model name/path (default: {TrainConfig.model_name})')
+    parser.add_argument('--config', default='config.yaml',
+                        help='Path to config.yaml (default: config.yaml)')
+    parser.add_argument('--model', type=str,
+                        default=m.get('name', TrainConfig.model_name),
+                        help='Model name/path')
     parser.add_argument('--train-data', type=str, default=TrainConfig.train_data,
                         help='Path to training JSONL')
     parser.add_argument('--val-data', type=str, default=TrainConfig.val_data,
                         help='Path to validation JSONL')
     parser.add_argument('--output-dir', type=str, default=TrainConfig.output_dir,
                         help='Checkpoint output directory')
-    parser.add_argument('--epochs', type=int, default=TrainConfig.num_epochs,
+    parser.add_argument('--epochs', type=int,
+                        default=tr.get('epochs', TrainConfig.num_epochs),
                         help='Number of training epochs')
-    parser.add_argument('--batch-size', type=int, default=TrainConfig.batch_size,
+    parser.add_argument('--batch-size', type=int,
+                        default=tr.get('batch_size', TrainConfig.batch_size),
                         help='Per-device batch size')
-    parser.add_argument('--lr', type=float, default=TrainConfig.learning_rate,
+    parser.add_argument('--lr', type=float,
+                        default=tr.get('learning_rate', TrainConfig.learning_rate),
                         help='Learning rate')
-    parser.add_argument('--max-seq-length', type=int, default=TrainConfig.max_seq_length,
+    parser.add_argument('--max-seq-length', type=int,
+                        default=tr.get('max_seq_length', TrainConfig.max_seq_length),
                         help='Maximum sequence length')
-    parser.add_argument('--lora-r', type=int, default=TrainConfig.lora_r,
+    parser.add_argument('--lora-r', type=int,
+                        default=lo.get('r', TrainConfig.lora_r),
                         help='LoRA rank')
-    parser.add_argument('--lora-alpha', type=int, default=TrainConfig.lora_alpha,
+    parser.add_argument('--lora-alpha', type=int,
+                        default=lo.get('alpha', TrainConfig.lora_alpha),
                         help='LoRA alpha')
     parser.add_argument('--wandb', action='store_true',
                         help='Enable Weights & Biases logging')

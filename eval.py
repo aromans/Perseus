@@ -13,9 +13,18 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent / 'src'))
 
+import yaml
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from peft import PeftModel
+
+
+def load_config(path: str = "config.yaml") -> dict:
+    p = Path(path)
+    if p.exists():
+        with open(p) as f:
+            return yaml.safe_load(f) or {}
+    return {}
 
 logging.basicConfig(
     level=logging.INFO,
@@ -100,6 +109,27 @@ class EvalPipeline:
     def load_model(self):
         if self.model is not None:
             return
+
+        has_gpu = torch.cuda.is_available()
+        if has_gpu:
+            logger.info("GPU detected — loading with 4-bit quantization")
+            from transformers import BitsAndBytesConfig
+            model_kwargs = {
+                "quantization_config": BitsAndBytesConfig(
+                    load_in_4bit=True,
+                    bnb_4bit_quant_type="nf4",
+                    bnb_4bit_compute_dtype=torch.bfloat16,
+                    bnb_4bit_use_double_quant=True,
+                ),
+                "device_map": "auto",
+            }
+        else:
+            logger.info("No GPU detected — loading in float32 on CPU")
+            model_kwargs = {
+                "torch_dtype": torch.float32,
+                "device_map": "cpu",
+            }
+
         logger.info(f"Loading base model: {self.base_model}")
         self.tokenizer = AutoTokenizer.from_pretrained(self.base_model, trust_remote_code=True)
         if self.tokenizer.pad_token is None:
@@ -107,9 +137,8 @@ class EvalPipeline:
 
         self.model = AutoModelForCausalLM.from_pretrained(
             self.base_model,
-            dtype=torch.float32,
-            device_map="cpu",
             trust_remote_code=True,
+            **model_kwargs,
         )
         logger.info(f"Loading LoRA adapter: {self.adapter_path}")
         self.model = PeftModel.from_pretrained(self.model, self.adapter_path)
@@ -204,15 +233,24 @@ class EvalPipeline:
 
 
 def main():
+    pre = argparse.ArgumentParser(add_help=False)
+    pre.add_argument('--config', default='config.yaml')
+    pre_args, _ = pre.parse_known_args()
+
+    cfg = load_config(pre_args.config)
+    model_default = cfg.get('model', {}).get('name', BASE_MODEL)
+
     parser = argparse.ArgumentParser(description='Perseus Eval Pipeline')
+    parser.add_argument('--config', default='config.yaml',
+                        help='Path to config.yaml (default: config.yaml)')
     parser.add_argument('--adapter', type=str,
                         default='data/checkpoints/final',
                         help='Path to LoRA adapter (default: data/checkpoints/final)')
     parser.add_argument('--data-root', type=Path,
                         default=Path('./data'),
                         help='Root data directory (default: ./data)')
-    parser.add_argument('--base-model', type=str, default=BASE_MODEL,
-                        help=f'Base model name (default: {BASE_MODEL})')
+    parser.add_argument('--base-model', type=str, default=model_default,
+                        help=f'Base model name (default: from config.yaml)')
     parser.add_argument('--c-files', nargs='+', type=Path, default=None,
                         help='Optional: C source files to process and evaluate instead of test.jsonl')
     args = parser.parse_args()

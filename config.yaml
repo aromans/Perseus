@@ -1,0 +1,23 @@
+# Perseus Model Configuration
+# Change 'name' to swap models without touching any other scripts.
+# Examples:
+#   Qwen/Qwen2.5-Coder-1.5B-Instruct  (fast, CPU-friendly)
+#   Qwen/Qwen2.5-Coder-7B-Instruct    (better quality, GPU recommended)
+#   mistralai/Codestral-22B-v0.1       (strong code model, GPU required)
+
+model:
+  name: "Qwen/Qwen2.5-Coder-1.5B-Instruct"
+
+lora:
+  r: 16
+  alpha: 32
+  dropout: 0.05
+
+training:
+  epochs: 30
+  batch_size: 1
+  gradient_accumulation: 4
+  learning_rate: 0.0002
+  max_seq_length: 4096
+  warmup_ratio: 0.1
+  weight_decay: 0.01
