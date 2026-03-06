@@ -51,12 +51,15 @@ def exact_match(generated: str, expected: str) -> bool:
 
 class EvalPipeline:
 
-    def __init__(self, data_root: Path, adapter_path: str, base_model: str):
-        self.data_root    = data_root
-        self.adapter_path = adapter_path
-        self.base_model   = base_model
-        self.model        = None
-        self.tokenizer    = None
+    def __init__(self, data_root: Path, adapter_path: str, base_model: str,
+                 max_new_tokens: int, temperature: float):
+        self.data_root      = data_root
+        self.adapter_path   = adapter_path
+        self.base_model     = base_model
+        self.max_new_tokens = max_new_tokens
+        self.temperature    = temperature
+        self.model          = None
+        self.tokenizer      = None
 
     def load_test_data(self) -> list:
         test_path = self.data_root / 'training' / 'test.jsonl'
@@ -133,8 +136,8 @@ class EvalPipeline:
         with torch.no_grad():
             outputs = self.model.generate(
                 **inputs,
-                max_new_tokens=1024,
-                temperature=0.1,
+                max_new_tokens=self.max_new_tokens,
+                temperature=self.temperature,
                 do_sample=True,
                 pad_token_id=self.tokenizer.eos_token_id,
             )
@@ -221,7 +224,8 @@ def main():
     pre_args, _ = pre.parse_known_args()
 
     cfg = load_config(pre_args.config)
-    model_default = cfg.get('model', {}).get('name', BASE_MODEL)
+    model_default = cfg.get('model', {}).get('name', 'Qwen/Qwen2.5-Coder-1.5B-Instruct')
+    inf = cfg.get('inference', {})
 
     parser = argparse.ArgumentParser(description='Perseus Eval Pipeline')
     parser.add_argument('--config', default='config.yaml',
@@ -235,6 +239,12 @@ def main():
     parser.add_argument('--base-model', type=str,
                         default=model_default,
                         help='Base model name (default: from config.yaml)')
+    parser.add_argument('--max-new-tokens', type=int,
+                        default=inf.get('max_new_tokens', 1024),
+                        help='Max tokens to generate per sample (default: from config.yaml)')
+    parser.add_argument('--temperature', type=float,
+                        default=inf.get('temperature', 0.1),
+                        help='Sampling temperature (default: from config.yaml)')
     parser.add_argument('--c-files', nargs='+', type=Path, default=None,
                         help='Optional: C source files to process and evaluate instead of test.jsonl')
     args = parser.parse_args()
@@ -243,6 +253,8 @@ def main():
         data_root=args.data_root,
         adapter_path=args.adapter,
         base_model=args.base_model,
+        max_new_tokens=args.max_new_tokens,
+        temperature=args.temperature,
     )
     pipeline.run(c_files=args.c_files)
 

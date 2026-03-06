@@ -41,8 +41,15 @@ class TrainConfig:
     lora_r: int
     lora_alpha: int
     lora_dropout: float
+    lora_target_modules: list
     warmup_ratio: float
     weight_decay: float
+    max_grad_norm: float
+    lr_scheduler_type: str
+    logging_steps: int
+    eval_samples: int
+    save_strategy: str
+    save_total_limit: int
     # Paths
     train_data: str = "data/training/train.jsonl"
     val_data: str = "data/training/val.jsonl"
@@ -50,10 +57,6 @@ class TrainConfig:
     # Flags
     use_wandb: bool = False
     dry_run: bool = False
-    eval_samples: int = 2
-    logging_steps: int = 1
-    save_strategy: str = "epoch"
-    save_total_limit: int = 3
 
 
 class PerseusTrainer:
@@ -154,10 +157,7 @@ class PerseusTrainer:
         lora_config = LoraConfig(
             r=self.config.lora_r,
             lora_alpha=self.config.lora_alpha,
-            target_modules=[
-                "q_proj", "k_proj", "v_proj", "o_proj",
-                "gate_proj", "up_proj", "down_proj",
-            ],
+            target_modules=self.config.lora_target_modules,
             lora_dropout=self.config.lora_dropout,
             bias="none",
             task_type="CAUSAL_LM",
@@ -195,10 +195,10 @@ class PerseusTrainer:
             per_device_train_batch_size=self.config.batch_size,
             gradient_accumulation_steps=self.config.gradient_accumulation,
             learning_rate=self.config.learning_rate,
-            lr_scheduler_type="cosine",
+            lr_scheduler_type=self.config.lr_scheduler_type,
             warmup_ratio=self.config.warmup_ratio,
             weight_decay=self.config.weight_decay,
-            max_grad_norm=0.3,
+            max_grad_norm=self.config.max_grad_norm,
             fp16=torch.cuda.is_available() and not torch.cuda.is_bf16_supported(),
             bf16=torch.cuda.is_available() and torch.cuda.is_bf16_supported(),
             logging_steps=self.config.logging_steps,
@@ -280,6 +280,7 @@ def main():
     m   = cfg.get('model', {})
     lo  = cfg.get('lora', {})
     tr  = cfg.get('training', {})
+    ck  = cfg.get('checkpoints', {})
 
     parser = argparse.ArgumentParser(description='Perseus Deobfuscation Model Training')
 
@@ -329,8 +330,18 @@ def main():
         lora_r=args.lora_r,
         lora_alpha=args.lora_alpha,
         lora_dropout=lo.get('dropout', 0.05),
+        lora_target_modules=lo.get('target_modules', [
+            'q_proj', 'k_proj', 'v_proj', 'o_proj',
+            'gate_proj', 'up_proj', 'down_proj',
+        ]),
         warmup_ratio=tr.get('warmup_ratio', 0.1),
         weight_decay=tr.get('weight_decay', 0.01),
+        max_grad_norm=tr.get('max_grad_norm', 0.3),
+        lr_scheduler_type=tr.get('lr_scheduler_type', 'cosine'),
+        logging_steps=tr.get('logging_steps', 1),
+        eval_samples=tr.get('eval_samples', 2),
+        save_strategy=ck.get('save_strategy', 'epoch'),
+        save_total_limit=ck.get('save_total_limit', 3),
         train_data=args.train_data,
         val_data=args.val_data,
         output_dir=args.output_dir,

@@ -12,6 +12,18 @@ lora:
   r: 16
   alpha: 32
   dropout: 0.05
+  # Target modules are model-specific — update these when changing models.
+  # Qwen2.5 / LLaMA-style:  q_proj k_proj v_proj o_proj gate_proj up_proj down_proj
+  # Mistral / Codestral:    q_proj k_proj v_proj o_proj gate_proj up_proj down_proj
+  # Falcon:                 query_key_value dense dense_h_to_4h dense_4h_to_h
+  target_modules:
+    - q_proj
+    - k_proj
+    - v_proj
+    - o_proj
+    - gate_proj
+    - up_proj
+    - down_proj
 
 training:
   epochs: 30
@@ -21,6 +33,18 @@ training:
   max_seq_length: 4096
   warmup_ratio: 0.1
   weight_decay: 0.01
+  max_grad_norm: 0.3
+  lr_scheduler_type: "cosine"
+  logging_steps: 1
+  eval_samples: 2
+
+checkpoints:
+  save_strategy: "epoch"
+  save_total_limit: 3
+
+inference:
+  max_new_tokens: 1024
+  temperature: 0.1
 
 pipeline:
   # Obfuscation types to generate and train on. Add new types here as they become available.

@@ -95,11 +95,12 @@ python3 train.py
 ```
 
 > [!NOTE]
-> Key training configuration (set in `config.yaml`):
-> - Base model: `Qwen/Qwen2.5-Coder-1.5B-Instruct` (swap to 7B or Codestral by editing `config.yaml`)
-> - LoRA: r=16, alpha=32, dropout=0.05 (~1.18% trainable parameters)
-> - Optimizer: AdamW, LR=2e-4, cosine schedule, warmup_ratio=0.1
-> - Checkpoints saved to `data/checkpoints/`
+> All training configuration lives in `config.yaml` — no code changes needed for most experiments:
+> - **Model**: swap `model.name` to use a different base model (e.g. `Qwen/Qwen2.5-Coder-7B-Instruct`, `mistralai/Codestral-22B-v0.1`)
+> - **LoRA**: rank, alpha, dropout, and `target_modules` (update target modules when changing model architectures)
+> - **Training**: epochs, batch size, learning rate, scheduler, grad norm, warmup, weight decay
+> - **Checkpoints**: save strategy and how many to keep (`checkpoints.save_total_limit`)
+> - **Inference**: `max_new_tokens` and `temperature` used during eval
 
 > [!IMPORTANT]
 > Perseus automatically uses a GPU if one is available (with 4-bit quantization via bitsandbytes). If no GPU is detected, it falls back to CPU in float32. CPU training is significantly slower — a smaller model like the 1.5B is recommended in that case.
@@ -113,7 +114,7 @@ WANDB_DISABLED=true python3 train.py
 
 Evaluate a trained checkpoint against the test set.
 ```bash
-python3 eval.py --checkpoint data/checkpoints/<checkpoint-name>
+python3 eval.py --adapter data/checkpoints/<checkpoint-name>
 ```
 
 Results are written to `data/training/eval_results.json`. To view them side-by-side:
@@ -122,13 +123,14 @@ python3 show_eval.py
 ```
 
 > [!TIP]
-> Point `--checkpoint` at a specific epoch checkpoint rather than the final one. On small datasets, earlier checkpoints typically generalize better before overfitting sets in.
+> Point `--adapter` at a specific epoch checkpoint rather than the final one. On small datasets, earlier checkpoints typically generalize better before overfitting sets in.
 
 ## Project Structure
 
 ```
 Perseus/
 ├── src/
+│   ├── config.py                # Shared constants and config loader
 │   ├── collect_sources.py       # Source file collection
 │   ├── process_data.py          # Obfuscation & disassembly
 │   ├── prepare_training_data.py # Train/val/test split
@@ -145,6 +147,7 @@ Perseus/
 ├── eval.py                      # Evaluation entry point
 ├── run_pipeline.py              # Data pipeline entry point
 ├── show_eval.py                 # Eval results viewer
+├── config.yaml                  # All configuration — model, LoRA, training, inference
 └── requirements.txt
 ```
 
