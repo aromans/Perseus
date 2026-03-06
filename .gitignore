@@ -3,7 +3,7 @@
 Tools/
 Tools/*
 
-perseus_data/*
+data/*
 wandb/*
 
 __pycache__/*
