@@ -21,3 +21,10 @@ training:
   max_seq_length: 4096
   warmup_ratio: 0.1
   weight_decay: 0.01
+
+pipeline:
+  # Obfuscation types to generate and train on. Add new types here as they become available.
+  obf_types:
+    - mba
+    - control_flow
+    - virtualization

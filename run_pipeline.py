@@ -11,6 +11,7 @@ sys.path.insert(0, str(Path(__file__).parent / 'src'))
 from collect_sources import SourceCollector
 from process_data import DataPipeline
 from feature_selection import FeatureExtractor
+from config import OBF_TYPES
 
 logging.basicConfig(
     level=logging.INFO,
@@ -104,7 +105,7 @@ def main():
 
     parser.add_argument('--data-root', type=Path, default=Path('./data'), help='Root directory for all data (default: ./data)')
     parser.add_argument('--repos-dir', type=Path, default=Path('./repos'), help='Directory for cloned reposirtories (default: ./repos)')
-    parser.add_argument('--obfuscations', nargs='+', default=['mba', 'virtualization', 'control_flow'], choices=['mba', 'virtualization', 'control_flow'], help='Obfuscation types to apply (default: all)')
+    parser.add_argument('--obfuscations', nargs='+', default=OBF_TYPES, choices=OBF_TYPES, help='Obfuscation types to apply (default: all from config.yaml)')
     parser.add_argument('--max-samples', type=int, default=None, help='Maximum number of samples to process (default: all)')
     parser.add_argument('--skip-collection', action='store_true', help='Skip source collection step (use existing sources)')
     parser.add_argument('--collect-only', action='store_true', help='Only run collection step, skip processing')
