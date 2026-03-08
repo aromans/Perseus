@@ -5,6 +5,7 @@ Tools/*
 
 data/*
 wandb/*
+repos/*
 
 src/__pycache__/*
 __pycache__/*

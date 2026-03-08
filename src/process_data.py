@@ -296,7 +296,7 @@ class DataPipeline:
 
         return metadata_list
 
-    def process_dataset(self, samples, obfuscation_types) -> None:
+    def process_dataset(self, samples, obfuscation_types) -> List[SampleMetadata]:
         metadata = []
 
         for file, is_mal in samples:
@@ -308,8 +308,10 @@ class DataPipeline:
         with open(metadata_dir, 'w') as f:
             json.dump([asdict(m) for m in metadata], f, indent=2)
 
-        logger.info(f"Processed {len(metadata)} samples")
+        logger.info(f"Processed {len(metadata)} variants")
         logger.info(f"Metadata saved to {metadata_dir}")
+
+        return metadata
 
 def main():
     data_root = Path('./data')

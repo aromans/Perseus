@@ -18,7 +18,7 @@
 
 ## About
 
-Perseus is a LoRA fine-tuned large language model for x86-64 binary deobfuscation. Given obfuscated assembly produced by the [Tigress C obfuscator](https://tigress.wtf/), Perseus attempts to recover clean, semantically equivalent assembly. The project serves as a proof-of-concept for applying instruction-tuned code models to the reverse engineering domain.
+Perseus is a LoRA fine-tuned large language model for x86-64 binary deobfuscation. Given obfuscated assembly Perseus attempts to recover clean, semantically equivalent assembly. Perseus investigates the feasibility of adapting instruction-tuned code models for binary deobfuscation, a core challenge in static malware analysis where obfuscation is routinely used to evade detection and complicate attribution.
 
 The pipeline handles everything from source collection and obfuscation through training data preparation, fine-tuning, and evaluation.
 
@@ -61,6 +61,21 @@ Place C source files in `data/source/benign/`. A small set of handwritten sample
 python3 run_pipeline.py --collect-only
 ```
 
+**AnghaBench sampling**
+
+Perseus can automatically sample functions from [AnghaBench](https://github.com/brenocfg/AnghaBench), a large corpus of real-world C functions extracted from open-source projects. Enable it in `config.yaml`:
+
+```yaml
+anghabench:
+  enabled: true
+  repo_dir: "repos/AnghaBench"   # auto-cloned if not present
+  n_samples: 100                 # number of functions to sample
+  min_lines: 10                  # minimum lines of code filter
+  seed: 42                       # seed for reproducible sampling
+```
+
+With `enabled: true`, running `--collect-only` will clone AnghaBench (first run only) and sample the configured number of compilable functions into `data/source/benign/`. The same seed produces the same sample every time.
+
 **2. Process & Obfuscate**
 Compile each source file, apply Tigress obfuscation transforms, and disassemble the resulting binaries.
 ```bash
@@ -76,7 +91,7 @@ python3 run_pipeline.py --skip-collection --obfuscations mba control_flow virtua
 **3. Prepare Training Data**
 Split processed samples into train/val/test sets and write JSONL files to `data/training/`.
 ```bash
-python3 run_pipeline.py --skip-collection --prepare-training
+python3 run_pipeline.py --prepare-training-only
 ```
 
 > [!NOTE]
@@ -93,6 +108,29 @@ Fine-tune Qwen2.5-Coder-1.5B-Instruct using LoRA via the SFT trainer.
 ```bash
 python3 train.py
 ```
+
+**Training on a cloud GPU**
+
+If training on a remote machine, use `export_adapters.py` to package your checkpoints for transfer once training completes. Only the LoRA adapter files are included — the base model is not transferred and will be re-downloaded from HuggingFace on first inference.
+
+```bash
+# Package all saved checkpoints
+python3 export_adapters.py
+
+# Or package only the latest checkpoint
+python3 export_adapters.py --latest
+
+# Or target a specific checkpoint
+python3 export_adapters.py --checkpoint data/checkpoints/checkpoint-20
+```
+
+This produces a `perseus_adapters_<timestamp>.tar.gz` archive. Transfer it to your local machine and extract into the project:
+
+```bash
+tar -xzf perseus_adapters_<timestamp>.tar.gz -C data/
+```
+
+Adapters will land in `data/checkpoints/` and are immediately usable with `eval.py`.
 
 > [!NOTE]
 > All training configuration lives in `config.yaml` — no code changes needed for most experiments:
@@ -147,6 +185,7 @@ Perseus/
 ├── eval.py                      # Evaluation entry point
 ├── run_pipeline.py              # Data pipeline entry point
 ├── show_eval.py                 # Eval results viewer
+├── export_adapters.py           # Package checkpoints for transfer from cloud GPUs
 ├── config.yaml                  # All configuration — model, LoRA, training, inference
 └── requirements.txt
 ```

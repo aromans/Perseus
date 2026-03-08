@@ -39,6 +39,7 @@ training:
   eval_samples: 2
 
 checkpoints:
+  dir: "data/checkpoints"
   save_strategy: "epoch"
   save_total_limit: 3
 
@@ -54,7 +55,7 @@ pipeline:
     - virtualization
 
 anghabench:
-  enabled: false          # Set to true to include AnghaBench samples in the pipeline
+  enabled: true          # Set to true to include AnghaBench samples in the pipeline
   repo_dir: "repos/AnghaBench"
   n_samples: 100
   min_lines: 10

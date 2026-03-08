@@ -73,7 +73,24 @@ def run_full_pipeline(
     logger.info("\nProcessing samples...")
     pipeline = DataPipeline(data_root)
 
-    pipeline.process_dataset(samples, obfuscation_types)
+    all_metadata = pipeline.process_dataset(samples, obfuscation_types)
+
+    n_candidates      = len(samples)
+    n_variants_total  = n_candidates * (1 + len(obfuscation_types))
+    n_obf_passed      = len(all_metadata)
+    n_compiled        = sum(1 for m in all_metadata if m.compilation_success)
+    n_disassembled    = sum(1 for m in all_metadata if m.disassembly_success)
+
+    logger.info("")
+    logger.info("=" * 60)
+    logger.info("Processing Summary")
+    logger.info("=" * 60)
+    logger.info(f"  Source candidates:       {n_candidates}")
+    logger.info(f"  Variants attempted:      {n_variants_total}  ({n_candidates} files × {1 + len(obfuscation_types)} variants)")
+    logger.info(f"  Passed obfuscation:      {n_obf_passed} / {n_variants_total}")
+    logger.info(f"  Passed compilation:      {n_compiled} / {n_obf_passed}")
+    logger.info(f"  Passed full pipeline:    {n_disassembled} / {n_variants_total}")
+    logger.info("=" * 60)
 
     #logger.info("\nExtracting features...")
     #extractor = FeatureExtractor()
@@ -123,6 +140,7 @@ def main():
     parser.add_argument('--skip-collection', action='store_true', help='Skip source collection step (use existing sources)')
     parser.add_argument('--collect-only', action='store_true', help='Only run collection step, skip processing')
     parser.add_argument('--prepare-training', action='store_true', help='Prepare training data after processing')
+    parser.add_argument('--prepare-training-only', action='store_true', help='Skip collection and processing; only prepare training data from existing processed files')
     parser.add_argument('--angha-dir', type=Path,
                         default=Path(angha.get('repo_dir', 'repos/AnghaBench')) if angha.get('enabled') else None,
                         help='Path to AnghaBench clone — overrides config.yaml (auto-cloned if absent)')
@@ -148,6 +166,16 @@ def main():
         )
         logger.info(f"Collected {len(samples)} samples")
         logger.info(f"Sources saved to {source_dir}")
+    elif args.prepare_training_only:
+        logger.info("Preparing training data from existing processed files...")
+        from prepare_training_data import TrainingDataPreparer
+        preparer = TrainingDataPreparer(data_root=args.data_root)
+        train_data, val_data, test_data = preparer.prepare_all()
+        training_dir = args.data_root / 'training'
+        preparer.save_jsonl(train_data, training_dir / 'train.jsonl')
+        preparer.save_jsonl(val_data, training_dir / 'val.jsonl')
+        preparer.save_jsonl(test_data, training_dir / 'test.jsonl')
+        preparer.save_stats(train_data, val_data, test_data, training_dir / 'data_stats.json')
     else:
         run_full_pipeline(
                 data_root=args.data_root,
