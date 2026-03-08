@@ -1,23 +1,4 @@
 #!/usr/bin/env python3
-"""
-export_adapters.py — Package LoRA adapter checkpoints for transfer off RunPod.
-
-Usage:
-    python3 export_adapters.py                  # packages all checkpoints
-    python3 export_adapters.py --latest         # packages only the latest checkpoint
-    python3 export_adapters.py --checkpoint data/checkpoints/checkpoint-20
-
-Output:
-    perseus_adapters_<timestamp>.tar.gz
-
-Transfer off RunPod:
-    runpodctl send perseus_adapters_<timestamp>.tar.gz
-    # then on your local machine:
-    runpodctl receive <code>
-
-    # or via SCP if you have SSH access:
-    scp -i <key> root@<pod-ip>:/workspace/Perseus/perseus_adapters_*.tar.gz .
-"""
 
 import argparse
 import sys
