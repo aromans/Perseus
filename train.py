@@ -56,6 +56,7 @@ class TrainConfig:
     output_dir: str = "data/checkpoints"
     # Flags
     use_wandb: bool = False
+    wandb_project: str = "Perseus"
     dry_run: bool = False
 
 
@@ -189,6 +190,10 @@ class PerseusTrainer:
 
         report_to = "wandb" if self.config.use_wandb else "none"
 
+        if self.config.use_wandb:
+            import wandb
+            wandb.init(project=self.config.wandb_project)
+
         training_args = SFTConfig(
             output_dir=self.config.output_dir,
             num_train_epochs=self.config.num_epochs,
@@ -281,6 +286,7 @@ def main():
     lo  = cfg.get('lora', {})
     tr  = cfg.get('training', {})
     ck  = cfg.get('checkpoints', {})
+    wb  = cfg.get('wandb', {})
 
     parser = argparse.ArgumentParser(description='Perseus Deobfuscation Model Training')
 
@@ -346,6 +352,7 @@ def main():
         val_data=args.val_data,
         output_dir=args.output_dir,
         use_wandb=args.wandb,
+        wandb_project=wb.get('project', 'Perseus'),
         dry_run=args.dry_run,
     )
 

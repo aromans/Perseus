@@ -25,6 +25,9 @@ lora:
     - up_proj
     - down_proj
 
+wandb:
+  project: "Perseus"
+
 training:
   epochs: 30
   batch_size: 1
