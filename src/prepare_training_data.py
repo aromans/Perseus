@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 
 import json
+import os
 import re
 import argparse
 import logging
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass, asdict
 from config import OBF_TYPES
+from tqdm import tqdm
 
 logging.basicConfig(
     level=logging.INFO,
@@ -314,12 +317,26 @@ class TrainingDataPreparer:
         logger.info(f"Val samples  ({n_val}):   {sorted(val_samples)}")
         logger.info(f"Test samples ({n_test}):  {sorted(test_samples)}")
 
+        workers = min(8, os.cpu_count() or 4)
+        tasks = [(sample, obf_type) for sample in samples for obf_type in OBF_TYPES]
+
+        logging.disable(logging.INFO)
+
         all_pairs = []
-        for sample in samples:
-            for obf_type in OBF_TYPES:
-                pairs = self.create_training_pairs(sample, obf_type)
-                logger.info(f"  {sample}/{obf_type}: {len(pairs)} function pairs")
-                all_pairs.extend(pairs)
+        with ThreadPoolExecutor(max_workers=workers) as executor:
+            futures = {
+                executor.submit(self.create_training_pairs, sample, obf_type): (sample, obf_type)
+                for sample, obf_type in tasks
+            }
+            with tqdm(total=len(tasks), desc="Building training pairs", unit="task") as pbar:
+                for future in as_completed(futures):
+                    sample, obf_type = futures[future]
+                    pairs = future.result()
+                    all_pairs.extend(pairs)
+                    pbar.set_postfix_str(f"{sample}/{obf_type} → {len(pairs)} pairs")
+                    pbar.update(1)
+
+        logging.disable(logging.NOTSET)
 
         logger.info(f"Total pairs: {len(all_pairs)}")
 

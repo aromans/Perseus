@@ -6,10 +6,12 @@ import random
 import tempfile
 import subprocess
 import shutil
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import List, Tuple
 import logging
 import argparse
+from tqdm import tqdm
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -110,18 +112,49 @@ class SourceCollector:
         random.seed(seed)
         random.shuffle(all_files)
 
+        # Cap the candidate pool — no need to scan all 1M files when we only need n_samples.
+        # 20x gives ample headroom even if most files fail static/compile checks.
+        candidate_pool = all_files[:n_samples * 20]
+        logger.info(f"Candidate pool: {len(candidate_pool)} files (capped at {n_samples} × 20)")
+
+        # Phase 1: static filter (cheap content check, no subprocess)
+        static_passed = []
+        for p in tqdm(candidate_pool, desc="Static filter", unit="file"):
+            if self._passes_static_filter(p, min_lines):
+                static_passed.append(p)
+        logger.info(f"Static filter: {len(static_passed)} / {len(candidate_pool)} passed")
+
+        # Phase 2: parallel compile check — gcc is the bottleneck, parallelise it
+        workers = min(8, os.cpu_count() or 4)
+        logger.info(f"Compile-checking {len(static_passed)} candidates with {workers} parallel workers...")
+
+        passed = []
+        logging.disable(logging.INFO)
+        with ThreadPoolExecutor(max_workers=workers) as executor:
+            futures = {executor.submit(self._try_compile, p): p for p in static_passed}
+            with tqdm(total=n_samples, desc="Compile check", unit="file") as pbar:
+                for future in as_completed(futures):
+                    if future.result():
+                        passed.append(futures[future])
+                        pbar.update(1)
+                    if len(passed) >= n_samples:
+                        for f in futures:
+                            f.cancel()
+                        break
+        logging.disable(logging.NOTSET)
+
+        logger.info(f"Compile check: {len(passed)} / {len(static_passed)} passed")
+
+        # Phase 3: write out up to n_samples, preserving shuffled order for reproducibility
+        passed_set = set(passed)
+        ordered = [p for p in static_passed if p in passed_set]
+
         collected = []
         seen_names = set()
 
-        for path in all_files:
+        for path in ordered:
             if len(collected) >= n_samples:
                 break
-
-            if not self._passes_static_filter(path, min_lines):
-                continue
-
-            if not self._try_compile(path):
-                continue
 
             name = self._sanitize_name(path, seen_names)
             seen_names.add(name)

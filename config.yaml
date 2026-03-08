@@ -60,6 +60,6 @@ pipeline:
 anghabench:
   enabled: true          # Set to true to include AnghaBench samples in the pipeline
   repo_dir: "repos/AnghaBench"
-  n_samples: 100
+  n_samples: 1000
   min_lines: 10
   seed: 42

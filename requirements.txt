@@ -24,6 +24,7 @@ trl>=0.7.0
 
 # Utilities
 pyyaml>=5.4.0
+tqdm>=4.64.0
 
 # Logging and monitoring
 wandb>=0.12.0

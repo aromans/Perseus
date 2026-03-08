@@ -5,10 +5,12 @@ import json
 import subprocess
 import hashlib
 import logging
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass, asdict
 import shutil
+from tqdm import tqdm
 
 logging.basicConfig(
         level=logging.INFO,
@@ -297,12 +299,32 @@ class DataPipeline:
         return metadata_list
 
     def process_dataset(self, samples, obfuscation_types) -> List[SampleMetadata]:
-        metadata = []
+        # Cap at 4 workers — Tigress is CPU-heavy and doesn't handle high concurrency well
+        workers = min(4, os.cpu_count() or 2)
+        logger.info(f"Processing {len(samples)} samples with {workers} parallel workers...")
 
-        for file, is_mal in samples:
-            logger.info(f"Processing {file.name}")
-            metadata_list = self.process_sample(file, is_mal, obfuscation_types)
-            metadata.extend(metadata_list)
+        # Suppress per-variant logs during parallel processing — progress bar provides feedback
+        logging.disable(logging.INFO)
+
+        metadata = []
+        with ThreadPoolExecutor(max_workers=workers) as executor:
+            futures = {
+                executor.submit(self.process_sample, file, is_mal, obfuscation_types): file
+                for file, is_mal in samples
+            }
+            with tqdm(total=len(samples), desc="Processing samples", unit="sample") as pbar:
+                for future in as_completed(futures):
+                    file = futures[future]
+                    try:
+                        result = future.result()
+                        metadata.extend(result)
+                        pbar.set_postfix_str(file.stem)
+                        pbar.update(1)
+                    except Exception as e:
+                        tqdm.write(f"ERROR: {file.name}: {e}")
+                        pbar.update(1)
+
+        logging.disable(logging.NOTSET)
 
         metadata_dir = self.dirs['metadata'] / 'dataset_metadata.json'
         with open(metadata_dir, 'w') as f:
