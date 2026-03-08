@@ -13,6 +13,7 @@
 ![Tigress](https://img.shields.io/badge/Obfuscator-Tigress-DC2626.svg)
 ![WandB](https://img.shields.io/badge/Tracking-W%26B-FFBE00.svg?logo=weightsandbiases&logoColor=black)
 ![Status](https://img.shields.io/badge/🔬-Research-2563EB.svg)
+![License](https://img.shields.io/badge/License-MIT-green.svg)
 
 </div>
 
@@ -188,6 +189,21 @@ Perseus/
 ├── export_adapters.py           # Package checkpoints for transfer from cloud GPUs
 ├── config.yaml                  # All configuration — model, LoRA, training, inference
 └── requirements.txt
+```
+
+## Citation
+
+If you use Perseus in your research, please cite:
+
+```bibtex
+@software{romans2026perseus,
+  author       = {Romans, Andrew},
+  title        = {Perseus: LLM-Assisted Binary Deobfuscation},
+  year         = {2026},
+  url          = {https://github.com/aromans/Perseus},
+  institution  = {Georgia Institute of Technology},
+  license      = {MIT}
+}
 ```
 
 ## Acknowledgements

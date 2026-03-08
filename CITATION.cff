@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use Perseus in your research, please cite it as below."
+type: software
+title: "Perseus: LLM-Assisted Binary Deobfuscation"
+abstract: "Perseus is a LoRA fine-tuned large language model for x86-64 binary deobfuscation. It investigates the feasibility of adapting instruction-tuned code models for binary deobfuscation, a core challenge in static malware analysis where obfuscation is routinely used to evade detection and complicate attribution."
+authors:
+  - family-names: Romans
+    given-names: Andrew
+    affiliation: "Georgia Institute of Technology"
+repository-code: "https://github.com/aromans/Perseus"
+license: MIT
+year: 2026
