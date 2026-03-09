@@ -210,6 +210,8 @@ class PerseusTrainer:
             eval_strategy="epoch" if val_dataset else "no",
             save_strategy=self.config.save_strategy,
             save_total_limit=self.config.save_total_limit,
+            load_best_model_at_end=True if val_dataset else False,
+            metric_for_best_model="eval_loss",
             report_to=report_to,
             dataset_text_field="text",
             gradient_checkpointing=True,
