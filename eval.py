@@ -9,6 +9,8 @@ import json
 import logging
 import argparse
 import sys
+import time
+from datetime import datetime, timedelta
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent / 'src'))
@@ -157,7 +159,9 @@ class EvalPipeline:
 
         self.load_model()
 
+        out_path = self.data_root / 'training' / 'eval_results.json'
         results = []
+        start_time = time.monotonic()
         for i, record in enumerate(records):
             meta = record.get('metadata', {})
             logger.info(
@@ -180,14 +184,18 @@ class EvalPipeline:
                 'expected':         expected,
             })
 
+            elapsed = time.monotonic() - start_time
+            avg_per_example = elapsed / (i + 1)
+            remaining = avg_per_example * (len(records) - i - 1)
+            eta = datetime.now() + timedelta(seconds=remaining)
             logger.info(f"  Exact match:   {em}")
             logger.info(f"  Line accuracy: {lacc:.1%}")
+            logger.info(f"  ETA:           {eta.strftime('%H:%M:%S')}  ({timedelta(seconds=int(remaining))} remaining)")
+
+            with open(out_path, 'w') as f:
+                json.dump(results, f, indent=2)
 
         self._print_summary(results)
-
-        out_path = self.data_root / 'training' / 'eval_results.json'
-        with open(out_path, 'w') as f:
-            json.dump(results, f, indent=2)
         logger.info(f"\nResults saved to {out_path}")
 
     def _print_summary(self, results: list):
