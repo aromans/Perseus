@@ -58,6 +58,7 @@ class TrainConfig:
     use_wandb: bool = False
     wandb_project: str = "Perseus"
     dry_run: bool = False
+    resume: str = None
 
 
 class PerseusTrainer:
@@ -248,8 +249,24 @@ class PerseusTrainer:
             args=training_args,
         )
 
+        resume_from = None
+        if self.config.resume == 'auto':
+            checkpoints = sorted(
+                [d for d in Path(self.config.output_dir).iterdir()
+                 if d.is_dir() and d.name.startswith('checkpoint-')],
+                key=lambda d: int(d.name.split('-')[-1])
+            )
+            if checkpoints:
+                resume_from = str(checkpoints[-1])
+                logger.info(f"Resuming from latest checkpoint: {resume_from}")
+            else:
+                logger.warning("--resume specified but no checkpoints found, starting fresh")
+        elif self.config.resume:
+            resume_from = self.config.resume
+            logger.info(f"Resuming from checkpoint: {resume_from}")
+
         logger.info("Starting training...")
-        trainer.train()
+        trainer.train(resume_from_checkpoint=resume_from)
 
         final_dir = Path(self.config.output_dir) / "final"
         model.save_pretrained(final_dir)
@@ -344,6 +361,8 @@ def main():
                         help='LoRA alpha')
     parser.add_argument('--wandb', action='store_true',
                         help='Enable Weights & Biases logging')
+    parser.add_argument('--resume', nargs='?', const='auto', default=None,
+                        help='Resume from checkpoint. Pass a path, or omit a value to use the latest checkpoint.')
     parser.add_argument('--dry-run', action='store_true',
                         help='Verify model and data pipeline without training')
 
@@ -377,6 +396,7 @@ def main():
         use_wandb=args.wandb,
         wandb_project=wb.get('project', 'Perseus'),
         dry_run=args.dry_run,
+        resume=args.resume,
     )
 
     trainer = PerseusTrainer(config)
