@@ -73,6 +73,21 @@ class PerseusTrainer:
                     records.append(json.loads(line))
             return records
 
+        def filter_by_length(records, tokenizer, max_length, split_name):
+            filtered = []
+            skipped = 0
+            for r in records:
+                text = self.format_prompt(r)
+                n_tokens = len(tokenizer.encode(text))
+                if n_tokens <= max_length:
+                    filtered.append(r)
+                else:
+                    skipped += 1
+            if skipped:
+                logger.warning(f"{split_name}: skipped {skipped} examples exceeding {max_length} tokens")
+            logger.info(f"{split_name}: {len(filtered)} examples after length filter")
+            return filtered
+
         train_records = load_jsonl(self.config.train_data)
         logger.info(f"Loaded {len(train_records)} training examples")
 
@@ -80,6 +95,12 @@ class PerseusTrainer:
         if Path(self.config.val_data).exists():
             val_records = load_jsonl(self.config.val_data)
             logger.info(f"Loaded {len(val_records)} validation examples")
+
+        # Need tokenizer for length filtering — load it early
+        tokenizer = AutoTokenizer.from_pretrained(self.config.model_name)
+        train_records = filter_by_length(train_records, tokenizer, self.config.max_seq_length, "train")
+        if val_records:
+            val_records = filter_by_length(val_records, tokenizer, self.config.max_seq_length, "val")
 
         train_dataset = Dataset.from_list([
             {"text": self.format_prompt(r)} for r in train_records
