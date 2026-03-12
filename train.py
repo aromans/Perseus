@@ -18,6 +18,7 @@ from transformers import (
     AutoTokenizer,
     BitsAndBytesConfig,
     TrainingArguments,
+    EarlyStoppingCallback,
 )
 from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
 from trl import SFTTrainer, SFTConfig
@@ -247,6 +248,10 @@ class PerseusTrainer:
             train_dataset=train_dataset,
             eval_dataset=val_dataset,
             args=training_args,
+            callbacks=[EarlyStoppingCallback(
+                early_stopping_patience=3, #TODO: add these stats to config.yaml
+                early_stopping_threshold=0.001
+            )]
         )
 
         resume_from = None
