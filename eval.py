@@ -38,13 +38,19 @@ def build_prompt(example: dict) -> str:
     )
 
 
-def line_accuracy(generated: str, expected: str) -> float:
-    gen_lines = [l.strip() for l in generated.strip().splitlines()]
-    exp_lines = [l.strip() for l in expected.strip().splitlines()]
-    if not exp_lines:
-        return 0.0
+def line_metrics(generated: str, expected: str) -> tuple[float, float, float]:
+    """Returns (precision, recall, f1) at the line level using positional matching."""
+    gen_lines = [l.strip() for l in generated.strip().splitlines() if l.strip()]
+    exp_lines = [l.strip() for l in expected.strip().splitlines() if l.strip()]
+    if not gen_lines and not exp_lines:
+        return 1.0, 1.0, 1.0
+    if not gen_lines or not exp_lines:
+        return 0.0, 0.0, 0.0
     matches = sum(g == e for g, e in zip(gen_lines, exp_lines))
-    return matches / len(exp_lines)
+    precision = matches / len(gen_lines)
+    recall    = matches / len(exp_lines)
+    f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0.0
+    return precision, recall, f1
 
 
 def exact_match(generated: str, expected: str) -> bool:
@@ -54,12 +60,15 @@ def exact_match(generated: str, expected: str) -> bool:
 class EvalPipeline:
 
     def __init__(self, data_root: Path, adapter_path: str, base_model: str,
-                 max_new_tokens: int, temperature: float):
+                 max_new_tokens: int, temperature: float,
+                 use_wandb: bool = False, wandb_project: str = "Perseus"):
         self.data_root      = data_root
         self.adapter_path   = adapter_path
         self.base_model     = base_model
         self.max_new_tokens = max_new_tokens
         self.temperature    = temperature
+        self.use_wandb      = use_wandb
+        self.wandb_project  = wandb_project
         self.model          = None
         self.tokenizer      = None
 
@@ -171,15 +180,17 @@ class EvalPipeline:
             generated = self.infer(record)
             expected  = record['output']
 
-            em   = exact_match(generated, expected)
-            lacc = line_accuracy(generated, expected)
+            em                    = exact_match(generated, expected)
+            precision, recall, f1 = line_metrics(generated, expected)
 
             results.append({
                 'sample':           meta.get('sample'),
                 'obfuscation_type': meta.get('obfuscation_type'),
                 'function':         meta.get('function'),
                 'exact_match':      em,
-                'line_accuracy':    lacc,
+                'line_precision':   precision,
+                'line_recall':      recall,
+                'line_f1':          f1,
                 'generated':        generated,
                 'expected':         expected,
             })
@@ -188,33 +199,48 @@ class EvalPipeline:
             avg_per_example = elapsed / (i + 1)
             remaining = avg_per_example * (len(records) - i - 1)
             eta = datetime.now() + timedelta(seconds=remaining)
-            logger.info(f"  Exact match:   {em}")
-            logger.info(f"  Line accuracy: {lacc:.1%}")
-            logger.info(f"  ETA:           {eta.strftime('%H:%M:%S')}  ({timedelta(seconds=int(remaining))} remaining)")
+            logger.info(f"  Exact match: {em}")
+            logger.info(f"  Precision:   {precision:.1%}  Recall: {recall:.1%}  F1: {f1:.1%}")
+            logger.info(f"  ETA:         {eta.strftime('%H:%M:%S')}  ({timedelta(seconds=int(remaining))} remaining)")
 
             with open(out_path, 'w') as f:
                 json.dump(results, f, indent=2)
 
-        self._print_summary(results)
+        self._print_summary(results, use_wandb=self.use_wandb)
         logger.info(f"\nResults saved to {out_path}")
 
-    def _print_summary(self, results: list):
+    def _print_summary(self, results: list, use_wandb: bool = False):
         print("\n" + "="*60)
         print("EVAL SUMMARY")
         print("="*60)
 
         n = len(results)
-        em_total   = sum(r['exact_match'] for r in results)
-        lacc_total = sum(r['line_accuracy'] for r in results)
-        print(f"Overall   — exact match: {em_total}/{n}  |  line accuracy: {lacc_total/n:.1%}")
+        em_total = sum(r['exact_match'] for r in results)
+        avg_p    = sum(r['line_precision'] for r in results) / n
+        avg_r    = sum(r['line_recall']    for r in results) / n
+        avg_f1   = sum(r['line_f1']        for r in results) / n
+        print(f"Overall   — exact: {em_total}/{n}  |  P: {avg_p:.1%}  R: {avg_r:.1%}  F1: {avg_f1:.1%}")
+
+        wandb_metrics = {
+            "eval/exact_match_pct": em_total / n,
+            "eval/line_precision":  avg_p,
+            "eval/line_recall":     avg_r,
+            "eval/line_f1":         avg_f1,
+        }
 
         for obf in OBF_TYPES:
             subset = [r for r in results if r['obfuscation_type'] == obf]
             if not subset:
                 continue
-            em   = sum(r['exact_match'] for r in subset)
-            lacc = sum(r['line_accuracy'] for r in subset) / len(subset)
-            print(f"  {obf:<16} — exact match: {em}/{len(subset)}  |  line accuracy: {lacc:.1%}")
+            em  = sum(r['exact_match']    for r in subset)
+            p   = sum(r['line_precision'] for r in subset) / len(subset)
+            r_  = sum(r['line_recall']    for r in subset) / len(subset)
+            f1  = sum(r['line_f1']        for r in subset) / len(subset)
+            print(f"  {obf:<16} — exact: {em}/{len(subset)}  |  P: {p:.1%}  R: {r_:.1%}  F1: {f1:.1%}")
+            wandb_metrics[f"eval/{obf}/line_precision"] = p
+            wandb_metrics[f"eval/{obf}/line_recall"]    = r_
+            wandb_metrics[f"eval/{obf}/line_f1"]        = f1
+            wandb_metrics[f"eval/{obf}/exact_match_pct"] = em / len(subset)
 
         print("="*60)
         print("\nPer-function results:")
@@ -222,8 +248,15 @@ class EvalPipeline:
             status = "✓" if r['exact_match'] else "✗"
             print(
                 f"  {status} {r['sample']}/{r['obfuscation_type']}/{r['function']}"
-                f"  — line acc: {r['line_accuracy']:.1%}"
+                f"  — P: {r['line_precision']:.1%}  R: {r['line_recall']:.1%}  F1: {r['line_f1']:.1%}"
             )
+
+        if use_wandb:
+            import wandb
+            if wandb.run is None:
+                wandb.init(project=self.wandb_project, job_type="eval")
+            wandb.log(wandb_metrics)
+            logger.info("Logged eval metrics to wandb.")
 
 
 def main():
@@ -255,14 +288,19 @@ def main():
                         help='Sampling temperature (default: from config.yaml)')
     parser.add_argument('--c-files', nargs='+', type=Path, default=None,
                         help='Optional: C source files to process and evaluate instead of test.jsonl')
+    parser.add_argument('--wandb', action='store_true',
+                        help='Log eval metrics to Weights & Biases')
     args = parser.parse_args()
 
+    wb = cfg.get('wandb', {})
     pipeline = EvalPipeline(
         data_root=args.data_root,
         adapter_path=args.adapter,
         base_model=args.base_model,
         max_new_tokens=args.max_new_tokens,
         temperature=args.temperature,
+        use_wandb=args.wandb,
+        wandb_project=wb.get('project', 'Perseus'),
     )
     pipeline.run(c_files=args.c_files)
 

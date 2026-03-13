@@ -11,7 +11,7 @@ model:
 lora:
   r: 16
   alpha: 32
-  dropout: 0.05
+  dropout: 0.1 #0.05 Changed to 0.1 for more regularization
   # Target modules are model-specific — update these when changing models.
   # Qwen2.5 / LLaMA-style:  q_proj k_proj v_proj o_proj gate_proj up_proj down_proj
   # Mistral / Codestral:    q_proj k_proj v_proj o_proj gate_proj up_proj down_proj
@@ -26,16 +26,16 @@ lora:
     - down_proj
 
 wandb:
-  project: "Perseus"
+  project: "PerseusDemo"
 
 training:
-  epochs: 30
+  epochs: 12
   batch_size: 1
-  gradient_accumulation: 4
+  gradient_accumulation: 8 #4 larger effective batch size, smoother gradient updates.
   learning_rate: 0.0002
   max_seq_length: 4096
   warmup_ratio: 0.1
-  weight_decay: 0.01
+  weight_decay: 0.05 #0.01 more L2 regularization (prevent overfitting on limited data)
   max_grad_norm: 0.3
   lr_scheduler_type: "cosine"
   logging_steps: 1
@@ -45,6 +45,10 @@ checkpoints:
   dir: "data/checkpoints"
   save_strategy: "epoch"
   save_total_limit: 3
+
+early_stopping:
+  patience: 3    # Stop after N epochs with no improvement
+  threshold: 0.001  # Minimum improvement to count as progress
 
 inference:
   max_new_tokens: 1024
@@ -60,6 +64,6 @@ pipeline:
 anghabench:
   enabled: true          # Set to true to include AnghaBench samples in the pipeline
   repo_dir: "repos/AnghaBench"
-  n_samples: 1000
+  n_samples: 10
   min_lines: 10
-  seed: 42
+  seed: 1337

@@ -50,7 +50,7 @@ def main():
         return
 
     for r in results:
-        em   = "EXACT MATCH" if r['exact_match'] else f"line acc: {r['line_accuracy']:.1%}"
+        em   = "EXACT MATCH" if r['exact_match'] else f"P: {r['line_precision']:.1%}  R: {r['line_recall']:.1%}  F1: {r['line_f1']:.1%}"
         print(f"\n{'='*110}")
         print(f"  {r['sample']} / {r['obfuscation_type']} / {r['function']}  —  {em}")
         print(f"{'='*110}")
@@ -58,10 +58,12 @@ def main():
 
     print(f"\n{'='*110}")
     print(f"SUMMARY: {len(results)} result(s) shown")
-    n_em   = sum(r['exact_match'] for r in results)
-    avg_la = sum(r['line_accuracy'] for r in results) / len(results)
-    print(f"  Exact match:   {n_em}/{len(results)}")
-    print(f"  Avg line acc:  {avg_la:.1%}")
+    n_em  = sum(r['exact_match']    for r in results)
+    avg_p = sum(r['line_precision'] for r in results) / len(results)
+    avg_r = sum(r['line_recall']    for r in results) / len(results)
+    avg_f = sum(r['line_f1']        for r in results) / len(results)
+    print(f"  Exact match:  {n_em}/{len(results)}")
+    print(f"  Avg P: {avg_p:.1%}  R: {avg_r:.1%}  F1: {avg_f:.1%}")
 
 
 if __name__ == '__main__':

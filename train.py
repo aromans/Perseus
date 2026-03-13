@@ -51,6 +51,8 @@ class TrainConfig:
     eval_samples: int
     save_strategy: str
     save_total_limit: int
+    early_stopping_patience: int
+    early_stopping_threshold: float
     # Paths
     train_data: str = "data/training/train.jsonl"
     val_data: str = "data/training/val.jsonl"
@@ -249,8 +251,8 @@ class PerseusTrainer:
             eval_dataset=val_dataset,
             args=training_args,
             callbacks=[EarlyStoppingCallback(
-                early_stopping_patience=3, #TODO: add these stats to config.yaml
-                early_stopping_threshold=0.001
+                early_stopping_patience=self.config.early_stopping_patience,
+                early_stopping_threshold=self.config.early_stopping_threshold,
             )]
         )
 
@@ -332,6 +334,7 @@ def main():
     tr  = cfg.get('training', {})
     ck  = cfg.get('checkpoints', {})
     wb  = cfg.get('wandb', {})
+    es  = cfg.get('early_stopping', {})
 
     parser = argparse.ArgumentParser(description='Perseus Deobfuscation Model Training')
 
@@ -395,6 +398,8 @@ def main():
         eval_samples=tr.get('eval_samples', 2),
         save_strategy=ck.get('save_strategy', 'epoch'),
         save_total_limit=ck.get('save_total_limit', 3),
+        early_stopping_patience=es.get('patience', 3),
+        early_stopping_threshold=es.get('threshold', 0.001),
         train_data=args.train_data,
         val_data=args.val_data,
         output_dir=args.output_dir,
