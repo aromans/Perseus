@@ -137,8 +137,11 @@ class EvalPipeline:
             trust_remote_code=True,
             **model_kwargs,
         )
-        logger.info(f"Loading LoRA adapter: {self.adapter_path}")
-        self.model = PeftModel.from_pretrained(self.model, self.adapter_path)
+        if self.adapter_path:
+            logger.info(f"Loading LoRA adapter: {self.adapter_path}")
+            self.model = PeftModel.from_pretrained(self.model, self.adapter_path)
+        else:
+            logger.info("No adapter specified — running zero-shot baseline")
         self.model.eval()
 
     def infer(self, record: dict) -> str:
@@ -272,8 +275,8 @@ def main():
     parser.add_argument('--config', default='config.yaml',
                         help='Path to config.yaml (default: config.yaml)')
     parser.add_argument('--adapter', type=str,
-                        default='data/checkpoints/final',
-                        help='Path to LoRA adapter (default: data/checkpoints/final)')
+                        default=None,
+                        help='Path to LoRA adapter. Omit for zero-shot baseline.')
     parser.add_argument('--data-root', type=Path,
                         default=Path('./data'),
                         help='Root data directory (default: ./data)')
