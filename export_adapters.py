@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 import argparse
+import os
 import sys
 import tarfile
-import shutil
 from datetime import datetime
 from pathlib import Path
 
@@ -67,6 +67,38 @@ def package_checkpoints(checkpoints: list[Path], config_path: Path, output_path:
     print(f"\nArchive created: {output_path}  ({size_mb:.1f} MB)")
 
 
+def push_to_hub(checkpoints: list[Path], config_path: Path, repo_id: str, token: str):
+    from huggingface_hub import HfApi
+
+    api = HfApi(token=token)
+
+    print(f"\nCreating private HuggingFace repo: {repo_id}")
+    api.create_repo(repo_id=repo_id, private=True, exist_ok=True, token=token)
+
+    if config_path.exists():
+        api.upload_file(
+            path_or_fileobj=str(config_path),
+            path_in_repo='config.yaml',
+            repo_id=repo_id,
+            token=token,
+        )
+        print(f"  + config.yaml")
+
+    for ckpt_dir in checkpoints:
+        for f in ckpt_dir.iterdir():
+            if f.name in ADAPTER_FILES:
+                api.upload_file(
+                    path_or_fileobj=str(f),
+                    path_in_repo=f'{ckpt_dir.name}/{f.name}',
+                    repo_id=repo_id,
+                    token=token,
+                )
+        print(f"  + {ckpt_dir.name}/")
+
+    print(f"\nUploaded to: https://huggingface.co/{repo_id}")
+    print("Repo is private — only visible to you.")
+
+
 def print_transfer_instructions(output_path: Path):
     print("\n" + "=" * 60)
     print("Transfer instructions")
@@ -96,6 +128,12 @@ def main():
                         help='Export only the latest checkpoint')
     parser.add_argument('--output', type=Path, default=None,
                         help='Output archive path (default: perseus_adapters_<timestamp>.tar.gz)')
+    parser.add_argument('--push-hub', action='store_true',
+                        help='Upload checkpoints to a private HuggingFace repo')
+    parser.add_argument('--hub-repo', type=str, default=None,
+                        help='HuggingFace repo id, e.g. username/perseus-1.5b-1k (default: auto-generated)')
+    parser.add_argument('--hub-token', type=str, default=None,
+                        help='HuggingFace token (default: HUGGINGFACE_TOKEN env var)')
     args = parser.parse_args()
 
     config_path = Path(__file__).parent / 'config.yaml'
@@ -119,6 +157,15 @@ def main():
 
     package_checkpoints(checkpoints, config_path, output_path)
     print_transfer_instructions(output_path)
+
+    if args.push_hub:
+        token = args.hub_token or os.environ.get('HUGGINGFACE_TOKEN')
+        if not token:
+            print("\nERROR: --push-hub requires a token. Pass --hub-token or set HUGGINGFACE_TOKEN.")
+            sys.exit(1)
+        model_slug = cfg.get('model', {}).get('name', 'model').split('/')[-1].lower()
+        repo_id = args.hub_repo or f"aromans/perseus-{model_slug}-{timestamp}"
+        push_to_hub(checkpoints, config_path, repo_id, token)
 
 
 if __name__ == '__main__':
