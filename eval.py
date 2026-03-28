@@ -27,14 +27,18 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def build_prompt(example: dict) -> str:
+def build_prompt(example: dict, tokenizer) -> str:
     user_msg = example['instruction']
     if example.get('input'):
         user_msg += f"\n\n{example['input']}"
-    return (
-        f"<|im_start|>system\n{SYSTEM_PROMPT}<|im_end|>\n"
-        f"<|im_start|>user\n{user_msg}<|im_end|>\n"
-        f"<|im_start|>assistant\n"
+    messages = [
+        {"role": "system",    "content": SYSTEM_PROMPT},
+        {"role": "user",      "content": user_msg},
+    ]
+    return tokenizer.apply_chat_template(
+        messages,
+        tokenize=False,
+        add_generation_prompt=True,
     )
 
 
@@ -145,7 +149,7 @@ class EvalPipeline:
         self.model.eval()
 
     def infer(self, record: dict) -> str:
-        prompt = build_prompt(record)
+        prompt = build_prompt(record, self.tokenizer)
         inputs = self.tokenizer(prompt, return_tensors="pt").to(self.model.device)
         with torch.no_grad():
             outputs = self.model.generate(

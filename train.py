@@ -81,7 +81,7 @@ class PerseusTrainer:
             filtered = []
             skipped = 0
             for r in records:
-                text = self.format_prompt(r)
+                text = self.format_prompt(r, tokenizer)
                 n_tokens = len(tokenizer.encode(text))
                 if n_tokens <= max_length:
                     filtered.append(r)
@@ -107,22 +107,35 @@ class PerseusTrainer:
             val_records = filter_by_length(val_records, tokenizer, self.config.max_seq_length, "val")
 
         train_dataset = Dataset.from_list([
-            {"text": self.format_prompt(r)} for r in train_records
+            {"text": self.format_prompt(r, tokenizer)} for r in train_records
         ])
 
         val_dataset = None
         if val_records:
             val_dataset = Dataset.from_list([
-                {"text": self.format_prompt(r)} for r in val_records
+                {"text": self.format_prompt(r, tokenizer)} for r in val_records
             ])
 
-        return train_dataset, val_dataset
+        return train_dataset, val_dataset, val_records
 
-    def format_prompt(self, example: dict) -> str:
+    def format_prompt(self, example: dict, tokenizer=None) -> str:
         user_msg = example['instruction']
         if example.get('input'):
             user_msg += f"\n\n{example['input']}"
 
+        if tokenizer is not None:
+            messages = [
+                {"role": "system",    "content": SYSTEM_PROMPT},
+                {"role": "user",      "content": user_msg},
+                {"role": "assistant", "content": example['output']},
+            ]
+            return tokenizer.apply_chat_template(
+                messages,
+                tokenize=False,
+                add_generation_prompt=False,
+            )
+
+        # Fallback for length filtering before tokenizer is loaded
         return (
             f"<|im_start|>system\n{SYSTEM_PROMPT}<|im_end|>\n"
             f"<|im_start|>user\n{user_msg}<|im_end|>\n"
@@ -200,7 +213,7 @@ class PerseusTrainer:
         return model
 
     def train(self):
-        train_dataset, val_dataset = self.load_data()
+        train_dataset, val_dataset, val_records = self.load_data()
         model, tokenizer = self.setup_model()
         model = self.setup_lora(model)
 
@@ -280,22 +293,30 @@ class PerseusTrainer:
         tokenizer.save_pretrained(final_dir)
         logger.info(f"Saved final adapter to {final_dir}")
 
-        if val_dataset and self.config.eval_samples > 0:
-            self._generate_samples(model, tokenizer, val_dataset)
+        if val_records and self.config.eval_samples > 0:
+            self._generate_samples(model, tokenizer, val_records)
 
-    def _generate_samples(self, model, tokenizer, val_dataset):
+    def _generate_samples(self, model, tokenizer, val_records):
         logger.info("\n=== Sample Generations ===")
         model.eval()
 
-        n = min(self.config.eval_samples, len(val_dataset))
+        n = min(self.config.eval_samples, len(val_records))
         for i in range(n):
-            text = val_dataset[i]['text']
+            record = val_records[i]
 
-            # Extract just the prompt (everything before assistant response)
-            prompt_end = text.find("<|im_start|>assistant\n")
-            if prompt_end == -1:
-                continue
-            prompt = text[:prompt_end] + "<|im_start|>assistant\n"
+            # Build prompt-only (no assistant response) using the tokenizer's chat template
+            user_msg = record['instruction']
+            if record.get('input'):
+                user_msg += f"\n\n{record['input']}"
+            messages = [
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user",   "content": user_msg},
+            ]
+            prompt = tokenizer.apply_chat_template(
+                messages,
+                tokenize=False,
+                add_generation_prompt=True,
+            )
 
             inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
 
@@ -313,13 +334,9 @@ class PerseusTrainer:
                 skip_special_tokens=True
             )
 
-            expected_start = prompt_end + len("<|im_start|>assistant\n")
-            expected_end = text.find("<|im_end|>", expected_start)
-            expected = text[expected_start:expected_end] if expected_end != -1 else ""
-
             logger.info(f"\n--- Sample {i+1} ---")
             logger.info(f"Generated (first 300 chars):\n{generated[:300]}")
-            logger.info(f"Expected (first 300 chars):\n{expected[:300]}")
+            logger.info(f"Expected (first 300 chars):\n{record['output'][:300]}")
 
 
 def main():
