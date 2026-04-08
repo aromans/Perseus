@@ -299,8 +299,8 @@ class DataPipeline:
         return metadata_list
 
     def process_dataset(self, samples, obfuscation_types) -> List[SampleMetadata]:
-        # Cap at 4 workers — Tigress is CPU-heavy and doesn't handle high concurrency well
-        workers = min(4, os.cpu_count() or 2)
+        # Cap at 10 workers — Tigress is CPU-heavy and doesn't handle high concurrency well
+        workers = min(10, os.cpu_count() or 2)
         logger.info(f"Processing {len(samples)} samples with {workers} parallel workers...")
 
         # Suppress per-variant logs during parallel processing — progress bar provides feedback
