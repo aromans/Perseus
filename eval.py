@@ -42,10 +42,32 @@ def build_prompt(example: dict, tokenizer) -> str:
     )
 
 
+import re as _re
+
+def _normalize_asm(text: str) -> list[str]:
+    """
+    Split assembly output into a list of normalized instruction strings.
+    Handles two formats:
+      - Normal (newline-separated): "+0x0:\tendbr64\n+0x4:\tpush\trbp"
+      - Collapsed (no whitespace):  "+0x0:endbr64+0x4:pushrbp"
+    Returns a list of whitespace-normalized instruction strings.
+    """
+    # If there are newlines, use them as separators (Qwen-style output)
+    if '\n' in text:
+        lines = [l.strip() for l in text.strip().splitlines() if l.strip()]
+    else:
+        # Split on address pattern (+0xNN: or 0xNNNNNNNN:)
+        parts = _re.split(r'(?=(?:\+0x|0x)[0-9a-fA-F]+:)', text.strip())
+        lines = [p.strip() for p in parts if p.strip()]
+
+    # Normalize internal whitespace within each line
+    return [' '.join(l.split()) for l in lines]
+
+
 def line_metrics(generated: str, expected: str) -> tuple[float, float, float]:
     """Returns (precision, recall, f1) at the line level using positional matching."""
-    gen_lines = [l.strip() for l in generated.strip().splitlines() if l.strip()]
-    exp_lines = [l.strip() for l in expected.strip().splitlines() if l.strip()]
+    gen_lines = _normalize_asm(generated)
+    exp_lines = _normalize_asm(expected)
     if not gen_lines and not exp_lines:
         return 1.0, 1.0, 1.0
     if not gen_lines or not exp_lines:
@@ -58,7 +80,7 @@ def line_metrics(generated: str, expected: str) -> tuple[float, float, float]:
 
 
 def exact_match(generated: str, expected: str) -> bool:
-    return generated.strip() == expected.strip()
+    return _normalize_asm(generated) == _normalize_asm(expected)
 
 
 class EvalPipeline:
