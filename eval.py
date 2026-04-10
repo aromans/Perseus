@@ -50,18 +50,28 @@ def _normalize_asm(text: str) -> list[str]:
     Handles two formats:
       - Normal (newline-separated): "+0x0:\tendbr64\n+0x4:\tpush\trbp"
       - Collapsed (no whitespace):  "+0x0:endbr64+0x4:pushrbp"
-    Returns a list of whitespace-normalized instruction strings.
+    Strips address prefixes and removes all internal whitespace (lowercased),
+    so "push rbp" and "pushrbp" compare as equal.
+    The `:` suffix on address patterns (+0xNN:) prevents false splits on
+    operands like [rbp+0x8].
     """
-    # If there are newlines, use them as separators (Qwen-style output)
-    if '\n' in text:
-        lines = [l.strip() for l in text.strip().splitlines() if l.strip()]
-    else:
-        # Split on address pattern (+0xNN: or 0xNNNNNNNN:)
-        parts = _re.split(r'(?=(?:\+0x|0x)[0-9a-fA-F]+:)', text.strip())
-        lines = [p.strip() for p in parts if p.strip()]
+    text = text.strip()
+    if not text:
+        return []
 
-    # Normalize internal whitespace within each line
-    return [' '.join(l.split()) for l in lines]
+    # Insert newlines before each address boundary that follows a non-space char.
+    # +0x[hex]: is an instruction address; +0x[hex]] (no colon) is an operand — don't split.
+    text = _re.sub(r'(?<=\S)(\+0x[0-9a-fA-F]+:)', r'\n\1', text)
+    lines = [l.strip() for l in text.splitlines() if l.strip()]
+
+    normalized = []
+    for line in lines:
+        # Strip address prefix (+0x1a4: or 0x401234:) and any surrounding whitespace
+        instr = _re.sub(r'^(?:\+0x|0x)[0-9a-fA-F]+:\s*', '', line)
+        # Remove ALL whitespace and lowercase — makes "push rbp" == "pushrbp"
+        normalized.append(_re.sub(r'\s+', '', instr).lower())
+
+    return normalized
 
 
 def line_metrics(generated: str, expected: str) -> tuple[float, float, float]:
