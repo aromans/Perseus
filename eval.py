@@ -100,8 +100,8 @@ class EvalPipeline:
                 n = per_type + (1 if i < remainder else 0)
                 sampled.extend(random.sample(by_obf[obf], min(n, len(by_obf[obf]))))
             records = sampled
-            logger.info(f"Stratified sample: {len(records)} test examples "
-                        f"({', '.join(f'{t}:{len([r for r in records if r[\"metadata\"][\"obfuscation_type\"]==t])}' for t in obf_types)})")
+            dist = ', '.join(f"{t}:{len([r for r in records if r['metadata']['obfuscation_type'] == t])}" for t in obf_types)
+            logger.info(f"Stratified sample: {len(records)} test examples ({dist})")
         else:
             logger.info(f"Loaded {len(records)} test examples from {test_path}")
         return records
