@@ -76,14 +76,34 @@ class EvalPipeline:
         self.model          = None
         self.tokenizer      = None
 
-    def load_test_data(self) -> list:
+    def load_test_data(self, max_samples: int = None) -> list:
         test_path = self.data_root / 'training' / 'test.jsonl'
         if not test_path.exists():
             logger.error(f"test.jsonl not found at {test_path}. Run prepare_training_data.py first.")
             return []
         with open(test_path) as f:
             records = [json.loads(line) for line in f]
-        logger.info(f"Loaded {len(records)} test examples from {test_path}")
+
+        if max_samples and max_samples < len(records):
+            # Stratified sample: preserve obfuscation type distribution
+            import random
+            from collections import defaultdict
+            random.seed(1337)
+            by_obf = defaultdict(list)
+            for r in records:
+                by_obf[r['metadata']['obfuscation_type']].append(r)
+            obf_types = sorted(by_obf.keys())
+            per_type = max_samples // len(obf_types)
+            remainder = max_samples % len(obf_types)
+            sampled = []
+            for i, obf in enumerate(obf_types):
+                n = per_type + (1 if i < remainder else 0)
+                sampled.extend(random.sample(by_obf[obf], min(n, len(by_obf[obf]))))
+            records = sampled
+            logger.info(f"Stratified sample: {len(records)} test examples "
+                        f"({', '.join(f'{t}:{len([r for r in records if r[\"metadata\"][\"obfuscation_type\"]==t])}' for t in obf_types)})")
+        else:
+            logger.info(f"Loaded {len(records)} test examples from {test_path}")
         return records
 
     def process_new_sources(self, c_files: list) -> list:
@@ -164,11 +184,47 @@ class EvalPipeline:
             skip_special_tokens=True
         )
 
-    def run(self, c_files: list = None):
+    def run_asm_file(self, asm_path: Path, label: str = None, out_path: Path = None):
+        """
+        Qualitative inference on a raw assembly file — no ground truth, no metrics.
+        Designed for real-world samples (e.g. Pikabot, GuLoader) where the analyst
+        evaluates the output manually.
+        """
+        asm_text = asm_path.read_text().strip()
+        if not asm_text:
+            logger.error(f"Empty file: {asm_path}")
+            return
+
+        name = label or asm_path.stem
+        instruction = f"Deobfuscate the following mba-obfuscated x86-64 assembly function '{name}'."
+        record = {"instruction": instruction, "input": asm_text, "output": ""}
+
+        self.load_model()
+
+        logger.info(f"\n[qualitative] {name}  ({asm_text.count(chr(10))+1} lines)")
+        generated = self.infer(record)
+
+        print("\n" + "="*60)
+        print(f"INPUT  ({name})")
+        print("="*60)
+        print(asm_text)
+        print("\n" + "="*60)
+        print(f"PERSEUS OUTPUT")
+        print("="*60)
+        print(generated)
+        print("="*60)
+
+        result = {"sample": name, "input": asm_text, "generated": generated}
+        save_path = out_path or (asm_path.parent / f"{asm_path.stem}_perseus.json")
+        with open(save_path, 'w') as f:
+            json.dump(result, f, indent=2)
+        logger.info(f"Saved to {save_path}")
+
+    def run(self, c_files: list = None, max_samples: int = None):
         if c_files:
             records = self.process_new_sources(c_files)
         else:
-            records = self.load_test_data()
+            records = self.load_test_data(max_samples=max_samples)
 
         if not records:
             return
@@ -295,6 +351,15 @@ def main():
                         help='Sampling temperature (default: from config.yaml)')
     parser.add_argument('--c-files', nargs='+', type=Path, default=None,
                         help='Optional: C source files to process and evaluate instead of test.jsonl')
+    parser.add_argument('--max-samples', type=int, default=None,
+                        help='Max test samples to evaluate. Stratified by obfuscation type. '
+                             'Omit to run the full test set.')
+    parser.add_argument('--asm-file', type=Path, default=None,
+                        help='Raw assembly file for qualitative inference (no ground truth). '
+                             'Use with real-world samples — output is for human RE evaluation.')
+    parser.add_argument('--asm-label', type=str, default=None,
+                        help='Label for the assembly sample (e.g. "pikabot_string_decrypt"). '
+                             'Used in the prompt and output filename.')
     parser.add_argument('--wandb', action='store_true',
                         help='Log eval metrics to Weights & Biases')
     args = parser.parse_args()
@@ -309,7 +374,11 @@ def main():
         use_wandb=args.wandb,
         wandb_project=wb.get('project', 'Perseus'),
     )
-    pipeline.run(c_files=args.c_files)
+
+    if args.asm_file:
+        pipeline.run_asm_file(args.asm_file, label=args.asm_label)
+    else:
+        pipeline.run(c_files=args.c_files, max_samples=args.max_samples)
 
 
 if __name__ == '__main__':
